@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="/qt/qml/volan123">/home/domagoj/volan/build/Desktop_Qt_6_8_2-Debug/volan123</file>
+
+  </qresource>
+</RCC>

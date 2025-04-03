@@ -1,0 +1,89 @@
+{
+	"cmake" : 
+	{
+		"generator" : 
+		{
+			"multiConfig" : false,
+			"name" : "Ninja"
+		},
+		"paths" : 
+		{
+			"cmake" : "/home/domagoj/Qt/6.8.2/Boot2Qt/raspberrypi-armv8/toolchain/sysroots/x86_64-pokysdk-linux/usr/bin/cmake",
+			"cpack" : "/home/domagoj/Qt/6.8.2/Boot2Qt/raspberrypi-armv8/toolchain/sysroots/x86_64-pokysdk-linux/usr/bin/cpack",
+			"ctest" : "/home/domagoj/Qt/6.8.2/Boot2Qt/raspberrypi-armv8/toolchain/sysroots/x86_64-pokysdk-linux/usr/bin/ctest",
+			"root" : "/home/domagoj/Qt/6.8.2/Boot2Qt/raspberrypi-armv8/toolchain/sysroots/x86_64-pokysdk-linux/usr/share/cmake-3.28"
+		},
+		"version" : 
+		{
+			"isDirty" : false,
+			"major" : 3,
+			"minor" : 28,
+			"patch" : 3,
+			"string" : "3.28.3",
+			"suffix" : ""
+		}
+	},
+	"objects" : 
+	[
+		{
+			"jsonFile" : "codemodel-v2-b11242916de2039b5d51.json",
+			"kind" : "codemodel",
+			"version" : 
+			{
+				"major" : 2,
+				"minor" : 6
+			}
+		},
+		{
+			"jsonFile" : "cache-v2-51a89e89ea8f4648b150.json",
+			"kind" : "cache",
+			"version" : 
+			{
+				"major" : 2,
+				"minor" : 0
+			}
+		},
+		{
+			"jsonFile" : "cmakeFiles-v1-288af8cc7350cfe0fa6a.json",
+			"kind" : "cmakeFiles",
+			"version" : 
+			{
+				"major" : 1,
+				"minor" : 0
+			}
+		}
+	],
+	"reply" : 
+	{
+		"cache-v2" : 
+		{
+			"jsonFile" : "cache-v2-51a89e89ea8f4648b150.json",
+			"kind" : "cache",
+			"version" : 
+			{
+				"major" : 2,
+				"minor" : 0
+			}
+		},
+		"cmakeFiles-v1" : 
+		{
+			"jsonFile" : "cmakeFiles-v1-288af8cc7350cfe0fa6a.json",
+			"kind" : "cmakeFiles",
+			"version" : 
+			{
+				"major" : 1,
+				"minor" : 0
+			}
+		},
+		"codemodel-v2" : 
+		{
+			"jsonFile" : "codemodel-v2-b11242916de2039b5d51.json",
+			"kind" : "codemodel",
+			"version" : 
+			{
+				"major" : 2,
+				"minor" : 6
+			}
+		}
+	}
+}

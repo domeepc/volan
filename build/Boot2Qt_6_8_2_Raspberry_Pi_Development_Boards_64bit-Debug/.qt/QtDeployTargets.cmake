@@ -1,0 +1,2 @@
+set(__QT_DEPLOY_TARGET_appvolan_FILE /home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug/appvolan)
+set(__QT_DEPLOY_TARGET_appvolan_TYPE EXECUTABLE)

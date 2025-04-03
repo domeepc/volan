@@ -1,0 +1,14 @@
+-rootPath
+/home/domagoj/volan
+-cmake-output
+-output-file
+/home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug/.qt/qml_imports/appvolan_conf.cmake
+-importPath
+/home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug/volan
+-importPath
+/home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug
+-importPath
+/home/domagoj/Qt/6.8.2/Boot2Qt/raspberrypi-armv8/toolchain/sysroots/cortexa53-poky-linux/usr/lib/qml
+-qrcFiles
+/home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug/.qt/rcc/qmake_volan.qrc
+/home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug/.qt/rcc/appvolan_raw_qml_0.qrc

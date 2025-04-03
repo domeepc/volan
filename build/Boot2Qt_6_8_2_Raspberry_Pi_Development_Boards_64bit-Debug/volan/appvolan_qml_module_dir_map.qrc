@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="/qt/qml/volan">/home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug/volan</file>
+
+  </qresource>
+</RCC>

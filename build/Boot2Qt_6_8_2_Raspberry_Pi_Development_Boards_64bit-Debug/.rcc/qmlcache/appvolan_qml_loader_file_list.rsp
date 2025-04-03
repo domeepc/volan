@@ -1,0 +1,5 @@
+--resource
+/home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug/.qt/rcc/qmake_volan.qrc
+--resource
+/home/domagoj/volan/build/Boot2Qt_6_8_2_Raspberry_Pi_Development_Boards_64bit-Debug/.qt/rcc/appvolan_raw_qml_0.qrc
+/qt/qml/volan/Main.qml
