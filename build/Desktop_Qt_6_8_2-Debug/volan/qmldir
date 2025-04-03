@@ -1,5 +1,0 @@
-module volan
-typeinfo appvolan.qmltypes
-prefer :/qt/qml/volan/
-Main 1.0 Main.qml
-

@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/volan">
-    <file alias="qmldir">/home/parniperica/Desktop/volan/build/Desktop_Qt_6_8_2-Debug/volan/qmldir</file>
-  </qresource>
-</RCC>
-
