@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/volan">
+    <file alias="qmldir">/Users/domagojmilardovic/Documents/volan/build/Qt_6_9_0_for_macOS-Debug/volan/qmldir</file>
+  </qresource>
+</RCC>
+
