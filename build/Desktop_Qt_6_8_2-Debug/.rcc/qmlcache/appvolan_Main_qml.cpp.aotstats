@@ -5,35 +5,35 @@
                 "entries": [
                     {
                         "codegenSuccessfull": true,
-                        "column": 30,
-                        "durationMicroseconds": 334,
+                        "column": 34,
+                        "durationMicroseconds": 188,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
-                        "line": 22
+                        "line": 65
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 28,
-                        "durationMicroseconds": 213,
+                        "column": 32,
+                        "durationMicroseconds": 99,
                         "errorMessage": "",
                         "functionName": "verticalAlignment",
-                        "line": 23
+                        "line": 66
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 21,
-                        "durationMicroseconds": 189,
+                        "column": 25,
+                        "durationMicroseconds": 91,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 28
+                        "line": 69
                     },
                     {
                         "codegenSuccessfull": false,
-                        "column": 13,
+                        "column": 17,
                         "durationMicroseconds": 0,
                         "errorMessage": "Functions without type annotations won't be compiled",
                         "functionName": "onFrameReceived",
-                        "line": 29
+                        "line": 70
                     }
                 ],
                 "filepath": "/home/parniperica/Desktop/volan/Main.qml"

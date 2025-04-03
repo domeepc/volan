@@ -15,7 +15,7 @@ Back::Back(QObject *parent) : QObject{parent} {
                                 bool ok;
                               QCanBusFrame frame = receive_device->readFrame();
                               QByteArray data = frame.payload();
-                              QString str = data.toHex().right(8).toUpper();
+                              QString str = data.toHex().left(2).toUpper();
                               uint8_t data_int = str.toUInt(&ok,16);
                               emit frameReceived(data_int);
                             });
