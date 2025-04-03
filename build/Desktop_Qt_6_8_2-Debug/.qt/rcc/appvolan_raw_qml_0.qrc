@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="/qt/qml/volan/">
-    <file alias="Main.qml">/home/domagoj/volan/Main.qml</file>
+    <file alias="Main.qml">/home/parniperica/Desktop/volan/Main.qml</file>
   </qresource>
 </RCC>
 

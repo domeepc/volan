@@ -9,7 +9,7 @@ endif()
 
 _qt_internal_deploy_qml_imports_for_target(
     ${__qt_opts}
-    IMPORTS_FILE "/home/domagoj/volan/build/Desktop_Qt_6_8_2-Debug/.qt/qml_imports/appvolan_build.cmake"
+    IMPORTS_FILE "/home/parniperica/Desktop/volan/build/Desktop_Qt_6_8_2-Debug/.qt/qml_imports/appvolan_build.cmake"
     PLUGINS_FOUND __qt_internal_plugins_found
     QML_DIR     "${arg_QML_DIR}"
     PLUGINS_DIR "${arg_PLUGINS_DIR}"

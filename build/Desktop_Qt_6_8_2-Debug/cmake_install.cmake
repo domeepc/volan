@@ -1,4 +1,4 @@
-# Install script for directory: /home/domagoj/volan
+# Install script for directory: /home/parniperica/Desktop/volan
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -49,12 +49,12 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/appvolan"
          RPATH "\$ORIGIN:\$ORIGIN/../lib")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/domagoj/volan/build/Desktop_Qt_6_8_2-Debug/appvolan")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/parniperica/Desktop/volan/build/Desktop_Qt_6_8_2-Debug/appvolan")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/appvolan" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/appvolan")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/appvolan"
-         OLD_RPATH "/home/domagoj/Qt/6.8.2/gcc_64/lib:"
+         OLD_RPATH "/home/parniperica/Qt/6.8.2/gcc_64/lib:"
          NEW_RPATH "\$ORIGIN:\$ORIGIN/../lib")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/appvolan")
@@ -77,6 +77,6 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-  file(WRITE "/home/domagoj/volan/build/Desktop_Qt_6_8_2-Debug/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/home/parniperica/Desktop/volan/build/Desktop_Qt_6_8_2-Debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

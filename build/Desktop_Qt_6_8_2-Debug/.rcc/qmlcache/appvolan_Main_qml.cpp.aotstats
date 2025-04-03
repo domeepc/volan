@@ -6,7 +6,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 30,
-                        "durationMicroseconds": 148,
+                        "durationMicroseconds": 334,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
                         "line": 22
@@ -14,7 +14,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 28,
-                        "durationMicroseconds": 62,
+                        "durationMicroseconds": 213,
                         "errorMessage": "",
                         "functionName": "verticalAlignment",
                         "line": 23
@@ -22,7 +22,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 21,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 189,
                         "errorMessage": "",
                         "functionName": "target",
                         "line": 28
@@ -36,7 +36,7 @@
                         "line": 29
                     }
                 ],
-                "filepath": "/home/domagoj/volan/Main.qml"
+                "filepath": "/home/parniperica/Desktop/volan/Main.qml"
             }
         ],
         "moduleId": "volan(appvolan)"

@@ -12,10 +12,12 @@ Back::Back(QObject *parent) : QObject{parent} {
     receive_device->connectDevice();
     receive_device->connect(receive_device, &QCanBusDevice::framesReceived,
                             [this, receive_device] {
+                                bool ok;
                               QCanBusFrame frame = receive_device->readFrame();
                               QByteArray data = frame.payload();
                               QString str = data.toHex().right(8).toUpper();
-                              emit frameReceived(str);
+                              uint8_t data_int = str.toUInt(&ok,16);
+                              emit frameReceived(data_int);
                             });
   }
 

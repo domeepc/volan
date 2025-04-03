@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="/">
-    <file alias="/qt/qml/volan">/home/domagoj/volan/build/Desktop_Qt_6_8_2-Debug/volan</file>
+    <file alias="/qt/qml/volan">/home/parniperica/Desktop/volan/build/Desktop_Qt_6_8_2-Debug/volan</file>
 
   </qresource>
 </RCC>

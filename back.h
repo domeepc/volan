@@ -15,7 +15,7 @@ class Back : public QObject {
 
   ~Back();
  signals:
-  void frameReceived(QString msg);
+  void frameReceived(uint8_t msg);
 };
 
 #endif  // BACK_H

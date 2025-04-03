@@ -1,10 +1,10 @@
 --bare
 -I
-/home/domagoj/volan/build/Desktop_Qt_6_8_2-Debug
+/home/parniperica/Desktop/volan/build/Desktop_Qt_6_8_2-Debug
 -I
-/home/domagoj/Qt/6.8.2/gcc_64/qml
+/home/parniperica/Qt/6.8.2/gcc_64/qml
 --resource
-/home/domagoj/volan/build/Desktop_Qt_6_8_2-Debug/.qt/rcc/qmake_volan.qrc
+/home/parniperica/Desktop/volan/build/Desktop_Qt_6_8_2-Debug/.qt/rcc/qmake_volan.qrc
 --resource
-/home/domagoj/volan/build/Desktop_Qt_6_8_2-Debug/.qt/rcc/appvolan_raw_qml_0.qrc
-/home/domagoj/volan/Main.qml
+/home/parniperica/Desktop/volan/build/Desktop_Qt_6_8_2-Debug/.qt/rcc/appvolan_raw_qml_0.qrc
+/home/parniperica/Desktop/volan/Main.qml
