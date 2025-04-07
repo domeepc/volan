@@ -13,6 +13,8 @@ class Back : public QObject {
   QCanBusDevice *receive_device;
   QCanBusDevice *send_device;
   void handleError(int);
+  void receiveFrames();
+  void debugSendFrame();
 
   ~Back();
  signals:

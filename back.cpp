@@ -1,8 +1,10 @@
 #include "back.h"
 
-Back::Back(QObject *parent) : QObject{parent} {
+Back::Back(QObject *parent) : QObject{parent} { receiveFrames(); }
+
+void Back::receiveFrames() {
   QString errorString;
-  QCanBusDevice *receive_device = QCanBus::instance()->createDevice(
+  *receive_device = QCanBus::instance()->createDevice(
       QStringLiteral("socketcan"), QStringLiteral("vcan1"), &errorString);
   if (!receive_device)
     qDebug() << errorString;
@@ -15,36 +17,38 @@ Back::Back(QObject *parent) : QObject{parent} {
           bool ok;
           QCanBusFrame frame = receive_device->readFrame();
           QByteArray data = frame.payload();
-          if(data.size() == 8){
-          QString battery_perc = data.toHex().left(2).toUpper();
-          data[0] >>= 1;
-          QString battery_temp = data.toHex().left(2).toUpper();
-          data[0] >>= 1;
-          QString speed = data.toHex().left(2).toUpper();
-          data[0] >>= 1;
-          uint8_t speed_int = speed.toUInt(&ok, 16);
-          uint8_t battery_temp_int = battery_temp.toUInt(&ok, 16);
-          uint8_t battery_p_int = battery_perc.toUInt(&ok, 16);
+          if (data.size() == 8) {
+            QString battery_perc = data.toHex().left(2).toUpper();
+            data[0] >>= 1;
+            QString battery_temp = data.toHex().left(2).toUpper();
+            data[0] >>= 1;
+            QString speed = data.toHex().left(2).toUpper();
+            data[0] >>= 1;
+            uint8_t speed_int = speed.toUInt(&ok, 16);
+            uint8_t battery_temp_int = battery_temp.toUInt(&ok, 16);
+            uint8_t battery_p_int = battery_perc.toUInt(&ok, 16);
 
-
-          if (speed_int <= 255 && speed_int >= 0) {
-            emit frameSpeedReceived(speed_int);
-          } else
-            handleError(1);
-          if (battery_temp_int <= 100 && battery_temp_int >= 0) {
-            emit frameBatTempReceived(battery_temp_int);
-          } else
-            handleError(2);
-          if (battery_p_int <= 100 && battery_p_int >= 0) {
-            emit frameBatPercReceived(battery_p_int);
-          } else
-            handleError(3);
-        }});
+            if (speed_int <= 255 && speed_int >= 0) {
+              emit frameSpeedReceived(speed_int);
+            } else
+              handleError(1);
+            if (battery_temp_int <= 100 && battery_temp_int >= 0) {
+              emit frameBatTempReceived(battery_temp_int);
+            } else
+              handleError(2);
+            if (battery_p_int <= 100 && battery_p_int >= 0) {
+              emit frameBatPercReceived(battery_p_int);
+            } else
+              handleError(3);
+          }
+        });
   }
+}
 
-  QCanBusDevice *send_device = QCanBus::instance()->createDevice(
+void Back::debugSendFrame() {
+  *send_device = QCanBus::instance()->createDevice(
       QStringLiteral("socketcan"), QStringLiteral("vcan0"), &errorString);
-  if (!receive_device)
+  if (!send_device)
     qDebug() << errorString;
   else {
     send_device->setConfigurationParameter(QCanBusDevice::BitRateKey,
@@ -68,21 +72,21 @@ Back::Back(QObject *parent) : QObject{parent} {
 }
 
 void Back::handleError(int err_id) {
-    QString err_msg;
-    switch (err_id){
-case 1:
-    err_msg = "Speed can't be over 255 km/h or below 0 km/h";
-    emit frameError(err_msg);
-    break;
-  case 2:
-    err_msg = "Speed can't be over 255 km/h or below 0 km/h";
-    emit frameError(err_msg);
-    break;
-  case 3:
-    err_msg = "Speed can't be over 255 km/h or below 0 km/h";
-    emit frameError(err_msg);
-    break;
-    }
+  QString err_msg;
+  switch (err_id) {
+    case 1:
+      err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+      emit frameError(err_msg);
+      break;
+    case 2:
+      err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+      emit frameError(err_msg);
+      break;
+    case 3:
+      err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+      emit frameError(err_msg);
+      break;
+  }
 }
 
 Back::~Back() {
