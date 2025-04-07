@@ -15,29 +15,31 @@ Back::Back(QObject *parent) : QObject{parent} {
           bool ok;
           QCanBusFrame frame = receive_device->readFrame();
           QByteArray data = frame.payload();
-          QString battery_perc = data.toHex().left(2).toUInt();
+          if(data.size() == 8){
+          QString battery_perc = data.toHex().left(2).toUpper();
           data[0] >>= 1;
-          QString battery_temp = data.toHex().left(2).toUInt();
+          QString battery_temp = data.toHex().left(2).toUpper();
           data[0] >>= 1;
-          QString speed = data.toHex().left(2).toUInt();
+          QString speed = data.toHex().left(2).toUpper();
           data[0] >>= 1;
-          uint8_t speed_int = speed.toUint(&ok, 16);
+          uint8_t speed_int = speed.toUInt(&ok, 16);
           uint8_t battery_temp_int = battery_temp.toUInt(&ok, 16);
           uint8_t battery_p_int = battery_perc.toUInt(&ok, 16);
+
 
           if (speed_int <= 255 && speed_int >= 0) {
             emit frameSpeedReceived(speed_int);
           } else
-            emit handleError(1);
+            handleError(1);
           if (battery_temp_int <= 100 && battery_temp_int >= 0) {
             emit frameBatTempReceived(battery_temp_int);
           } else
-            emit handleError(2);
+            handleError(2);
           if (battery_p_int <= 100 && battery_p_int >= 0) {
-            emit frameSpeedReceived(battery_p_int);
+            emit frameBatPercReceived(battery_p_int);
           } else
-            emit handleError(3);
-        });
+            handleError(3);
+        }});
   }
 
   QCanBusDevice *send_device = QCanBus::instance()->createDevice(
@@ -66,16 +68,21 @@ Back::Back(QObject *parent) : QObject{parent} {
 }
 
 void Back::handleError(int err_id) {
-  switch (err_id):
+    QString err_msg;
+    switch (err_id){
 case 1:
-    QString err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+    err_msg = "Speed can't be over 255 km/h or below 0 km/h";
     emit frameError(err_msg);
+    break;
   case 2:
-    QString err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+    err_msg = "Speed can't be over 255 km/h or below 0 km/h";
     emit frameError(err_msg);
+    break;
   case 3:
-    QString err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+    err_msg = "Speed can't be over 255 km/h or below 0 km/h";
     emit frameError(err_msg);
+    break;
+    }
 }
 
 Back::~Back() {

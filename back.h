@@ -18,7 +18,7 @@ class Back : public QObject {
  signals:
   void frameSpeedReceived(uint8_t speed_val);
   void frameBatTempReceived(uint8_t bat_t_val);
-  void frameBatPercRecevived(uint8_t bat_perc_val);
+  void frameBatPercReceived(uint8_t bat_perc_val);
   void frameError(QString err_msg);
 };
 
