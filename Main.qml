@@ -54,7 +54,7 @@ Window {
         color: "#000000"
         radius: 10
         Text {
-            id: text1
+            id: battery_p_text
             x: 15
             y: 57
             width: 204
@@ -67,7 +67,7 @@ Window {
 
             Connections{
                 target: backend
-                function onFrameReceived(msg){ text1.text = msg + "%"}
+                function onFrameBatPercReceived(bat_perc_val){ battery_p_text.text = bat_perc_val + "%"}
             }
         }
     }
@@ -133,25 +133,55 @@ Window {
     }
 
     Text {
-        id: text2
+        id: bat_temp
         x: 346
         y: 312
         width: 134
         height: 93
-        color: "#ffffff"
-        text: qsTr("40")
-        font.pixelSize: 75
+        Text {
+            id: battery_temp_text
+            x: 15
+            y: 57
+            width: 204
+            height: 93
+            color: "#ffffff"
+
+            font.pixelSize: 75
+            horizontalAlignment: Text.AlignHCenter;
+            verticalAlignment: Text.AlignVCenter;
+
+            Connections{
+                target: backend
+                function onFrameBatTempReceived(bat_temp_val){ battery_temp_text.text = bat_temp_val + "°C"}
+            }
+        }
     }
 
     Text {
-        id: text3
+        id: speed
         x: 623
         y: 42
         width: 215
         height: 84
         color: "#ffffff"
-        text: qsTr("50")
-        font.pixelSize: 75
+
+        Text {
+            id: speed_val_text
+            x: 15
+            y: 57
+            width: 204
+            height: 93
+            color: "#ffffff"
+
+            font.pixelSize: 75
+            horizontalAlignment: Text.AlignHCenter;
+            verticalAlignment: Text.AlignVCenter;
+
+            Connections{
+                target: backend
+                function onFrameSpeedReceived(speed_val){ speed_val_text.text = speed_val + "kph"}
+            }
+        }
     }
 }
 

@@ -22,19 +22,19 @@ Back::Back(QObject *parent) : QObject{parent} {
           QString speed = data.toHex().left(2).toUInt();
           data[0] >>= 1;
           uint8_t speed_int = speed.toUint(&ok, 16);
-          uint8_t battery_temp.toUInt(&ok, 16);
+          uint8_t battery_temp_int = battery_temp.toUInt(&ok, 16);
           uint8_t battery_p_int = battery_perc.toUInt(&ok, 16);
 
           if (speed_int <= 255 && speed_int >= 0) {
             emit frameSpeedReceived(speed_int);
           } else
             emit handleError(1);
-          if (battery_temp <= 100 && speed_int >= 0) {
-            emit frameSpeedReceived(speed_int);
+          if (battery_temp_int <= 100 && battery_temp_int >= 0) {
+            emit frameBatTempReceived(battery_temp_int);
           } else
             emit handleError(2);
-          if (battery_perc <= 100 && speed_int >= 0) {
-            emit frameSpeedReceived(speed_int);
+          if (battery_p_int <= 100 && battery_p_int >= 0) {
+            emit frameSpeedReceived(battery_p_int);
           } else
             emit handleError(3);
         });
