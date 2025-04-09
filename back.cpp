@@ -12,35 +12,44 @@ void Back::receiveFrames() {
     receive_device->setConfigurationParameter(QCanBusDevice::BitRateKey,
                                               QVariant());
     receive_device->connectDevice();
-    while (receive_device->framesAvailable()) {
-      bool ok;
-      QCanBusFrame frame = receive_device->readFrame();
-      QByteArray data = frame.payload();
-      if (data.size() == 8) {
-        QString battery_perc = data.toHex().left(2).toUpper();
-        data[0] >>= 1;
-        QString battery_temp = data.toHex().left(2).toUpper();
-        data[0] >>= 1;
-        QString speed = data.toHex().left(2).toUpper();
-        data[0] >>= 1;
-        uint8_t speed_int = speed.toUInt(&ok, 16);
-        uint8_t battery_temp_int = battery_temp.toUInt(&ok, 16);
-        uint8_t battery_p_int = battery_perc.toUInt(&ok, 16);
 
-        if (speed_int <= 255 && speed_int >= 0) {
-          emit frameSpeedReceived(speed_int);
-        } else
-          handleError(1);
-        if (battery_temp_int <= 100 && battery_temp_int >= 0) {
-          emit frameBatTempReceived(battery_temp_int);
-        } else
-          handleError(2);
-        if (battery_p_int <= 100 && battery_p_int >= 0) {
-          emit frameBatPercReceived(battery_p_int);
-        } else
-          handleError(3);
+    QObject::connect(receive_device, &QCanBusDevice::framesReceived, [=]() {
+      while (receive_device->framesAvailable()) {
+        bool ok;
+        QCanBusFrame frame = receive_device->readFrame();
+        QByteArray data = frame.payload();
+        QByteArray::Iterator it;
+        int count = 0;
+        for (it = data.begin(); it != data.end(); it++) {
+          if (data.size() == 8) {
+            QByteArray one_byte(1, 0);
+            one_byte[0] = data.at(count++);
+            if (count == 1) {
+              QString battery_perc = one_byte.toHex().left(2).toUpper();
+              uint8_t battery_p_int = battery_perc.toUInt(&ok, 16);
+              if (battery_p_int >= 0 && battery_p_int <= 100) {
+                emit frameBatPercReceived(battery_p_int);
+              } else
+                handleError(1);
+            } else if (count == 2) {
+              QString battery_temp = one_byte.toHex().left(2).toUpper();
+              uint8_t battery_temp_int = battery_temp.toUInt(&ok, 16);
+              if (battery_temp_int >= 0 && battery_temp_int <= 100) {
+                emit frameBatTempReceived(battery_temp_int);
+              } else
+                handleError(2);
+            } else if (count == 3) {
+              QString speed = one_byte.toHex().left(2).toUpper();
+              uint8_t speed_int = speed.toUInt(&ok, 16);
+              if (speed_int >= 0 && speed_int <= 100) {
+                emit frameSpeedReceived(speed_int);
+              } else
+                handleError(1);
+            }
+          }
+        }
       }
-    };
+    });
   }
 }
 
