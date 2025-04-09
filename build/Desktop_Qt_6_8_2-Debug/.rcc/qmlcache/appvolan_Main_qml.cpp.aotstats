@@ -5,123 +5,179 @@
                 "entries": [
                     {
                         "codegenSuccessfull": true,
-                        "column": 34,
+                        "column": 12,
                         "durationMicroseconds": 190,
                         "errorMessage": "",
-                        "functionName": "horizontalAlignment",
-                        "line": 47
+                        "functionName": "width",
+                        "line": 7
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 32,
-                        "durationMicroseconds": 97,
+                        "column": 13,
+                        "durationMicroseconds": 101,
                         "errorMessage": "",
-                        "functionName": "verticalAlignment",
-                        "line": 48
+                        "functionName": "height",
+                        "line": 8
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 27,
-                        "durationMicroseconds": 76,
+                        "column": 23,
+                        "durationMicroseconds": 80,
+                        "errorMessage": "",
+                        "functionName": "fill",
+                        "line": 19
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 35,
+                        "durationMicroseconds": 64,
+                        "errorMessage": "",
+                        "functionName": "fill",
+                        "line": 38
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 39,
+                        "durationMicroseconds": 65,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 43
                     },
                     {
+                        "codegenSuccessfull": false,
+                        "column": 40,
+                        "durationMicroseconds": 210,
+                        "errorMessage": "Cannot access value for name colorCode",
+                        "functionName": "color",
+                        "line": 57
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 39,
+                        "durationMicroseconds": 219,
+                        "errorMessage": "Cannot access value for name name",
+                        "functionName": "text",
+                        "line": 61
+                    },
+                    {
                         "codegenSuccessfull": true,
-                        "column": 25,
+                        "column": 42,
+                        "durationMicroseconds": 113,
+                        "errorMessage": "",
+                        "functionName": "horizontalAlignment",
+                        "line": 90
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 40,
+                        "durationMicroseconds": 94,
+                        "errorMessage": "",
+                        "functionName": "verticalAlignment",
+                        "line": 91
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 35,
+                        "durationMicroseconds": 70,
+                        "errorMessage": "",
+                        "functionName": "fill",
+                        "line": 87
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 33,
                         "durationMicroseconds": 84,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 51
+                        "line": 94
                     },
                     {
                         "codegenSuccessfull": false,
-                        "column": 17,
+                        "column": 25,
                         "durationMicroseconds": 0,
                         "errorMessage": "Functions without type annotations won't be compiled",
                         "functionName": "onFrameBatPercReceived",
-                        "line": 52
+                        "line": 95
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 34,
-                        "durationMicroseconds": 93,
+                        "column": 42,
+                        "durationMicroseconds": 90,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
-                        "line": 74
+                        "line": 116
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 32,
-                        "durationMicroseconds": 88,
-                        "errorMessage": "",
-                        "functionName": "verticalAlignment",
-                        "line": 75
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 27,
-                        "durationMicroseconds": 67,
-                        "errorMessage": "",
-                        "functionName": "fill",
-                        "line": 70
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 25,
-                        "durationMicroseconds": 81,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 78
-                    },
-                    {
-                        "codegenSuccessfull": false,
-                        "column": 17,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Functions without type annotations won't be compiled",
-                        "functionName": "onFrameBatTempReceived",
-                        "line": 79
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 34,
-                        "durationMicroseconds": 89,
-                        "errorMessage": "",
-                        "functionName": "horizontalAlignment",
-                        "line": 102
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 32,
+                        "column": 40,
                         "durationMicroseconds": 85,
                         "errorMessage": "",
                         "functionName": "verticalAlignment",
-                        "line": 103
+                        "line": 117
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 27,
+                        "column": 35,
                         "durationMicroseconds": 65,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 98
+                        "line": 113
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 25,
-                        "durationMicroseconds": 81,
+                        "column": 33,
+                        "durationMicroseconds": 82,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 106
+                        "line": 120
                     },
                     {
                         "codegenSuccessfull": false,
-                        "column": 17,
+                        "column": 25,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Functions without type annotations won't be compiled",
+                        "functionName": "onFrameBatTempReceived",
+                        "line": 121
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 42,
+                        "durationMicroseconds": 89,
+                        "errorMessage": "",
+                        "functionName": "horizontalAlignment",
+                        "line": 148
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 40,
+                        "durationMicroseconds": 87,
+                        "errorMessage": "",
+                        "functionName": "verticalAlignment",
+                        "line": 149
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 35,
+                        "durationMicroseconds": 64,
+                        "errorMessage": "",
+                        "functionName": "fill",
+                        "line": 145
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 33,
+                        "durationMicroseconds": 90,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 152
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 25,
                         "durationMicroseconds": 0,
                         "errorMessage": "Functions without type annotations won't be compiled",
                         "functionName": "onFrameSpeedReceived",
-                        "line": 107
+                        "line": 153
                     }
                 ],
                 "filepath": "/home/parniperica/Desktop/volan/Main.qml"

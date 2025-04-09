@@ -1,127 +1,174 @@
 import QtQuick
+import QtQuick.Layouts
 import volan
 
-
 Window {
-    width: 640
-    height: 480
+    id: window_ID
+    width: Screen.width
+    height: Screen.height
     visible: true
     title: qsTr("Volan prototype")
     color: "#000000"
 
-    Back{
+    Back {
         id: backend
     }
 
+    RowLayout {
+        id: row
+        anchors.fill: parent
+        spacing: 3
 
 
-    Rectangle {
-        id: rectangle1
-        x: 8
-        y: 8
-        width: 250
-        height: 464
-        color: "transparent"
-        radius: 10
-        border.color: "#ed333b"
-        border.width: 13
-    }
+        ColumnLayout {
+            spacing: 3
+            Layout.fillWidth: true
 
-    Rectangle {
-        id: baterry_perc
-        x: 275
-        y: 8
-        width: 250
-        color: "transparent"
-        height: 230
-        border.color: "#f0ff00"
-        border.width: 13
-        radius: 10
+            Rectangle {
+                id: error_box
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
+                radius: 10
+                border.color: "#ed333b"
+                border.width: 13
 
-        Text {
-            id: battery_p_text
-            anchors.fill: parent
-            color: "#ffffff"
 
-            font.pixelSize: 65
-            horizontalAlignment: Text.AlignHCenter;
-            verticalAlignment: Text.AlignVCenter;
+                Item {
+                    anchors.fill: parent
+                    anchors.margins: 16
 
-            Connections{
-                target: backend
-                function onFrameBatPercReceived(bat_perc_val){ battery_p_text.text = bat_perc_val + "%"}
+                    ListView {
+                        id: listView
+                        anchors.fill: parent
+
+                        model: ListModel {
+                            ListElement { name: "Red"; colorCode: "red" }
+                            ListElement { name: "fesb racing"; colorCode: "green" }
+                            ListElement { name: "Blue"; colorCode: "blue" }
+                            ListElement { name: "White"; colorCode: "white" }
+                        }
+                           delegate: Row {
+                            spacing: 5
+                            Rectangle {
+                                width: 100
+                                height: 20
+
+                                color: colorCode
+                            }
+                            Text {
+                                width: 100
+                                text: name
+                                color: "#ffffff"
+                            }
+                        }
+                    }
+                }
             }
-    }
-    }
 
-    Rectangle {
-        id: rectangle5
-        x: 275
-        y: 243
-        width: 250
-        height: 230
-        border.color: "#f0ff00"
-        color: "transparent"
-        border.width: 13
-        radius: 10
+        }
 
-        Text {
-            id: battery_temp_text
-            anchors.fill: parent;
-            color: "#ffffff"
 
-            font.pixelSize: 65
-            horizontalAlignment: Text.AlignHCenter;
-            verticalAlignment: Text.AlignVCenter;
+        ColumnLayout {
+            spacing: 3
+            Layout.fillWidth: true
 
-            Connections{
-                target: backend
-                function onFrameBatTempReceived(bat_temp_val){ battery_temp_text.text = bat_temp_val + "°C"}
+            Rectangle {
+                id: battery_perc
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
+                border.color: "#f0ff00"
+                border.width: 13
+                radius: 10
+
+                Text {
+                    id: battery_p_text
+                    anchors.fill: parent
+                    color: "#ffffff"
+                    font.pixelSize: 65
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    Connections {
+                        target: backend
+                        function onFrameBatPercReceived(val) {
+                            battery_p_text.text = val + "%"
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                id: rectangle5
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                border.color: "#f0ff00"
+                color: "transparent"
+                border.width: 13
+                radius: 10
+
+                Text {
+                    id: battery_temp_text
+                    anchors.fill: parent
+                    color: "#ffffff"
+                    font.pixelSize: 65
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    Connections {
+                        target: backend
+                        function onFrameBatTempReceived(val) {
+                            battery_temp_text.text = val + "°C"
+                        }
+                    }
+                }
             }
         }
 
-    }
 
-    Rectangle {
-        id: speed
-        x: 542
-        y: 8
-        width: 250
-        height: 152
-        color: "transparent"
-        border.color: "#3a54c0"
-        border.width: 13
-        radius: 10
+        ColumnLayout {
+            spacing: 3
+            Layout.fillWidth: true
 
-        Text {
-            id: speed_val_text
-            anchors.fill: parent;
-            color: "#ffffff"
+            Rectangle {
+                id: speed
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
+                border.color: "#3a54c0"
+                border.width: 13
+                radius: 10
 
-            font.pixelSize: 65
-            horizontalAlignment: Text.AlignHCenter;
-            verticalAlignment: Text.AlignVCenter;
+                Text {
+                    id: speed_val_text
+                    anchors.fill: parent
+                    color: "#ffffff"
+                    font.pixelSize: 65
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
 
-            Connections{
-                target: backend
-                function onFrameSpeedReceived(speed_val){ speed_val_text.text = speed_val + "kph"}
+                    Connections {
+                        target: backend
+                        function onFrameSpeedReceived(val) {
+                            speed_val_text.text = val + "kph"
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                id: rec
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                border.color: "#3a54c0"
+                color: "transparent"
+                border.width: 13
+                radius: 10
             }
         }
     }
 
 
-    Rectangle {
-        id: rec
-        x: 544
-        y: 173
-        width: 250
-        height: 299
-        border.color: "#3a54c0"
-        color: "transparent"
-        border.width: 13
-        radius: 10
-
-    }
 }
-
 
