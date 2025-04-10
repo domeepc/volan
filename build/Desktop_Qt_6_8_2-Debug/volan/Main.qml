@@ -19,7 +19,7 @@ Window {
         anchors.fill: parent
         spacing: 3
 
-
+        //left column
         ColumnLayout {
             spacing: 3
             Layout.fillWidth: true
@@ -43,24 +43,33 @@ Window {
                         anchors.fill: parent
 
                         model: ListModel {
-                            ListElement { name: "Red"; colorCode: "red" }
-                            ListElement { name: "fesb racing"; colorCode: "green" }
-                            ListElement { name: "Blue"; colorCode: "blue" }
-                            ListElement { name: "White"; colorCode: "white" }
+                            ListElement { name: "ERROR-1";}
+                            ListElement { name: "ERROR-2";}
+                            ListElement { name: "STA JE OVO!!STA JE OVO!!STA JE OVO!!STA JE OVO!!STA JE OVO!!";}
+                            ListElement { name: "ERROR-4";}
+                            ListElement { name: "ERROR-5";}
+                            ListElement { name: "ERROR-nixa";}
+                            ListElement { name: "ERROR-7";}
+                            ListElement { name: "ERROR-8";}
+                            ListElement { name: "ERROR-9";}
+                            ListElement { name: "ERROR-69";}
                         }
                            delegate: Row {
-                            spacing: 5
-                            Rectangle {
-                                width: 100
-                                height: 20
+                            width: parent.width
 
-                                color: colorCode
+
+                            Rectangle {
+                                width: parent.width
+                                height: 30
+                                color: "transparent"
+                                Text {
+                                    width: 100
+                                    text: name
+                                    color: "#ffffff"
+
+                                }
                             }
-                            Text {
-                                width: 100
-                                text: name
-                                color: "#ffffff"
-                            }
+
                         }
                     }
                 }
@@ -68,7 +77,7 @@ Window {
 
         }
 
-
+        //middle column
         ColumnLayout {
             spacing: 3
             Layout.fillWidth: true
@@ -126,7 +135,7 @@ Window {
             }
         }
 
-
+        //right column
         ColumnLayout {
             spacing: 3
             Layout.fillWidth: true
