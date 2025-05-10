@@ -1,7 +1,6 @@
 #include "back.h"
 
 Back::Back(QObject *parent) : QObject{parent} { receiveFrames(); }
-
 void Back::receiveFrames() {
   QString errorString;
   receive_device = QCanBus::instance()->createDevice(
@@ -14,37 +13,47 @@ void Back::receiveFrames() {
     receive_device->connectDevice();
 
     QObject::connect(receive_device, &QCanBusDevice::framesReceived, [=]() {
+      bool ok;
+      QByteArray::Iterator it;
+      QCanBusFrame frame;
+      QDateTime time = QDateTime::currentDateTimeUtc();
+      QByteArray data;
+      QByteArray one_byte(1, 0);
+      QString battery_perc;
+      uint8_t battery_p_int;
+      QString battery_temp;
+      uint8_t battery_temp_int;
+      QString speed;
+      uint8_t speed_int;
+      int count;
       while (receive_device->framesAvailable()) {
-        bool ok;
-        QCanBusFrame frame = receive_device->readFrame();
-        QByteArray data = frame.payload();
-        QByteArray::Iterator it;
-        int count = 0;
+        frame = receive_device->readFrame();
+        count = 0;
+        data = frame.payload();
         for (it = data.begin(); it != data.end(); it++) {
           if (data.size() == 8) {
-            QByteArray one_byte(1, 0);
             one_byte[0] = data.at(count++);
             if (count == 1) {
-              QString battery_perc = one_byte.toHex().left(2).toUpper();
-              uint8_t battery_p_int = battery_perc.toUInt(&ok, 16);
+              battery_perc = one_byte.toHex().left(2).toUpper();
+              battery_p_int = battery_perc.toUInt(&ok, 16);
               if (battery_p_int >= 0 && battery_p_int <= 100) {
                 emit frameBatPercReceived(battery_p_int);
               } else
-                handleError(1);
+                handleError(1, battery_p_int, time);
             } else if (count == 2) {
-              QString battery_temp = one_byte.toHex().left(2).toUpper();
-              uint8_t battery_temp_int = battery_temp.toUInt(&ok, 16);
+              battery_temp = one_byte.toHex().left(2).toUpper();
+              battery_temp_int = battery_temp.toUInt(&ok, 16);
               if (battery_temp_int >= 0 && battery_temp_int <= 100) {
                 emit frameBatTempReceived(battery_temp_int);
               } else
-                handleError(2);
+                handleError(2, battery_temp_int, time);
             } else if (count == 3) {
-              QString speed = one_byte.toHex().left(2).toUpper();
-              uint8_t speed_int = speed.toUInt(&ok, 16);
-              if (speed_int >= 0 && speed_int <= 100) {
+              speed = one_byte.toHex().left(2).toUpper();
+              speed_int = speed.toUInt(&ok, 16);
+              if (speed_int >= 0 && speed_int <= 255) {
                 emit frameSpeedReceived(speed_int);
               } else
-                handleError(1);
+                handleError(3, speed_int, time);
             }
           }
         }
@@ -80,19 +89,30 @@ void Back::debugSendFrame() {
   }
 }
 
-void Back::handleError(int err_id) {
+void Back::handleError(int err_id, uint8_t error_val, QDateTime error_time) {
   QString err_msg;
   switch (err_id) {
     case 1:
-      err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+      err_msg = QStringLiteral(
+                    "%1 - Battery can't be over 100% or below 0% - val %2%")
+                    .arg(error_time.toString())
+                    .arg(error_val);
       emit frameError(err_msg);
       break;
     case 2:
-      err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+      err_msg = QStringLiteral(
+                    "%1 - Battery temperature can't be over 100°C or below 0°C "
+                    "- val %2°C")
+                    .arg(error_time.toString())
+                    .arg(error_val);
       emit frameError(err_msg);
       break;
     case 3:
-      err_msg = "Speed can't be over 255 km/h or below 0 km/h";
+      err_msg =
+          QStringLiteral(
+              "%1 - Speed can't be over 255 km/h or below 0 km/h - val %2 km/h")
+              .arg(error_time.toString())
+              .arg(error_val);
       emit frameError(err_msg);
       break;
   }

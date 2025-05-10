@@ -12,7 +12,7 @@ class Back : public QObject {
   explicit Back(QObject *parent = nullptr);
   QCanBusDevice *receive_device;
   QCanBusDevice *send_device;
-  void handleError(int);
+  void handleError(int, uint8_t, QDateTime);
   void receiveFrames();
   void debugSendFrame();
 

@@ -41,36 +41,30 @@ Window {
                     ListView {
                         id: listView
                         anchors.fill: parent
-
-                        model: ListModel {
-                            ListElement { name: "ERROR-1";}
-                            ListElement { name: "ERROR-2";}
-                            ListElement { name: "STA JE OVO!!STA JE OVO!!STA JE OVO!!STA JE OVO!!STA JE OVO!!";}
-                            ListElement { name: "ERROR-4";}
-                            ListElement { name: "ERROR-5";}
-                            ListElement { name: "ERROR-nixa";}
-                            ListElement { name: "ERROR-7";}
-                            ListElement { name: "ERROR-8";}
-                            ListElement { name: "ERROR-9";}
-                            ListElement { name: "ERROR-69";}
+                        spacing: 10
+                        onCountChanged: {
+                            listView.positionViewAtEnd()
                         }
+
+                        model: ListModel {id: list_model}
                            delegate: Row {
                             width: parent.width
-
-
-                            Rectangle {
-                                width: parent.width
-                                height: 30
-                                color: "transparent"
                                 Text {
-                                    width: 100
+                                    width: parent.width
                                     text: name
                                     color: "#ffffff"
-
+                                    wrapMode: Text.Wrap
+                                    padding: 10
                                 }
+
                             }
 
-                        }
+                           Connections{
+                            target: backend
+                            function onFrameError(err_msg){
+                                list_model.append({name: err_msg})
+                            }
+                           }
                     }
                 }
             }
