@@ -26,35 +26,59 @@ void Back::receiveFrames() {
       QString speed;
       uint8_t speed_int;
       int count;
+
       while (receive_device->framesAvailable()) {
         frame = receive_device->readFrame();
         count = 0;
         data = frame.payload();
+
+        // preskoci ako podatak nije 8 bitova
+        if (data.size() != 8) {
+          return;
+        }
+
+        // idi kroz petlju i uzimaj 2 po 2 bita (fiksni podatak, sansa za
+        // pucanje programa, dosta sporo I believe)
         for (it = data.begin(); it != data.end(); it++) {
-          if (data.size() == 8) {
-            one_byte[0] = data.at(count++);
-            if (count == 1) {
+          one_byte[0] = data.at(count++);
+
+          switch (count) {
+            case 1:
               battery_perc = one_byte.toHex().left(2).toUpper();
               battery_p_int = battery_perc.toUInt(&ok, 16);
-              if (battery_p_int >= 0 && battery_p_int <= 100) {
-                emit frameBatPercReceived(battery_p_int);
-              } else
+
+              if (!(battery_p_int >= 0 && battery_p_int <= 100)) {
                 handleError(1, battery_p_int, time);
-            } else if (count == 2) {
+                return;
+              }
+
+              emit frameBatPercReceived(battery_p_int);
+
+              break;
+            case 2:
               battery_temp = one_byte.toHex().left(2).toUpper();
               battery_temp_int = battery_temp.toUInt(&ok, 16);
-              if (battery_temp_int >= 0 && battery_temp_int <= 100) {
-                emit frameBatTempReceived(battery_temp_int);
-              } else
+
+              if (!(battery_temp_int >= 0 && battery_temp_int <= 100)) {
                 handleError(2, battery_temp_int, time);
-            } else if (count == 3) {
+                return;
+              }
+
+              emit frameBatTempReceived(battery_temp_int);
+
+              break;
+            case 3:
               speed = one_byte.toHex().left(2).toUpper();
               speed_int = speed.toUInt(&ok, 16);
-              if (speed_int >= 0 && speed_int <= 255) {
-                emit frameSpeedReceived(speed_int);
-              } else
+
+              if (!(speed_int >= 0 && speed_int <= 255)) {
                 handleError(3, speed_int, time);
-            }
+                return;
+              }
+
+              emit frameSpeedReceived(speed_int);
+
+              break;
           }
         }
       }
@@ -62,7 +86,9 @@ void Back::receiveFrames() {
   }
 }
 
-void Back::debugSendFrame() {
+// totalno nepotrbno za sada
+
+/*void Back::debugSendFrame() {
   QString errorString;
   send_device = QCanBus::instance()->createDevice(
       QStringLiteral("socketcan"), QStringLiteral("vcan0"), &errorString);
@@ -88,7 +114,9 @@ void Back::debugSendFrame() {
     send_device->writeFrame(frame);
   }
 }
+*/
 
+// mali errorHandler za moguce greske
 void Back::handleError(int err_id, uint8_t error_val, QDateTime error_time) {
   QString err_msg;
   switch (err_id) {
@@ -108,16 +136,17 @@ void Back::handleError(int err_id, uint8_t error_val, QDateTime error_time) {
       emit frameError(err_msg);
       break;
     case 3:
-      err_msg =
-          QStringLiteral(
-              "%1 - Speed can't be over 255 km/h or below 0 km/h - val %2 km/h")
-              .arg(error_time.toString())
-              .arg(error_val);
+      err_msg = QStringLiteral(
+                    "%1 - Speed can't be over 255 km/h or below 0 km/h - val "
+                    "%2 km/h")
+                    .arg(error_time.toString())
+                    .arg(error_val);
       emit frameError(err_msg);
       break;
   }
 }
 
+// diskonektaj device kad je gotov program
 Back::~Back() {
   if (receive_device->state() == QCanBusDevice::ConnectedState) {
     receive_device->disconnectDevice();
