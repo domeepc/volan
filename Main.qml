@@ -6,6 +6,7 @@ Window {
     id: window_ID
     width: Screen.width
     height: Screen.height
+    visibility: Window.FullScreen
     visible: true
     title: qsTr("Volan prototype")
     color: "#000000"
