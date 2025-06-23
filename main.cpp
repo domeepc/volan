@@ -1,3 +1,4 @@
+#include <QCursor>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -8,6 +9,7 @@ int main(int argc, char *argv[]) {
   Back *back = new Back;
 
   QGuiApplication app(argc, argv);
+  QGuiApplication::setOverrideCursor(QCursor(Qt::BlankCursor));
 
   QQmlApplicationEngine engine;
   engine.rootContext()->setContextProperty("back", back);

@@ -1,158 +1,178 @@
 import QtQuick
+import QtQuick.Layouts
 import volan
 
-
 Window {
-    width: 640
-    height: 480
+    id: window_ID
+    width: Screen.width
+    height: Screen.height
+    visibility: Window.FullScreen
     visible: true
     title: qsTr("Volan prototype")
     color: "#000000"
 
-    Back{
+    Back {
         id: backend
     }
 
+    RowLayout {
+        id: row
+        anchors.fill: parent
+        spacing: 3
+
+        //left column
+        ColumnLayout {
+            spacing: 3
+            Layout.fillWidth: true
+
+            Rectangle {
+                id: error_box
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
+                radius: 10
+                border.color: "#ed333b"
+                border.width: 13
 
 
-    Rectangle {
-        id: rectangle1
-        x: 8
-        y: 8
-        width: 250
-        height: 464
-        color: "#ed333b"
-        radius: 10
-    }
+                Item {
+                    anchors.fill: parent
+                    anchors.margins: 16
 
-    Rectangle {
-        id: rectangle2
-        x: 18
-        y: 20
-        width: 227
-        height: 442
-        color: "#000000"
-        radius: 10
-    }
+                    ListView {
+                        id: listView
+                        anchors.fill: parent
+                        spacing: 10
+                        onCountChanged: {
+                            listView.positionViewAtEnd()
+                        }
 
-    Rectangle {
-        id: rectangle3
-        x: 275
-        y: 8
-        width: 250
-        height: 230
-        color: "#f0ff00"
-        radius: 10
-    }
+                        model: ListModel {id: list_model}
+                           delegate: Row {
+                            width: parent.width
+                                Text {
+                                    width: parent.width
+                                    text: name
+                                    color: "#ffffff"
+                                    wrapMode: Text.Wrap
+                                    padding: 10
+                                }
 
-    Rectangle {
-        id: battery_percent
-        x: 285
-        y: 20
-        width: 227
-        height: 207
-        color: "#000000"
-        radius: 10
-        Text {
-            id: text1
-            x: 15
-            y: 57
-            width: 204
-            height: 93
-            color: "#ffffff"
+                            }
 
-            font.pixelSize: 75
-            horizontalAlignment: Text.AlignHCenter;
-            verticalAlignment: Text.AlignVCenter;
+                           Connections{
+                            target: backend
+                            function onFrameError(err_msg){
+                                list_model.append({name: err_msg})
+                            }
+                           }
+                    }
+                }
+            }
 
-            Connections{
-                target: backend
-                function onFrameReceived(msg){ text1.text = msg + "%"}
+        }
+
+        //middle column
+        ColumnLayout {
+            spacing: 3
+            Layout.fillWidth: true
+
+            Rectangle {
+                id: battery_perc
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
+                border.color: "#f0ff00"
+                border.width: 13
+                radius: 10
+
+                Text {
+                    id: battery_p_text
+                    anchors.fill: parent
+                    color: "#ffffff"
+                    font.pixelSize: 65
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    Connections {
+                        target: backend
+                        function onFrameBatPercReceived(val) {
+                            battery_p_text.text = val + "%"
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                id: rectangle5
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                border.color: "#f0ff00"
+                color: "transparent"
+                border.width: 13
+                radius: 10
+
+                Text {
+                    id: battery_temp_text
+                    anchors.fill: parent
+                    color: "#ffffff"
+                    font.pixelSize: 65
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    Connections {
+                        target: backend
+                        function onFrameBatTempReceived(val) {
+                            battery_temp_text.text = val + "°C"
+                        }
+                    }
+                }
+            }
+        }
+
+        //right column
+        ColumnLayout {
+            spacing: 3
+            Layout.fillWidth: true
+
+            Rectangle {
+                id: speed
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
+                border.color: "#3a54c0"
+                border.width: 13
+                radius: 10
+
+                Text {
+                    id: speed_val_text
+                    anchors.fill: parent
+                    color: "#ffffff"
+                    font.pixelSize: 65
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    Connections {
+                        target: backend
+                        function onFrameSpeedReceived(val) {
+                            speed_val_text.text = val + "kph"
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                id: rec
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                border.color: "#3a54c0"
+                color: "transparent"
+                border.width: 13
+                radius: 10
             }
         }
     }
 
-    Rectangle {
-        id: rectangle5
-        x: 275
-        y: 243
-        width: 250
-        height: 230
-        color: "#f0ff00"
-        radius: 10
-    }
 
-    Rectangle {
-        id: rectangle6
-        x: 285
-        y: 255
-        width: 227
-        height: 207
-        color: "#000000"
-        radius: 10
-    }
-
-    Rectangle {
-        id: rectangle7
-        x: 542
-        y: 8
-        width: 250
-        height: 152
-        color: "#3a54c0"
-        radius: 10
-    }
-
-    Rectangle {
-        id: rectangle8
-        x: 552
-        y: 20
-        width: 227
-        height: 130
-        color: "#000000"
-        radius: 10
-    }
-
-    Rectangle {
-        id: rectangle9
-        x: 544
-        y: 173
-        width: 250
-        height: 299
-        color: "#3a54c0"
-        radius: 10
-    }
-
-    Rectangle {
-        id: rectangle10
-        x: 554
-        y: 185
-        width: 227
-        height: 277
-        color: "#000000"
-        radius: 10
-    }
-
-    Text {
-        id: text2
-        x: 346
-        y: 312
-        width: 134
-        height: 93
-        color: "#ffffff"
-        text: qsTr("40")
-        font.pixelSize: 75
-    }
-
-    Text {
-        id: text3
-        x: 623
-        y: 42
-        width: 215
-        height: 84
-        color: "#ffffff"
-        text: qsTr("50")
-        font.pixelSize: 75
-    }
 }
-
 
