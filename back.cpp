@@ -4,7 +4,7 @@ Back::Back(QObject *parent) : QObject{parent} { receiveFrames(); }
 void Back::receiveFrames() {
   QString errorString;
   receive_device = QCanBus::instance()->createDevice(
-      QStringLiteral("socketcan"), QStringLiteral("vcan1"), &errorString);
+      QStringLiteral("socketcan"), QStringLiteral("can0"), &errorString);
   if (!receive_device)
     qDebug() << errorString;
   else {
