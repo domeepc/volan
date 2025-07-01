@@ -1,15 +1,15 @@
-#Naredbe za pokretanje aplikacije
-
-
--Pokretanje same aplikacije
+# Pokretanje aplikacije
 
 ```bash
 ./path/appvolan
 ```
 
-Pri svakoj promjeni aplikacije potrebno je compilirati preko qt creatora inace se promjene nece prikazati na rpi-u. Potrebno i compilirati svaki library zasebno koji aplikacija koristi.
+Potrebno compilirati svaki library koji app koristi i 
+sam app preko qt creatora (library preko gcc compilera).
 
--Setupiranje can porta
+---
+
+Pokretanje can-a
 
 ```bash
 sudo ip link set can0 up type can bitrate 1000000
