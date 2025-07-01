@@ -1,4 +1,4 @@
-#Pokretanje aplikacije
+# Pokretanje aplikacije
 
 ```bash
 ./path/appvolan
