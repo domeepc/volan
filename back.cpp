@@ -17,76 +17,93 @@ void Back::receiveFrames() {
       QByteArray::Iterator it;
       QCanBusFrame frame;
       QDateTime time = QDateTime::currentDateTimeUtc();
-      QByteArray data;
-      QByteArray one_byte(1, 0);
+      QByteArray data, frame_id, one_byte(1, 0);
       QString battery_perc;
-      uint8_t battery_p_int;
-      QString battery_temp;
-      uint8_t battery_temp_int;
-      QString speed;
-      uint8_t speed_int;
-      int count;
+      uint8_t battery_p_int, battery_temp_int, speed_int;
+      QString battery_temp, speed;
+      int count, battery_perc_limit_low, battery_perc_limit_high,
+          battery_temp_limit_low, battery_temp_limit_high, speed_limit_low,
+          speed_limit_high;
+
+      battery_perc_limit_low = battery_temp_limit_low = speed_limit_low = 0;
+      battery_perc_limit_high = battery_temp_limit_high = 100;
+      speed_limit_high = 255;
 
       while (receive_device->framesAvailable()) {
         frame = receive_device->readFrame();
         count = 0;
         data = frame.payload();
+        frame_id = frame.frameId();
 
         // preskoci ako podatak nije 8 bitova
         if (data.size() != 8) {
           return;
         }
 
-        // idi kroz petlju i uzimaj 2 po 2 bita (fiksni podatak, sansa za
-        // pucanje programa, dosta sporo I believe)
-        for (it = data.begin(); it != data.end(); it++) {
-          one_byte[0] = data.at(count++);
+        // id baterije = BA5
+        // id brzine = BE4
 
-          switch (count) {
-            case 1:
-              battery_perc = one_byte.toHex().left(2).toUpper();
-              battery_p_int = battery_perc.toUInt(&ok, 16);
+        switch (frame_id) {
+          case 0xBA5:
+            for (it = data.begin(); it != data.end(); it++) {
+              one_byte[0] = data.at(count++);
 
-              if (!(battery_p_int >= 0 && battery_p_int <= 100)) {
-                handleError(1, battery_p_int, time);
-                return;
+              switch (count) {
+                case 1:
+                  battery_perc = one_byte.toHex().left(2).toUpper();
+                  battery_p_int = battery_perc.toUInt(&ok, 16);
+
+                  if (!(battery_p_int >= battery_perc_limit_low &&
+                        battery_p_int <= battery_perc_limit_high)) {
+                    handleError(1, battery_p_int, time);
+                    return;
+                  }
+
+                  emit frameBatPercReceived(battery_p_int);
+
+                  break;
+                case 2:
+                  battery_temp = one_byte.toHex().left(2).toUpper();
+                  battery_temp_int = battery_temp.toUInt(&ok, 16);
+
+                  if (!(battery_temp_int >= battery_temp_limit_low &&
+                        battery_temp_int <= battery_temp_limit_high)) {
+                    handleError(2, battery_temp_int, time);
+                    return;
+                  }
+
+                  emit frameBatTempReceived(battery_temp_int);
+
+                  break;
               }
+              case 0xBE4:
+                for (it = data.begin(); it != data.end(); it++) {
+                  one_byte[0] = data.at(count++);
 
-              emit frameBatPercReceived(battery_p_int);
+                  switch (count) {
+                    case 1:
+                      speed = one_byte.toHex().left(2).toUpper();
+                      speed_int = speed.toUInt(&ok, 16);
 
-              break;
-            case 2:
-              battery_temp = one_byte.toHex().left(2).toUpper();
-              battery_temp_int = battery_temp.toUInt(&ok, 16);
+                      if (!(speed_int >= speed_limit_low &&
+                            speed_int <= speed_limit_high)) {
+                        handleError(3, speed_int, time);
+                        return;
+                      }
 
-              if (!(battery_temp_int >= 0 && battery_temp_int <= 100)) {
-                handleError(2, battery_temp_int, time);
-                return;
-              }
+                      emit frameSpeedReceived(speed_int);
 
-              emit frameBatTempReceived(battery_temp_int);
-
-              break;
-            case 3:
-              speed = one_byte.toHex().left(2).toUpper();
-              speed_int = speed.toUInt(&ok, 16);
-
-              if (!(speed_int >= 0 && speed_int <= 255)) {
-                handleError(3, speed_int, time);
-                return;
-              }
-
-              emit frameSpeedReceived(speed_int);
-
-              break;
-          }
+                      break;
+                  }
+                }
+            }
         }
       }
     });
   }
 }
 
-// totalno nepotrbno za sada
+// totalno nepotrebno za sada
 
 /*void Back::debugSendFrame() {
   QString errorString;
