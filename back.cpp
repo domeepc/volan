@@ -17,13 +17,13 @@ void Back::receiveFrames() {
       QByteArray::Iterator it;
       QCanBusFrame frame;
       QDateTime time = QDateTime::currentDateTimeUtc();
-      QByteArray data, frame_id, one_byte(1, 0);
+      QByteArray data, one_byte(1, 0);
       QString battery_perc;
       uint8_t battery_p_int, battery_temp_int, speed_int;
       QString battery_temp, speed;
       int count, battery_perc_limit_low, battery_perc_limit_high,
           battery_temp_limit_low, battery_temp_limit_high, speed_limit_low,
-          speed_limit_high;
+          speed_limit_high, frame_id;
 
       battery_perc_limit_low = battery_temp_limit_low = speed_limit_low = 0;
       battery_perc_limit_high = battery_temp_limit_high = 100;
@@ -40,11 +40,8 @@ void Back::receiveFrames() {
           return;
         }
 
-        // id baterije = BA5
-        // id brzine = BE4
-
         switch (frame_id) {
-          case 0xBA5:
+          case 0x400:
             for (it = data.begin(); it != data.end(); it++) {
               one_byte[0] = data.at(count++);
 
@@ -76,27 +73,29 @@ void Back::receiveFrames() {
 
                   break;
               }
-              case 0xBE4:
-                for (it = data.begin(); it != data.end(); it++) {
-                  one_byte[0] = data.at(count++);
-
-                  switch (count) {
-                    case 1:
-                      speed = one_byte.toHex().left(2).toUpper();
-                      speed_int = speed.toUInt(&ok, 16);
-
-                      if (!(speed_int >= speed_limit_low &&
-                            speed_int <= speed_limit_high)) {
-                        handleError(3, speed_int, time);
-                        return;
-                      }
-
-                      emit frameSpeedReceived(speed_int);
-
-                      break;
-                  }
-                }
             }
+            break;
+          case 0x200:
+            for (it = data.begin(); it != data.end(); it++) {
+              one_byte[0] = data.at(count++);
+
+              switch (count) {
+                case 1:
+                  speed = one_byte.toHex().left(2).toUpper();
+                  speed_int = speed.toUInt(&ok, 16);
+
+                  if (!(speed_int >= speed_limit_low &&
+                        speed_int <= speed_limit_high)) {
+                    handleError(3, speed_int, time);
+                    return;
+                  }
+
+                  emit frameSpeedReceived(speed_int);
+
+                  break;
+              }
+            }
+            break;
         }
       }
     });

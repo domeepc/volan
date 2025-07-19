@@ -1,7 +1,7 @@
 # Pokretanje aplikacije
 
 ```bash
-./path/appvolan
+./usr/local/bin/appvolan
 ```
 
 Potrebno compilirati svaki library koji app koristi i 
