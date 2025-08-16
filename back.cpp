@@ -5,23 +5,24 @@ void Back::receiveFrames() {
   QString errorString;
   receive_device = QCanBus::instance()->createDevice(
       QStringLiteral("socketcan"), QStringLiteral("can0"), &errorString);
-  if (!receive_device)
-    qDebug() << errorString;
-  else {
-    receive_device->setConfigurationParameter(QCanBusDevice::BitRateKey,
-                                              QVariant());
-    receive_device->connectDevice();
+  if (!receive_device) {
+    qDebug() << "Failed to create CAN device:" << errorString;
+    return;
+  }
+  
+  receive_device->setConfigurationParameter(QCanBusDevice::BitRateKey,
+                                            QVariant());
+  if (!receive_device->connectDevice()) {
+    qDebug() << "Failed to connect to CAN device:" << receive_device->errorString();
+    return;
+  }
 
     QObject::connect(receive_device, &QCanBusDevice::framesReceived, [=]() {
-      bool ok;
-      QByteArray::Iterator it;
       QCanBusFrame frame;
       QDateTime time = QDateTime::currentDateTimeUtc();
-      QByteArray data, one_byte(1, 0);
-      QString battery_perc;
+      QByteArray data;
       uint8_t battery_p_int, battery_temp_int, speed_int;
-      QString battery_temp, speed;
-      int count, battery_perc_limit_low, battery_perc_limit_high,
+      int battery_perc_limit_low, battery_perc_limit_high,
           battery_temp_limit_low, battery_temp_limit_high, speed_limit_low,
           speed_limit_high, frame_id;
 
@@ -31,75 +32,85 @@ void Back::receiveFrames() {
 
       while (receive_device->framesAvailable()) {
         frame = receive_device->readFrame();
-        count = 0;
         data = frame.payload();
         frame_id = frame.frameId();
 
         // preskoci ako podatak nije 8 bitova
         if (data.size() != 8) {
-          return;
+          continue; // Skip this frame but continue processing others
         }
 
+        // Check for FF error patterns first (before processing specific frame types)
+        if (data.size() >= 6) {
+          // Check for FF error patterns: FF FF XX XX YY YY (6 bytes)
+          if (static_cast<uint8_t>(data[0]) == 0xFF && static_cast<uint8_t>(data[1]) == 0xFF) {
+            handleError(4, 0, time); // Battery error
+            return;
+          }
+          if (static_cast<uint8_t>(data[2]) == 0xFF && static_cast<uint8_t>(data[3]) == 0xFF) {
+            handleError(5, 0, time); // Speed error
+            return;
+          }
+          if (static_cast<uint8_t>(data[4]) == 0xFF && static_cast<uint8_t>(data[5]) == 0xFF) {
+            handleError(6, 0, time); // High temperature error
+            return;
+          }
+        }
+
+        // id baterije = BA5
+        // id brzine = BE4
+        
         switch (frame_id) {
-          case 0x400:
-            for (it = data.begin(); it != data.end(); it++) {
-              one_byte[0] = data.at(count++);
-
-              switch (count) {
-                case 1:
-                  battery_perc = one_byte.toHex().left(2).toUpper();
-                  battery_p_int = battery_perc.toUInt(&ok, 16);
-
-                  if (!(battery_p_int >= battery_perc_limit_low &&
-                        battery_p_int <= battery_perc_limit_high)) {
-                    handleError(1, battery_p_int, time);
-                    return;
-                  }
-
-                  emit frameBatPercReceived(battery_p_int);
-
-                  break;
-                case 2:
-                  battery_temp = one_byte.toHex().left(2).toUpper();
-                  battery_temp_int = battery_temp.toUInt(&ok, 16);
-
-                  if (!(battery_temp_int >= battery_temp_limit_low &&
-                        battery_temp_int <= battery_temp_limit_high)) {
-                    handleError(2, battery_temp_int, time);
-                    return;
-                  }
-
-                  emit frameBatTempReceived(battery_temp_int);
-
-                  break;
+          case 0xFFF:
+            // Special error frame ID handling
+            handleError(7, 0, time);
+            return;
+            
+          case 0xBA5:
+            // Optimized battery data processing - work directly with bytes
+            if (data.size() >= 2) {
+              // Battery percentage from first byte
+              battery_p_int = static_cast<uint8_t>(data[0]);
+              
+              if (!(battery_p_int >= battery_perc_limit_low &&
+                    battery_p_int <= battery_perc_limit_high)) {
+                handleError(1, battery_p_int, time);
+                return;
               }
+              
+              emit frameBatPercReceived(battery_p_int);
+              
+              // Battery temperature from second byte
+              battery_temp_int = static_cast<uint8_t>(data[1]);
+              
+              if (!(battery_temp_int >= battery_temp_limit_low &&
+                    battery_temp_int <= battery_temp_limit_high)) {
+                handleError(2, battery_temp_int, time);
+                return;
+              }
+              
+              emit frameBatTempReceived(battery_temp_int);
             }
             break;
-          case 0x200:
-            for (it = data.begin(); it != data.end(); it++) {
-              one_byte[0] = data.at(count++);
-
-              switch (count) {
-                case 1:
-                  speed = one_byte.toHex().left(2).toUpper();
-                  speed_int = speed.toUInt(&ok, 16);
-
-                  if (!(speed_int >= speed_limit_low &&
-                        speed_int <= speed_limit_high)) {
-                    handleError(3, speed_int, time);
-                    return;
-                  }
-
-                  emit frameSpeedReceived(speed_int);
-
-                  break;
+            
+          case 0xBE4:
+            // Optimized speed data processing - work directly with bytes
+            if (data.size() >= 1) {
+              // Speed from first byte
+              speed_int = static_cast<uint8_t>(data[0]);
+              
+              if (!(speed_int >= speed_limit_low &&
+                    speed_int <= speed_limit_high)) {
+                handleError(3, speed_int, time);
+                return;
               }
+              
+              emit frameSpeedReceived(speed_int);
             }
             break;
         }
       }
     });
-  }
 }
 
 // totalno nepotrebno za sada
@@ -159,13 +170,45 @@ void Back::handleError(int err_id, uint8_t error_val, QDateTime error_time) {
                     .arg(error_val);
       emit frameError(err_msg);
       break;
+    case 4:
+      err_msg = QStringLiteral(
+                    "%1 - Battery error detected (FF FF pattern in payload)")
+                    .arg(error_time.toString());
+      emit frameError(err_msg);
+      break;
+    case 5:
+      err_msg = QStringLiteral(
+                    "%1 - Speed error detected (FF FF pattern in payload)")
+                    .arg(error_time.toString());
+      emit frameError(err_msg);
+      break;
+    case 6:
+      err_msg = QStringLiteral(
+                    "%1 - High temperature error detected (FF FF pattern in payload)")
+                    .arg(error_time.toString());
+      emit frameError(err_msg);
+      break;
+    case 7:
+      err_msg = QStringLiteral(
+                    "%1 - Critical error detected (Frame ID 0xFFF)")
+                    .arg(error_time.toString());
+      emit frameError(err_msg);
+      break;
   }
 }
 
 // diskonektaj device kad je gotov program
 Back::~Back() {
-  if (receive_device->state() == QCanBusDevice::ConnectedState) {
-    receive_device->disconnectDevice();
+  if (receive_device) {
+    if (receive_device->state() == QCanBusDevice::ConnectedState) {
+      receive_device->disconnectDevice();
+    }
+    delete receive_device;
   }
-  delete receive_device;
+  if (send_device) {
+    if (send_device->state() == QCanBusDevice::ConnectedState) {
+      send_device->disconnectDevice();
+    }
+    delete send_device;
+  }
 }
