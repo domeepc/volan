@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 
       &QQmlApplicationEngine::objectCreationFailed, &app,
       []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
-  engine.load(QUrl(QStringLiteral("qrc:/volan/Main.qml")));
+  engine.loadFromModule("volan", "Main");
 
   return app.exec();
 }
