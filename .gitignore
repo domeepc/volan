@@ -30,7 +30,6 @@ ui_*.h
 *.qmlc
 *.jsc
 Makefile*
-*build-*
 *.qm
 *.prl
 
@@ -55,5 +54,8 @@ compile_commands.json
 
 *_qmlcache.qrc
 
-# Release packages
+# Release packages  
 releases/
+
+# Build script exceptions (keep these files)
+!build-*.sh
