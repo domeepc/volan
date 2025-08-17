@@ -10,6 +10,7 @@
 *.dll
 *.dylib
 build/
+build-*/
 
 # Qt-es
 object_script.*.Release
@@ -29,7 +30,6 @@ ui_*.h
 *.qmlc
 *.jsc
 Makefile*
-*build-*
 *.qm
 *.prl
 
@@ -53,3 +53,9 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+# Release packages  
+releases/
+
+# Build script exceptions (keep these files)
+!build-*.sh
