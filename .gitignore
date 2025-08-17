@@ -10,6 +10,7 @@
 *.dll
 *.dylib
 build/
+build-*/
 
 # Qt-es
 object_script.*.Release
@@ -53,3 +54,6 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+# Release packages
+releases/
