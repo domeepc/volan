@@ -1,0 +1,177 @@
+name: Build and Release for Raspberry Pi
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers on version tags like v1.0.0, v2.1.3, etc.
+      - '*' # Or any other tag pattern you prefer
+
+jobs:
+  build-rpi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            gcc-aarch64-linux-gnu \
+            g++-aarch64-linux-gnu \
+            file
+
+      - name: Install Qt 6 for cross-compilation
+        run: |
+          sudo apt-get install -y \
+            qt6-base-dev \
+            qt6-declarative-dev \
+            qt6-serialbus-dev \
+            libqt6serialbus6-dev \
+            qmake6 \
+            libgl1-mesa-dev
+
+      - name: Set up cross-compilation sysroot
+        run: |
+          # Create a minimal sysroot structure
+          mkdir -p /tmp/rpi-sysroot/usr/lib/aarch64-linux-gnu
+          mkdir -p /tmp/rpi-sysroot/usr/include
+
+          # Copy Qt6 libraries for cross-compilation
+          # Note: This uses the host Qt6 as a base. For production, you might want
+          # to download actual RPi Qt6 libraries
+          sudo cp -r /usr/lib/aarch64-linux-gnu/* /tmp/rpi-sysroot/usr/lib/aarch64-linux-gnu/ 2>/dev/null || true
+          sudo cp -r /usr/include/* /tmp/rpi-sysroot/usr/include/ 2>/dev/null || true
+
+          echo "Sysroot created at /tmp/rpi-sysroot"
+
+      - name: Create CMake toolchain file
+        run: |
+          cat > rpi-toolchain.cmake << 'EOF'
+          set(CMAKE_SYSTEM_NAME Linux)
+          set(CMAKE_SYSTEM_VERSION 1)
+          set(CMAKE_SYSTEM_PROCESSOR aarch64)
+
+          set(CMAKE_C_COMPILER aarch64-linux-gnu-gcc)
+          set(CMAKE_CXX_COMPILER aarch64-linux-gnu-g++)
+          set(CMAKE_AR aarch64-linux-gnu-ar)
+          set(CMAKE_STRIP aarch64-linux-gnu-strip)
+
+          set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+          set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+          set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+          set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+          # Set C++ standard
+          set(CMAKE_CXX_STANDARD 17)
+          set(CMAKE_CXX_STANDARD_REQUIRED ON)
+          EOF
+
+      - name: Configure CMake for Raspberry Pi
+        run: |
+          mkdir -p build-rpi
+          cd build-rpi
+          cmake .. \
+            -DCMAKE_TOOLCHAIN_FILE=../rpi-toolchain.cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr/local
+
+      - name: Build application
+        run: |
+          cd build-rpi
+          make -j$(nproc)
+
+      - name: Verify build
+        run: |
+          ls -lh build-rpi/appvolan
+          file build-rpi/appvolan
+          aarch64-linux-gnu-strip build-rpi/appvolan
+
+      - name: Package release
+        run: |
+          mkdir -p release
+          cp build-rpi/appvolan release/
+          cp README.md release/ 2>/dev/null || true
+          cp LICENSE release/ 2>/dev/null || true
+
+          # Create a simple installation script
+          cat > release/install.sh << 'EOF'
+          #!/bin/bash
+          # Volan installation script for Raspberry Pi
+
+          echo "Installing Volan..."
+          sudo cp appvolan /usr/local/bin/
+          sudo chmod +x /usr/local/bin/appvolan
+          echo "Installation complete!"
+          echo ""
+          echo "To set up CAN interface:"
+          echo "  sudo ip link set can0 up type can bitrate 1000000"
+          echo ""
+          echo "To run:"
+          echo "  appvolan"
+          EOF
+          chmod +x release/install.sh
+
+          # Create archive
+          cd release
+          tar czf ../volan-rpi4-${GITHUB_REF_NAME}.tar.gz *
+          cd ..
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            volan-rpi4-${{ github.ref_name }}.tar.gz
+            build-rpi/appvolan
+          body: |
+            ## Volan Release ${{ github.ref_name }}
+
+            Build for Raspberry Pi 4 Compute Module (ARM64/aarch64)
+
+            ### Features
+            - Qt-based GUI application
+            - CAN network support via Qt SerialBus
+            - Optimized for Raspberry Pi 4 Compute Module
+
+            ### Installation
+
+            1. Download and extract the archive:
+               ```bash
+               wget https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/volan-rpi4-${{ github.ref_name }}.tar.gz
+               tar xzf volan-rpi4-${{ github.ref_name }}.tar.gz
+               cd release
+               ```
+
+            2. Run the installation script:
+               ```bash
+               chmod +x install.sh
+               ./install.sh
+               ```
+
+            ### Requirements
+            - Raspberry Pi 4 Compute Module (or Raspberry Pi 4 Model B)
+            - Raspberry Pi OS (64-bit) with Qt 6
+            - CAN interface hardware
+
+            ### Setup CAN Interface
+            ```bash
+            # Enable CAN interface
+            sudo ip link set can0 up type can bitrate 1000000
+
+            # Verify interface is up
+            ip link show can0
+            ```
+
+            ### Running
+            ```bash
+            appvolan
+            ```
+
+            Built on: ${{ github.event.head_commit.timestamp }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
