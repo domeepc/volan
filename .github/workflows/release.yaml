@@ -111,6 +111,15 @@ jobs:
           set(OpenGL_GL_PREFERENCE GLVND)
           EOF
 
+      - name: Debug OpenGL libraries
+        run: |
+          echo "Searching for OpenGL libraries..."
+          find /usr/lib -name "libOpenGL.so*" 2>/dev/null || true
+          find /usr/lib -name "libGL.so*" 2>/dev/null || true
+          find /usr/lib -name "libGLX.so*" 2>/dev/null || true
+          ldconfig -p | grep -i opengl || true
+          ldconfig -p | grep -i glx || true
+
       - name: Configure CMake for Raspberry Pi
         run: |
           mkdir -p build-rpi
@@ -125,13 +134,26 @@ jobs:
 
           echo "Using Qt6 at: $QT6_DIR"
 
+          # Find OpenGL libraries manually
+          OPENGL_LIB=$(find /usr/lib -name "libOpenGL.so" 2>/dev/null | head -n 1)
+          GLX_LIB=$(find /usr/lib -name "libGLX.so" 2>/dev/null | head -n 1)
+
+          if [ -z "$OPENGL_LIB" ]; then
+            OPENGL_LIB=$(find /usr/lib -name "libGL.so" 2>/dev/null | head -n 1)
+          fi
+
+          echo "OpenGL library: $OPENGL_LIB"
+          echo "GLX library: $GLX_LIB"
+
           cmake .. \
             -DCMAKE_TOOLCHAIN_FILE=../rpi-toolchain.cmake \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=/usr/local \
             -DCMAKE_PREFIX_PATH="$QT6_CMAKE_DIR" \
             -DQt6_DIR="$QT6_DIR" \
-            -DOpenGL_GL_PREFERENCE=GLVND
+            -DOpenGL_GL_PREFERENCE=GLVND \
+            -DOPENGL_opengl_LIBRARY="$OPENGL_LIB" \
+            -DOPENGL_glx_LIBRARY="$GLX_LIB"
 
       - name: Build application
         run: |
