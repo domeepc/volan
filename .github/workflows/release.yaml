@@ -14,157 +14,59 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up build environment
-        env:
-          DEBIAN_FRONTEND: noninteractive
+      - name: Set up QEMU for ARM64 emulation
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build for Raspberry Pi using ARM64 container
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            build-essential \
-            cmake \
-            gcc-aarch64-linux-gnu \
-            g++-aarch64-linux-gnu \
-            file
-
-      - name: Install Qt 6 for cross-compilation
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          sudo apt-get install -y \
-            qt6-base-dev \
-            qt6-declarative-dev \
-            qt6-serialbus-dev \
-            libqt6serialbus6-dev \
-            libqt6quick6 \
-            libqt6qml6 \
-            libqt6gui6 \
-            libqt6core6 \
-            libqt6opengl6-dev \
-            qml6-module-qtquick \
-            qmake6 \
-            mesa-common-dev \
-            libgl1-mesa-dev \
-            libgles2-mesa-dev \
-            libglx-dev \
-            libgl-dev \
-            libegl-dev \
-            libopengl-dev \
-            libxkbcommon-dev \
-            libvulkan-dev
-
-      - name: Set up cross-compilation sysroot
-        run: |
-          # Create a minimal sysroot structure
-          mkdir -p /tmp/rpi-sysroot/usr/lib/aarch64-linux-gnu
-          mkdir -p /tmp/rpi-sysroot/usr/include
-
-          # Copy Qt6 libraries for cross-compilation
-          # Note: This uses the host Qt6 as a base. For production, you might want
-          # to download actual RPi Qt6 libraries
-          sudo cp -r /usr/lib/aarch64-linux-gnu/* /tmp/rpi-sysroot/usr/lib/aarch64-linux-gnu/ 2>/dev/null || true
-          sudo cp -r /usr/include/* /tmp/rpi-sysroot/usr/include/ 2>/dev/null || true
-
-          echo "Sysroot created at /tmp/rpi-sysroot"
-
-      - name: Find Qt6 paths
-        id: qt6-paths
-        run: |
-          # Find Qt6 installation directory
-          QT6_DIR=$(find /usr/lib/*/cmake/Qt6 -type d 2>/dev/null | head -n 1)
-          if [ -z "$QT6_DIR" ]; then
-            QT6_DIR=$(find /usr/lib/cmake/Qt6 -type d 2>/dev/null | head -n 1)
-          fi
-
-          # Get the base Qt6 path
-          QT6_BASE=$(dirname $(dirname $QT6_DIR))
-
-          echo "Qt6_DIR=$QT6_DIR" >> $GITHUB_OUTPUT
-          echo "Qt6_BASE=$QT6_BASE" >> $GITHUB_OUTPUT
-          echo "Found Qt6 at: $QT6_DIR"
-          echo "Qt6 base: $QT6_BASE"
-
-          # List available Qt6 modules
-          ls -la $(dirname $QT6_DIR) || true
-
-      - name: Create CMake toolchain file
-        run: |
-          cat > rpi-toolchain.cmake << 'EOF'
-          set(CMAKE_SYSTEM_NAME Linux)
-          set(CMAKE_SYSTEM_VERSION 1)
-          set(CMAKE_SYSTEM_PROCESSOR aarch64)
-
-          set(CMAKE_C_COMPILER aarch64-linux-gnu-gcc)
-          set(CMAKE_CXX_COMPILER aarch64-linux-gnu-g++)
-          set(CMAKE_AR aarch64-linux-gnu-ar)
-          set(CMAKE_STRIP aarch64-linux-gnu-strip)
-
-          set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-          set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
-          set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
-          set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
-
-          # Set C++ standard
-          set(CMAKE_CXX_STANDARD 17)
-          set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-          # Allow OpenGL to be found on host system
-          set(OpenGL_GL_PREFERENCE GLVND)
-          EOF
-
-      - name: Debug OpenGL libraries
-        run: |
-          echo "Searching for OpenGL libraries..."
-          find /usr/lib -name "libOpenGL.so*" 2>/dev/null || true
-          find /usr/lib -name "libGL.so*" 2>/dev/null || true
-          find /usr/lib -name "libGLX.so*" 2>/dev/null || true
-          ldconfig -p | grep -i opengl || true
-          ldconfig -p | grep -i glx || true
-
-      - name: Configure CMake for Raspberry Pi
-        run: |
-          mkdir -p build-rpi
-          cd build-rpi
-
-          # Set Qt6 paths
-          QT6_DIR=$(find /usr/lib/*/cmake/Qt6 -type d 2>/dev/null | head -n 1)
-          if [ -z "$QT6_DIR" ]; then
-            QT6_DIR=$(find /usr/lib/cmake/Qt6 -type d 2>/dev/null | head -n 1)
-          fi
-          QT6_CMAKE_DIR=$(dirname $QT6_DIR)
-
-          echo "Using Qt6 at: $QT6_DIR"
-
-          # Find OpenGL libraries manually
-          OPENGL_LIB=$(find /usr/lib -name "libOpenGL.so" 2>/dev/null | head -n 1)
-          GLX_LIB=$(find /usr/lib -name "libGLX.so" 2>/dev/null | head -n 1)
-
-          if [ -z "$OPENGL_LIB" ]; then
-            OPENGL_LIB=$(find /usr/lib -name "libGL.so" 2>/dev/null | head -n 1)
-          fi
-
-          echo "OpenGL library: $OPENGL_LIB"
-          echo "GLX library: $GLX_LIB"
-
-          cmake .. \
-            -DCMAKE_TOOLCHAIN_FILE=../rpi-toolchain.cmake \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/usr/local \
-            -DCMAKE_PREFIX_PATH="$QT6_CMAKE_DIR" \
-            -DQt6_DIR="$QT6_DIR" \
-            -DOpenGL_GL_PREFERENCE=GLVND \
-            -DOPENGL_opengl_LIBRARY="$OPENGL_LIB" \
-            -DOPENGL_glx_LIBRARY="$GLX_LIB"
-
-      - name: Build application
-        run: |
-          cd build-rpi
-          make -j$(nproc)
+          docker run --rm --platform linux/arm64 \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            arm64v8/debian:bookworm \
+            bash -c "
+              set -e
+              export DEBIAN_FRONTEND=noninteractive
+              
+              echo 'Installing dependencies...'
+              apt-get update
+              apt-get install -y \
+                build-essential \
+                cmake \
+                qt6-base-dev \
+                qt6-declarative-dev \
+                qt6-serialbus-dev \
+                libqt6serialbus6-dev \
+                libgl1-mesa-dev \
+                file
+              
+              echo 'Creating build directory...'
+              mkdir -p build-rpi
+              cd build-rpi
+              
+              echo 'Configuring with CMake...'
+              cmake .. \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_INSTALL_PREFIX=/usr/local \
+                -DCMAKE_CXX_STANDARD=17
+              
+              echo 'Building application...'
+              make -j\$(nproc)
+              
+              echo 'Build complete!'
+              ls -lh appvolan
+              file appvolan
+              strip appvolan
+            "
 
       - name: Verify build
         run: |
           ls -lh build-rpi/appvolan
           file build-rpi/appvolan
-          aarch64-linux-gnu-strip build-rpi/appvolan
 
       - name: Package release
         run: |
