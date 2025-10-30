@@ -44,7 +44,11 @@ jobs:
             qmake6 \
             libgl1-mesa-dev \
             libgles2-mesa-dev \
-            libxkbcommon-dev
+            libglx-dev \
+            libgl-dev \
+            libegl-dev \
+            libxkbcommon-dev \
+            libvulkan-dev
 
       - name: Set up cross-compilation sysroot
         run: |
