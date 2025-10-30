@@ -48,6 +48,26 @@ jobs:
 
           echo "Sysroot created at /tmp/rpi-sysroot"
 
+      - name: Find Qt6 paths
+        id: qt6-paths
+        run: |
+          # Find Qt6 installation directory
+          QT6_DIR=$(find /usr/lib/*/cmake/Qt6 -type d 2>/dev/null | head -n 1)
+          if [ -z "$QT6_DIR" ]; then
+            QT6_DIR=$(find /usr/lib/cmake/Qt6 -type d 2>/dev/null | head -n 1)
+          fi
+
+          # Get the base Qt6 path
+          QT6_BASE=$(dirname $(dirname $QT6_DIR))
+
+          echo "Qt6_DIR=$QT6_DIR" >> $GITHUB_OUTPUT
+          echo "Qt6_BASE=$QT6_BASE" >> $GITHUB_OUTPUT
+          echo "Found Qt6 at: $QT6_DIR"
+          echo "Qt6 base: $QT6_BASE"
+
+          # List available Qt6 modules
+          ls -la $(dirname $QT6_DIR) || true
+
       - name: Create CMake toolchain file
         run: |
           cat > rpi-toolchain.cmake << 'EOF'
@@ -61,9 +81,9 @@ jobs:
           set(CMAKE_STRIP aarch64-linux-gnu-strip)
 
           set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-          set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-          set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-          set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+          set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
+          set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
+          set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
 
           # Set C++ standard
           set(CMAKE_CXX_STANDARD 17)
@@ -74,10 +94,22 @@ jobs:
         run: |
           mkdir -p build-rpi
           cd build-rpi
+
+          # Set Qt6 paths
+          QT6_DIR=$(find /usr/lib/*/cmake/Qt6 -type d 2>/dev/null | head -n 1)
+          if [ -z "$QT6_DIR" ]; then
+            QT6_DIR=$(find /usr/lib/cmake/Qt6 -type d 2>/dev/null | head -n 1)
+          fi
+          QT6_CMAKE_DIR=$(dirname $QT6_DIR)
+
+          echo "Using Qt6 at: $QT6_DIR"
+
           cmake .. \
             -DCMAKE_TOOLCHAIN_FILE=../rpi-toolchain.cmake \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/usr/local
+            -DCMAKE_INSTALL_PREFIX=/usr/local \
+            -DCMAKE_PREFIX_PATH="$QT6_CMAKE_DIR" \
+            -DQt6_DIR="$QT6_DIR"
 
       - name: Build application
         run: |
