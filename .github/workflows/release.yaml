@@ -30,16 +30,21 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get install -y --no-install-recommends \
+          sudo apt-get install -y \
             qt6-base-dev \
             qt6-declarative-dev \
             qt6-serialbus-dev \
             libqt6serialbus6-dev \
             libqt6quick6 \
             libqt6qml6 \
+            libqt6gui6 \
+            libqt6core6 \
+            libqt6opengl6-dev \
             qml6-module-qtquick \
             qmake6 \
-            libgl1-mesa-dev
+            libgl1-mesa-dev \
+            libgles2-mesa-dev \
+            libxkbcommon-dev
 
       - name: Set up cross-compilation sysroot
         run: |
