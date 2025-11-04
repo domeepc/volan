@@ -38,7 +38,7 @@ jobs:
           path: |
             build-rpi
             .cache/ccache
-          key: ${{ runner.os }}-cmake-arm64-${{ hashFiles('CMakeLists.txt', '*.cpp', '*.h', '*.qml') }}
+          key: ${{ runner.os }}-cmake-arm64-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('*.cpp') }}-${{ hashFiles('*.h') }}
           restore-keys: |
             ${{ runner.os }}-cmake-arm64-
 
