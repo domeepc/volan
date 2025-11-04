@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - 'v*' # Triggers on version tags like v1.0.0, v2.1.3, etc.
-      - '*' # Or any other tag pattern you prefer
 
 permissions:
   contents: write
@@ -25,27 +24,57 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Cache APT packages
+        uses: actions/cache@v4
+        with:
+          path: apt-cache
+          key: ${{ runner.os }}-apt-arm64-${{ hashFiles('.github/workflows/release.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-arm64-
+
+      - name: Cache CMake build
+        uses: actions/cache@v4
+        with:
+          path: |
+            build-rpi
+            .cache/ccache
+          key: ${{ runner.os }}-cmake-arm64-${{ hashFiles('**/CMakeLists.txt', '**/*.cpp', '**/*.h') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-arm64-
+
       - name: Build for Raspberry Pi using ARM64 container
         run: |
+          # Create cache directories
+          mkdir -p apt-cache .cache/ccache
+          
           docker run --rm --platform linux/arm64 \
             -v ${{ github.workspace }}:/workspace \
+            -v ${{ github.workspace }}/apt-cache:/var/cache/apt/archives \
+            -v ${{ github.workspace }}/.cache/ccache:/root/.cache/ccache \
             -w /workspace \
             arm64v8/debian:bookworm \
             bash -c "
               set -e
               export DEBIAN_FRONTEND=noninteractive
+              export CCACHE_DIR=/root/.cache/ccache
               
               echo 'Installing dependencies...'
               apt-get update
               apt-get install -y \
                 build-essential \
                 cmake \
+                ccache \
                 qt6-base-dev \
                 qt6-declarative-dev \
                 qt6-serialbus-dev \
                 libqt6serialbus6-dev \
                 libgl1-mesa-dev \
                 file
+              
+              # Configure ccache
+              export PATH=/usr/lib/ccache:\$PATH
+              ccache --max-size=500M
+              ccache --show-stats
               
               echo 'Creating build directory...'
               mkdir -p build-rpi
@@ -55,10 +84,14 @@ jobs:
               cmake .. \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DCMAKE_INSTALL_PREFIX=/usr/local \
-                -DCMAKE_CXX_STANDARD=17
+                -DCMAKE_CXX_STANDARD=17 \
+                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
               
               echo 'Building application...'
               make -j\$(nproc)
+              
+              echo 'CCache statistics:'
+              ccache --show-stats
               
               echo 'Build complete!'
               ls -lh appvolan
@@ -170,7 +203,6 @@ jobs:
                ```bash
                wget https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/volan-rpi4-${{ github.ref_name }}.tar.gz
                tar xzf volan-rpi4-${{ github.ref_name }}.tar.gz
-               cd release
                ```
 
             2. Run the installation script (this will install Qt6 dependencies):
@@ -208,7 +240,7 @@ jobs:
             ### Setup CAN Interface
             ```bash
             # Enable CAN interface
-            sudo ip link set can0 up type can bitrate 1000000
+            sudo ip link set can0 up type can bitrate 500000
 
             # Verify interface is up
             ip link show can0
