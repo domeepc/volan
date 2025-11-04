@@ -91,7 +91,7 @@ jobs:
           # Check for required Qt6 libraries
           echo "Checking for required Qt6 libraries..."
           if ! dpkg -l | grep -q libqt6serialbus6; then
-            echo "Qt6 SerialBus library not found. Installing dependencies..."
+            echo "Qt6 libraries not found. Installing dependencies..."
             sudo apt-get update
             sudo apt-get install -y \
               libqt6core6 \
@@ -99,13 +99,23 @@ jobs:
               libqt6qml6 \
               libqt6quick6 \
               libqt6serialbus6 \
+              libqt6opengl6 \
+              qt6-qpa-plugins \
               qml6-module-qtquick \
               qml6-module-qtquick-controls \
               qml6-module-qtquick-layouts \
-              qml6-module-qtquick-window
+              qml6-module-qtquick-window \
+              libgl1 \
+              libegl1 \
+              libgles2
             echo "Dependencies installed successfully!"
           else
-            echo "Qt6 libraries already installed."
+            echo "Qt6 libraries already installed. Checking for platform plugins..."
+            if ! dpkg -l | grep -q qt6-qpa-plugins; then
+              echo "Installing Qt6 platform plugins..."
+              sudo apt-get update
+              sudo apt-get install -y qt6-qpa-plugins libgl1 libegl1 libgles2
+            fi
           fi
 
           echo ""
@@ -171,14 +181,23 @@ jobs:
 
             **Manual installation** (if you prefer):
             ```bash
-            # Install Qt6 dependencies
+            # Install Qt6 dependencies and platform plugins
             sudo apt-get update
-            sudo apt-get install -y libqt6core6 libqt6gui6 libqt6qml6 libqt6quick6 libqt6serialbus6 qml6-module-qtquick
+            sudo apt-get install -y \
+              libqt6core6 libqt6gui6 libqt6qml6 libqt6quick6 \
+              libqt6serialbus6 libqt6opengl6 qt6-qpa-plugins \
+              qml6-module-qtquick qml6-module-qtquick-controls \
+              libgl1 libegl1 libgles2
 
             # Copy binary
             sudo cp appvolan /usr/local/bin/
             sudo chmod +x /usr/local/bin/appvolan
             ```
+
+            **Troubleshooting:**
+            - If you get "no Qt platform plugin could be initialized", ensure `qt6-qpa-plugins` is installed
+            - For headless/embedded display, set: `export QT_QPA_PLATFORM=eglfs`
+            - For X11/desktop, Qt should auto-detect, or set: `export QT_QPA_PLATFORM=xcb`
 
             ### Requirements
             - Raspberry Pi 4 Compute Module (or Raspberry Pi 4 Model B)
