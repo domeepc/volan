@@ -38,7 +38,7 @@ jobs:
           path: |
             build-rpi
             .cache/ccache
-          key: ${{ runner.os }}-cmake-arm64-${{ hashFiles('**/CMakeLists.txt', '**/*.cpp', '**/*.h') }}
+          key: ${{ runner.os }}-cmake-arm64-${{ hashFiles('CMakeLists.txt', '*.cpp', '*.h', '*.qml') }}
           restore-keys: |
             ${{ runner.os }}-cmake-arm64-
 
@@ -46,7 +46,7 @@ jobs:
         run: |
           # Create cache directories
           mkdir -p apt-cache .cache/ccache
-          
+
           docker run --rm --platform linux/arm64 \
             -v ${{ github.workspace }}:/workspace \
             -v ${{ github.workspace }}/apt-cache:/var/cache/apt/archives \
