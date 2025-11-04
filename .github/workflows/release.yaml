@@ -83,16 +83,53 @@ jobs:
           #!/bin/bash
           # Volan installation script for Raspberry Pi
 
-          echo "Installing Volan..."
+          echo "==================================="
+          echo "Volan Installation Script"
+          echo "==================================="
+          echo ""
+
+          # Check for required Qt6 libraries
+          echo "Checking for required Qt6 libraries..."
+          if ! dpkg -l | grep -q libqt6serialbus6; then
+            echo "Qt6 SerialBus library not found. Installing dependencies..."
+            sudo apt-get update
+            sudo apt-get install -y \
+              libqt6core6 \
+              libqt6gui6 \
+              libqt6qml6 \
+              libqt6quick6 \
+              libqt6serialbus6 \
+              qml6-module-qtquick \
+              qml6-module-qtquick-controls \
+              qml6-module-qtquick-layouts \
+              qml6-module-qtquick-window
+            echo "Dependencies installed successfully!"
+          else
+            echo "Qt6 libraries already installed."
+          fi
+
+          echo ""
+          echo "Installing Volan application..."
           sudo cp appvolan /usr/local/bin/
           sudo chmod +x /usr/local/bin/appvolan
           echo "Installation complete!"
           echo ""
-          echo "To set up CAN interface:"
-          echo "  sudo ip link set can0 up type can bitrate 1000000"
+          echo "==================================="
+          echo "Setup Instructions"
+          echo "==================================="
           echo ""
-          echo "To run:"
-          echo "  appvolan"
+          echo "1. Set up CAN interface:"
+          echo "   sudo ip link set can0 up type can bitrate 1000000"
+          echo ""
+          echo "2. To make CAN setup persistent, add to /etc/network/interfaces:"
+          echo "   auto can0"
+          echo "   iface can0 inet manual"
+          echo "     pre-up /sbin/ip link set can0 type can bitrate 1000000"
+          echo "     up /sbin/ip link set can0 up"
+          echo ""
+          echo "3. Run the application:"
+          echo "   appvolan"
+          echo ""
           EOF
           chmod +x release/install.sh
 
@@ -126,16 +163,28 @@ jobs:
                cd release
                ```
 
-            2. Run the installation script:
+            2. Run the installation script (this will install Qt6 dependencies):
                ```bash
                chmod +x install.sh
                ./install.sh
                ```
 
+            **Manual installation** (if you prefer):
+            ```bash
+            # Install Qt6 dependencies
+            sudo apt-get update
+            sudo apt-get install -y libqt6core6 libqt6gui6 libqt6qml6 libqt6quick6 libqt6serialbus6 qml6-module-qtquick
+
+            # Copy binary
+            sudo cp appvolan /usr/local/bin/
+            sudo chmod +x /usr/local/bin/appvolan
+            ```
+
             ### Requirements
             - Raspberry Pi 4 Compute Module (or Raspberry Pi 4 Model B)
-            - Raspberry Pi OS (64-bit) with Qt 6
-            - CAN interface hardware
+            - Raspberry Pi OS (64-bit) - Bookworm or later
+            - Qt 6 runtime libraries (installed automatically by script)
+            - CAN interface hardware (e.g., MCP2515, Waveshare CAN HAT)
 
             ### Setup CAN Interface
             ```bash
