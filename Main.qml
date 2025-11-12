@@ -11,6 +11,12 @@ Window {
     title: qsTr("Volan prototype")
     color: "#000000"
 
+    transform: Rotation {
+            origin.x: parent.width/2
+            origin.y: parent.height/2
+            angle: 90   // clockwise
+        }
+
     Back {
         id: backend
     }
