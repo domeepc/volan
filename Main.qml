@@ -16,15 +16,16 @@ Window {
         id: backend
     }
 
-
-    Page{
+    Item {
+        anchors.centerIn: parent
+        width: window_ID.height
+        height: window_ID.width
         rotation: 90
-        anchors.fill: parent
 
-    RowLayout {
-        id: row
-        anchors.fill: parent
-        spacing: 3
+        RowLayout {
+            id: row
+            anchors.fill: parent
+            spacing: 3
 
         //left column
         ColumnLayout {
@@ -178,7 +179,6 @@ Window {
             }
         }
     }
-
     }
 
 
