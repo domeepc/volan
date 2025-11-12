@@ -11,22 +11,20 @@ Window {
     title: qsTr("Volan prototype")
     color: "#000000"
 
+
     Back {
         id: backend
     }
 
-    Item {
-        anchors.fill: parent
-        transform: Rotation {
-            origin.x: parent.width/2
-            origin.y: parent.height/2
-            angle: 90   // clockwise
-        }
 
-        RowLayout {
-            id: row
-            anchors.fill: parent
-            spacing: 3
+    Page{
+        rotation: 90
+        anchors.fill: parent
+
+    RowLayout {
+        id: row
+        anchors.fill: parent
+        spacing: 3
 
         //left column
         ColumnLayout {
@@ -180,6 +178,7 @@ Window {
             }
         }
     }
+
     }
 
 
