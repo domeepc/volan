@@ -27,9 +27,10 @@ jobs:
       - name: Cache APT packages
         uses: actions/cache@v4
         with:
-          path: apt-cache/*.deb
-          key: ${{ runner.os }}-apt-arm64-${{ hashFiles('.github/workflows/release.yaml') }}
+          path: apt-cache
+          key: ${{ runner.os }}-apt-arm64-qt6-v1
           restore-keys: |
+            ${{ runner.os }}-apt-arm64-qt6-
             ${{ runner.os }}-apt-arm64-
 
       - name: Cache CMake build
@@ -38,7 +39,7 @@ jobs:
           path: |
             build-rpi
             .cache/ccache
-          key: ${{ runner.os }}-cmake-arm64-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('*.cpp') }}-${{ hashFiles('*.h') }}
+          key: ${{ runner.os }}-cmake-arm64-${{ hashFiles('CMakeLists.txt', '*.cpp', '*.h', '*.qml') }}-v1
           restore-keys: |
             ${{ runner.os }}-cmake-arm64-
 
