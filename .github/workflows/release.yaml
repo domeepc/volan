@@ -27,7 +27,7 @@ jobs:
       - name: Cache APT packages
         uses: actions/cache@v4
         with:
-          path: apt-cache
+          path: apt-cache/*.deb
           key: ${{ runner.os }}-apt-arm64-${{ hashFiles('.github/workflows/release.yaml') }}
           restore-keys: |
             ${{ runner.os }}-apt-arm64-
@@ -46,6 +46,9 @@ jobs:
         run: |
           # Create cache directories
           mkdir -p apt-cache .cache/ccache
+          
+          # Fix permissions for apt-cache to avoid tar errors
+          chmod -R 755 apt-cache 2>/dev/null || true
 
           docker run --rm --platform linux/arm64 \
             -v ${{ github.workspace }}:/workspace \
@@ -99,6 +102,12 @@ jobs:
               strip appvolan
             "
 
+      - name: Clean up cache directories
+        run: |
+          # Remove lock files and other non-cacheable items from apt-cache
+          rm -f apt-cache/lock apt-cache/partial/* 2>/dev/null || true
+          chmod -R 755 apt-cache 2>/dev/null || true
+
       - name: Verify build
         run: |
           ls -lh build-rpi/appvolan
@@ -135,10 +144,10 @@ jobs:
               libqt6opengl6 \
               qt6-qpa-plugins \
               qml6-module-qtquick \
-              qml6-module-qtqml-workerscript \
               qml6-module-qtquick-controls \
               qml6-module-qtquick-layouts \
               qml6-module-qtquick-window \
+              qml6-module-qtqml-workerscript \
               libgl1 \
               libegl1 \
               libgles2
