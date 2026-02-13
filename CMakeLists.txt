@@ -4,21 +4,24 @@ project(volan VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick SerialBus)
+find_package(Qt6 REQUIRED COMPONENTS Quick SerialBus SerialPort)
 
 qt_standard_project_setup()
 
 qt_add_executable(appvolan
     main.cpp
-    back.cpp
+
 )
+
+qt_policy(SET QTP0001 NEW)
 
 qt_add_qml_module(appvolan
     URI volan
     VERSION 1.0
     QML_FILES
         Main.qml
-        SOURCES back.h back.cpp
+
+        SOURCES caninterface.h caninterface.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -35,6 +38,7 @@ set_target_properties(appvolan PROPERTIES
 target_link_libraries(appvolan
     PRIVATE Qt6::Quick
     PRIVATE Qt6::SerialBus
+    PRIVATE Qt6::SerialPort
 )
 
 include(GNUInstallDirs)
