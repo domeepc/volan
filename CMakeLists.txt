@@ -22,6 +22,9 @@ qt_add_qml_module(appvolan
         Main.qml
 
         SOURCES caninterface.h caninterface.cpp
+        SOURCES canmessageprocessor.h canmessageprocessor.cpp
+        SOURCES dbcmanager.h dbcmanager.cpp
+        SOURCES signalhandler.h signalhandler.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
