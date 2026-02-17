@@ -19,13 +19,13 @@ public:
 
     void setMessages(const QList<QCanMessageDescription> &messages);
     void setUniqueIDDescription(const QCanUniqueIdDescription &idDescription);
-    void processFrame(const QCanBusFrame &frame);
+
 
 signals:
-    void frameDecoded(QtCanBus::UniqueId id,
-                      const QVariantMap &sigs
-    );
+    void frameDecoded(QtCanBus::UniqueId id, const QVariantMap &sigs);
 
+public slots:
+    void processFrame(const QCanBusFrame &frame);
 private:
     QCanFrameProcessor m_processor;
 };

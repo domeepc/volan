@@ -8,12 +8,14 @@ bool CanInterface::start(const QString &interfaceName){
     if(m_device) stop();
 
     m_device = QCanBus::instance()->createDevice("socketcan", interfaceName);
-    m_device->connectDevice();
+
+    /*
     if(!m_device){
         qWarning() << "CAN device not created!";
         qDebug() << "aaaaa   " << m_device;
         return false;
     }
+    */
 
     //kad primi okvir šalji signal
     connect(m_device, &QCanBusDevice::framesReceived, this, &CanInterface::onFramesReceived);
@@ -25,8 +27,6 @@ bool CanInterface::start(const QString &interfaceName){
     connect(m_device, &QCanBusDevice:: stateChanged, this, &CanInterface::onStateChanged);
 
 
-    QByteArray data = QByteArray::fromHex("55");
-
 
 
     if(!m_device->connectDevice()){
@@ -36,6 +36,11 @@ bool CanInterface::start(const QString &interfaceName){
         return false;
     }
 
+    QCanBusFrame frame;
+    frame.setFrameId(123);
+    QByteArray data = QByteArray::fromHex("55");
+    frame.setPayload(data);
+    sendFrame(frame);
 
     return true;
 }

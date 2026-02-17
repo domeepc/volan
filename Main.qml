@@ -14,23 +14,16 @@ Window {
     Item {
         anchors.fill: parent
         Text {
-            id: frame
+            id: speed
 
             anchors.centerIn: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: "black"
-            text: qsTr("0")
+            text: signalHandler.speed
             font.pointSize: 24
 
-            Connections{
-                target: canInterface
 
-
-                function onProcess(frameId){
-                    frame.text = frameId
-                }
-            }
 
         }
     }

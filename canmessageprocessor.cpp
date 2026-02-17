@@ -10,7 +10,7 @@ void CanMessageProcessor::setMessages(const QList<QCanMessageDescription> &messa
 }
 
 void CanMessageProcessor::processFrame(const QCanBusFrame &frame){
-
+    qDebug() << "AAAAA";
     if(!frame.isValid()){
         qDebug() << "CAN frame not valid!";
     }
@@ -26,6 +26,7 @@ void CanMessageProcessor::processFrame(const QCanBusFrame &frame){
         return;
     }
 
+
     qDebug() << "Frame ID: " << result.uniqueId;
     QMapIterator<QString, QVariant> i(result.signalValues);
     while (i.hasNext()) {
@@ -36,7 +37,7 @@ void CanMessageProcessor::processFrame(const QCanBusFrame &frame){
 
 
 
-    //emit frameDecoded(result.uniqueId, result.signalValues);
+    emit frameDecoded(result.uniqueId, result.signalValues);
 }
 
 void CanMessageProcessor::setUniqueIDDescription(const QCanUniqueIdDescription &idDescription){

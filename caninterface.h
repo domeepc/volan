@@ -19,15 +19,9 @@ public:
     void stop();
     // mozda dodat funkciju za ponovni pokusaj spajanja na can u slucaju greski
 
-
-
-
 signals:
     void frameReceived(const QCanBusFrame &frame);
     void errorOccurred(const QString &error);
-
-
-    void process(QString frameid);//ova funkcija je samo za testiranje
 
 private slots:
     void onFramesReceived();

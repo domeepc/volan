@@ -6,6 +6,7 @@
 #include "caninterface.h"
 #include "dbcmanager.h"
 #include "canmessageprocessor.h"
+#include "signalhandler.h"
 
 int main(int argc, char *argv[]) {
   //Back *back = new Back;
@@ -13,10 +14,11 @@ int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
 
+
+
+
   CanInterface canInterface;
   canInterface.start("vcan0");
-
-  engine.rootContext()->setContextProperty(QStringLiteral("canInterface"), &canInterface);
 
   QString path ="/home/pmales/Desktop/volan/volantest/dbcfile.dbc";
   DbcManager DBCparser;
@@ -31,9 +33,13 @@ int main(int argc, char *argv[]) {
   processor.setUniqueIDDescription(DBCparser.getIdDescription());
   processor.setMessages(DBCparser.getMessages());
 
+  SignalHandler signalHandler;
+  engine.rootContext()->setContextProperty("signalHandler", &signalHandler);
+
 
   QObject::connect(&canInterface, &CanInterface::frameReceived, &processor, &CanMessageProcessor::processFrame);
 
+  QObject::connect(&processor, &CanMessageProcessor::frameDecoded, &signalHandler, &SignalHandler::handleDecodedFrame);
   QObject::connect(
       &engine,
       &QQmlApplicationEngine::objectCreationFailed,
