@@ -27,6 +27,11 @@ void CanMessageProcessor::processFrame(const QCanBusFrame &frame){
     }
 
     qDebug() << "Frame ID: " << result.uniqueId;
+    QMapIterator<QString, QVariant> i(result.signalValues);
+    while (i.hasNext()) {
+        i.next();
+        qDebug() << "  Signal:" << i.key() << ", Value:" << i.value();
+    }
 
 
 

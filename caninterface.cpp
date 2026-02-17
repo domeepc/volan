@@ -8,15 +8,14 @@ bool CanInterface::start(const QString &interfaceName){
     if(m_device) stop();
 
     m_device = QCanBus::instance()->createDevice("socketcan", interfaceName);
-
-
+    m_device->connectDevice();
     if(!m_device){
         qWarning() << "CAN device not created!";
         qDebug() << "aaaaa   " << m_device;
         return false;
     }
 
-    //kad primi okvir šali signal
+    //kad primi okvir šalji signal
     connect(m_device, &QCanBusDevice::framesReceived, this, &CanInterface::onFramesReceived);
 
     //ako se greska dogodi posalji error signal
@@ -24,6 +23,9 @@ bool CanInterface::start(const QString &interfaceName){
 
     //ako se CAN device iskljuci salji signal
     connect(m_device, &QCanBusDevice:: stateChanged, this, &CanInterface::onStateChanged);
+
+
+    QByteArray data = QByteArray::fromHex("55");
 
 
 
@@ -46,19 +48,16 @@ void CanInterface::stop(){
     m_device = nullptr;
 }
 
+void CanInterface::sendFrame(const QCanBusFrame &frame){
+    if(m_device->writeFrame(frame)){
+        qWarning() << "Failed to send frame with ID: "<< frame.frameId() << " " << frame.payload();
+    }
+}
 
 
 
 void CanInterface::onFramesReceived(){
     while(m_device->framesAvailable()){
-
-        /*ovaj dio je samo testiranje
-        QCanBusFrame frame = m_device->readFrame();
-        QString frameHexPadded = QString::number(static_cast<quint64>(frame.frameId()), 16).toUpper();
-        qDebug() << frameHexPadded;
-        emit process(frameHexPadded);
-        */
-
 
         emit frameReceived(m_device->readFrame());
     }

@@ -19,7 +19,7 @@ public:
     void stop();
     // mozda dodat funkciju za ponovni pokusaj spajanja na can u slucaju greski
 
-    bool sendFrame(const QCanBusFrame &frame);
+
 
 
 signals:
@@ -31,6 +31,7 @@ signals:
 
 private slots:
     void onFramesReceived();
+    void sendFrame(const QCanBusFrame &frame);
     void onErrorOccurred(QCanBusDevice::CanBusError error);
     void onStateChanged(QCanBusDevice::CanBusDeviceState state);
 

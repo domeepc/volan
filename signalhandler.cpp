@@ -2,4 +2,8 @@
 
 SignalHandler::SignalHandler(QObject *parent)
     : QObject{parent}
-{}
+{
+
+}
+
+
