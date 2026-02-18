@@ -4,12 +4,16 @@ import volan
 
 Window {
     id: window_ID
-    // width: Screen.width
-    // height: Screen.height
-    //visibility: Window.FullScreen
+    width: 853
+    height: 479
+
     visible: true
-    title: qsTr("Volan prototype")
-    //color: "#000000"
+
+    Rectangle {
+        width: parent.width
+        height: parent.height
+        color: "black"
+    }
 
     Item {
         anchors.fill: parent
@@ -19,7 +23,7 @@ Window {
             anchors.centerIn: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            color: "black"
+            color: "white"
             text: signalHandler.speed
             font.pointSize: 24
 

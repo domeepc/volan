@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 
+
 #include <QtSerialBus/QCanBus>
 #include <QtSerialBus/QCanBusFrame>
 
@@ -17,11 +18,11 @@ public:
 
     bool start(const QString &interfaceName);
     void stop();
-    // mozda dodat funkciju za ponovni pokusaj spajanja na can u slucaju greski
 
 signals:
     void frameReceived(const QCanBusFrame &frame);
     void errorOccurred(const QString &error);
+    void connected();
 
 private slots:
     void onFramesReceived();
@@ -31,7 +32,7 @@ private slots:
 
 private:
     QCanBusDevice *m_device = nullptr;
-
+    QString m_interfaceName;
 };
 
 #endif // CANINTERFACE_H

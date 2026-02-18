@@ -1,21 +1,22 @@
 #include "caninterface.h"
 
 CanInterface::CanInterface(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},
+    m_device(nullptr)
+
 {}
 
 bool CanInterface::start(const QString &interfaceName){
     if(m_device) stop();
 
+    m_interfaceName = interfaceName;
+
     m_device = QCanBus::instance()->createDevice("socketcan", interfaceName);
 
-    /*
-    if(!m_device){
-        qWarning() << "CAN device not created!";
-        qDebug() << "aaaaa   " << m_device;
+    if (!m_device) {
+        emit errorOccurred("SocketCAN plugin missing");
         return false;
     }
-    */
 
     //kad primi okvir šalji signal
     connect(m_device, &QCanBusDevice::framesReceived, this, &CanInterface::onFramesReceived);
@@ -33,14 +34,15 @@ bool CanInterface::start(const QString &interfaceName){
         emit errorOccurred("Cannot connect CAN device!");
         delete m_device;
         m_device = nullptr;
+
         return false;
     }
 
-    QCanBusFrame frame;
-    frame.setFrameId(123);
-    QByteArray data = QByteArray::fromHex("55");
-    frame.setPayload(data);
-    sendFrame(frame);
+    // QCanBusFrame frame;
+    // frame.setFrameId(123);
+    // QByteArray data = QByteArray::fromHex("55");
+    // frame.setPayload(data);
+    // sendFrame(frame);
 
     return true;
 }
@@ -54,7 +56,7 @@ void CanInterface::stop(){
 }
 
 void CanInterface::sendFrame(const QCanBusFrame &frame){
-    if(m_device->writeFrame(frame)){
+    if(!m_device->writeFrame(frame)){
         qWarning() << "Failed to send frame with ID: "<< frame.frameId() << " " << frame.payload();
     }
 }
@@ -69,12 +71,18 @@ void CanInterface::onFramesReceived(){
 }
 
 
+
+
 void CanInterface::onErrorOccurred(QCanBusDevice::CanBusError error){
-    if (error == QCanBusDevice::NoError) return;
 
-    qDebug() << "CAN error: " << error;
+    if(error == QCanBusDevice::NoError)
+        return;
 
-    emit errorOccurred(m_device->errorString());
+    qDebug() << "CAN Error:" << error << m_device->errorString();
+
+    stop();
+
+
 }
 
 void CanInterface::onStateChanged(QCanBusDevice::CanBusDeviceState state){
@@ -82,7 +90,7 @@ void CanInterface::onStateChanged(QCanBusDevice::CanBusDeviceState state){
         emit errorOccurred("CAN interface is disconnected");
 
     }else if(state == QCanBusDevice::ConnectedState){
-        emit errorOccurred("CAN interface is connected!");
+        emit connected();
 
     }
 }
