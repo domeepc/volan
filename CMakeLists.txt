@@ -32,6 +32,9 @@ qt_add_qml_module(appvolan
         images/race.png
         SOURCES
         QML_FILES mechView.qml
+        QML_FILES bmsView.qml
+        QML_FILES vcuView.qml
+        QML_FILES errorView.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
