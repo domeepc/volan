@@ -1,450 +1,584 @@
 import QtQuick
 import QtQuick.Layouts
 
-Rectangle{
+
+ColumnLayout {
     anchors.fill: parent
-    color: "black"
-    ColumnLayout {
-        anchors.fill: parent
+    spacing: 10
+
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredHeight: parent.height * 0.2
         spacing: 10
 
-        RowLayout {
+        //prosjecna temperatura svih modula tj. temperatura baterije
+        Rectangle {
+            id: batteryTemperature
             Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.2
-            spacing: 10
+            Layout.fillHeight: true
 
+            color: "black"
 
-            Rectangle {
-                id: batteryTemperature
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: 1   // equal stretch
+            Text {
+                text: "BT:" + "100°C"
+                anchors.centerIn: parent
 
-                color: "black"
-                border.width: 5
-                border.color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
 
-                Text {
-                    anchors.centerIn: parent
-                    color: "white"
-                    font.pixelSize: parent.height * 0.5
-                    text: "BT " + "100 C"
-                }
-            }
-
-            Rectangle {
-                id: inverterTemperature
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: 1   // equal stretch
-
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-                Text {
-                    anchors.centerIn: parent
-                    color: "white"
-                    font.pixelSize: parent.height * 0.5
-                    text: "IT " + "100 C"
-                }
-            }
-
-            Rectangle {
-                id: stateOfCharge
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: 1   // equal stretch
-
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-                Text {
-                    anchors.centerIn: parent
-                    color: "white"
-                    font.pixelSize: parent.height * 0.5
-                    text: "SOC " + "100%"
-                }
-            }
-
-            Rectangle {
-                id: preset
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: 1   // equal stretch
-
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-                Text {
-                    anchors.centerIn: parent
-                    color: "white"
-                    font.pixelSize: parent.height * 0.5
-                    text: "PRESET"
-                }
-            }
-
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.4
-            spacing: 10
-
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: 3
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 10
-
-                    Text {
-                        text: "Motor temp"
-                        color: "white"
-                        font.pixelSize: parent.height * 0.2
-
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                    }
-
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 20
-
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                    }
-                }
-            }
-
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: 3
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 10
-
-                    Text {
-                        text: "Motor rpm"
-                        color: "white"
-                        font.pixelSize: parent.height * 0.2
-
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                    }
-
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 20
-
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                    }
-                }
-            }
-
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: 3
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 10
-
-                    Text {
-                        text: "Brake"
-                        color: "white"
-                        font.pixelSize: parent.height * 0.2
-
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                    }
-
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 20
-
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                    }
-                }
-            }
-
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: 2
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 10
-
-                    Text {
-                        text: "Slip"
-                        color: "white"
-                        font.pixelSize: parent.height * 0.2
-
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                    }
-
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 20
-
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-
-                    }
-                }
+                color: "white"
+                font.pixelSize: parent.height * 0.5
+                font.bold: true
             }
         }
 
-        RowLayout {
+        //slip omjer
+        Rectangle {
+            id: slipRatio
             Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.4
-            spacing: 10
-
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: 2
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 10
-
-                    Text {
-                        text: "Torque"
-                        color: "white"
-                        font.pixelSize: parent.height * 0.2
-
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                    }
+            Layout.fillHeight: true
 
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 20
+            color: "black"
 
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
+            Text {
+                text: "SLIP " + "0.8"
+                anchors.centerIn: parent
 
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
 
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                    }
-                }
+                color: "white"
+                font.pixelSize: parent.height * 0.5
+                font.bold: true
             }
+        }
 
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: 2
-                color: "black"
-                border.width: 5
-                border.color: "white"
+        //SoC
+        Rectangle {
+            id: stateOfCharge
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.preferredWidth: 1   // equal stretch
 
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 10
+            color: "black"
 
-                    Text {
-                        text: "Damper"
-                        color: "white"
-                        font.pixelSize: parent.height * 0.2
+            Text {
+                text: "SC:" + "100%"
+                anchors.centerIn: parent
 
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                    }
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignHCenter
 
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 20
-
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Text {
-                            text: "45"
-                            color: "white"
-                            font.pixelSize: 50
-
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                    }
-                }
+                color: "white"
+                font.pixelSize: parent.height * 0.5
+                font.bold: true
             }
+        }
+
+        //Preset
+        Rectangle {
+            id: preset
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            color: "black"
+
+            Text {
+                text: "PRESET"
+                anchors.fill: parent
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                color: "white"
+                font.pixelSize: parent.height * 0.5
+                font.bold: true
+            }
+        }
+
+    }
+
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredHeight: parent.height * 0.4
+        spacing: 10
+
+        //Temperature motora
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 2
+            color: "black"
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 10
+
+                Text {
+                    text: "M-TEMP"
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    color: "white"
+                    font.pixelSize: height * 0.5
+                    font.bold: true
+                }
 
 
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 20
 
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: 3
-                color: "black"
-                border.width: 5
-                border.color: "white"
-
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 10
-
-                    // Title
                     Text {
-                        Layout.fillWidth: true
-                        text: "Correct factors"
-                        color: "white"
-                        font.pixelSize: 35
-                        horizontalAlignment: Text.AlignHCenter
-                    }
+                        text: "45"
 
-                    // Spacer (push numbers to bottom)
-                    Item {
+                        Layout.fillWidth: true
                         Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
                     }
+                    Text {
+                        text: "45"
 
-                    // Bottom row of numbers
-                    RowLayout {
                         Layout.fillWidth: true
-                        spacing: 20
+                        Layout.fillHeight: true
 
-                        Text {
-                            text: "12"
-                            color: "white"
-                            font.pixelSize: 50
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
 
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignHCenter
-                        }
-                        Text {
-                            text: "12"
-                            color: "white"
-                            font.pixelSize: 50
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                }
+            }
+        }
 
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignHCenter
-                        }
-                        Text {
-                            text: "12"
-                            color: "white"
-                            font.pixelSize: 50
+        //rpm motora
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 2
+            color: "black"
 
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignHCenter
-                        }
-                        Text {
-                            text: "12"
-                            color: "white"
-                            font.pixelSize: 50
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 10
 
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignHCenter
-                        }
+                Text {
+                    text: "M-RPM"
 
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    color: "white"
+                    font.pixelSize: height * 0.5
+                    font.bold: true
+                }
+
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 20
+
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                }
+            }
+        }
+
+        //Pritisak kocnica
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 2
+            color: "black"
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 10
+
+                Text {
+                    text: "BRAKE"
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    color: "white"
+                    font.pixelSize: height * 0.5
+                    font.bold: true
+                }
+
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 20
+
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                }
+            }
+        }
+
+        //Inverter temperature
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 2
+            color: "black"
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 10
+
+                Text {
+                    text: "I-TEMP"
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    color: "white"
+                    font.pixelSize: height * 0.5
+                    font.bold: true
+                }
+
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 20
+
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                }
+            }
+        }
+    }
+
+
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredHeight: parent.height * 0.4
+        spacing: 10
+
+        //torque(moment?) vrijednosti
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            color: "black"
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 10
+
+                Text {
+                    text: "TORQUE"
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    color: "white"
+                    font.pixelSize: height * 0.5
+                    font.bold: true
+                }
+
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 20
+
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                }
+            }
+        }
+
+        //damper pozicija
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            color: "black"
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 10
+
+                Text {
+                    text: "DAMPER"
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    color: "white"
+                    font.pixelSize: height * 0.5
+                    font.bold: true
+                }
+
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 20
+
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                    Text {
+                        text: "45"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                }
+            }
+        }
+
+
+        //korekcisjki faktori
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.preferredWidth: 2
+
+            color: "black"
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 10
+
+                Text {
+                    text: "C-FACTORS"
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    color: "white"
+                    font.pixelSize: height * 0.5
+                    font.bold: true
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 20
+
+                    Text {
+                        text: "12"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        Layout.alignment: Qt.AlignHCenter
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                    Text {
+                        text: "12"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        Layout.alignment: Qt.AlignHCenter
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                    Text {
+                        text: "12"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        Layout.alignment: Qt.AlignHCenter
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+
+                        font.pixelSize: height * 0.5
+                        font.bold: true
+                    }
+                    Text {
+                        text: "12"
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        Layout.alignment: Qt.AlignHCenter
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        color: "white"
+
+                        font.pixelSize: height * 0.5
+                        font.bold: true
                     }
                 }
             }
         }
     }
 }
+

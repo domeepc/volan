@@ -11,12 +11,14 @@ Window {
     height: 479
     visible: true
 
-    StackView{
-        id: stackView
+    Rectangle{
         anchors.fill: parent
-        initialItem: "bmsView.qml"
+        color: "white"
+        StackView{
+            id: stackView
+            anchors.fill: parent
+            initialItem: "raceView.qml"
+        }
     }
-
-
 }
 
