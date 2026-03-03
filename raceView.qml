@@ -2,19 +2,18 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Rectangle {
+ColumnLayout {
     anchors.fill: parent
-    color: "black"
+    spacing: 10
 
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: 0
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredHeight: 2
+        color: "black"
 
-        //ikone
         RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.2
-            Layout.alignment: Qt.AlignHCenter
+            anchors.centerIn: parent
             spacing: 50
 
             Repeater {
@@ -26,81 +25,84 @@ Rectangle {
                 }
             }
         }
+    }
 
-        //bijela crta
-        Rectangle {
-            Layout.fillWidth: true
-            height: 5
-            color: "white"
-        }
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-        //glavni dio
+        Layout.preferredHeight: 7
+        color: "black"
+
         RowLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.margins: 20
+            anchors.fill: parent
             spacing: 0
 
             Item {
+                id: batteryPercent
+
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.preferredWidth: 1
 
-                Item {
-                    id: batteryPercent
-                    width: 120
-                    height: 250
-                    //property real value: signalHandler.soc
+                Layout.topMargin: 50
+                Layout.bottomMargin: 50
 
-                    Row {
-                        anchors.fill: parent
-                        spacing: 10
+                Row {
+                    anchors.fill: parent
+                    spacing: 10
 
-                        Item {
-                            width: 75
-                            height: parent.height
+                    Item {
+                        width: 75
+                        height: parent.height
 
-                            Rectangle {
-                                anchors.fill: parent
-                                color: "#222"
-                                radius: 8
-                            }
-                            Rectangle {
-                                width: parent.width
-                                height: parent.height * (signalHandler.soc - 50)/50
-                                anchors.bottom: parent.bottom
-                                color: "green"
-                                radius: 8
-                            }
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "#222"
+                            radius: 8
                         }
+                        Rectangle {
+                            width: parent.width
+                            height: parent.height * (signalHandler.soc - 50)/50
+                            anchors.bottom: parent.bottom
+                            color: "green"
+                            radius: 8
+                        }
+                    }
 
-                        // --- SCALE ---
-                        Item {
-                            width: 60
-                            height: parent.height
+                    // --- SCALE ---
+                    Item {
+                        width: 60
+                        height: parent.height
 
-                            Repeater {
-                                model: 6
+                        Repeater {
+                            model: 6
 
-                                Text {
-                                    text: 50 + (index * 10)
-                                    color: "white"
-                                    font.pixelSize: 32
-                                    font.bold: true
-                                    y: parent.height - (index / 5) * parent.height - height/2
-                                }
+                            Text {
+                                text: 50 + (index * 10)
+                                color: "white"
+                                font.pixelSize: 32
+                                font.bold: true
+                                y: parent.height - (index / 5) * parent.height - height/2
                             }
                         }
                     }
                 }
+
             }
 
+            //brzina
             Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.preferredWidth: 2
 
-                radius: 50
+                Layout.topMargin: 20
+                Layout.bottomMargin: 20
+
+
+
+                radius: height / 4
                 border.width: 10
                 border.color: "white"
                 color: "black"
@@ -115,6 +117,7 @@ Rectangle {
                 }
             }
 
+            //SoP
             Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
@@ -206,47 +209,13 @@ Rectangle {
                 }
             }
         }
+    }
 
-        // mode i preset
-        Item {
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.1
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-            Rectangle {
-                width: 200
-                height: parent.height
-                anchors.left: parent.left
-
-                border.width: 5
-                border.color: "white"
-                color: "black"
-
-                Text {
-                    text: "MODE"
-                    anchors.centerIn: parent
-                    color: "white"
-                    font.pixelSize: parent.height * 0.8
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 200
-                height: parent.height
-                anchors.right: parent.right
-
-                border.width: 5
-                border.color: "white"
-                color: "black"
-
-                Text {
-                    text: "PRESET"
-                    anchors.centerIn: parent
-                    color: "white"
-                    font.pixelSize: parent.height * 0.8
-                    font.bold: true
-                }
-            }
-        }
+        Layout.preferredHeight: 1
+        color: "black"
     }
 }

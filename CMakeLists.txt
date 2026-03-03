@@ -27,7 +27,7 @@ qt_add_qml_module(appvolan
         SOURCES dbcmanager.h dbcmanager.cpp
         SOURCES signalhandler.h signalhandler.cpp
         QML_FILES raceView.qml
-        QML_FILES testView.qml
+        QML_FILES
     RESOURCES
         images/race.png
         SOURCES
@@ -35,6 +35,8 @@ qt_add_qml_module(appvolan
         QML_FILES bmsView.qml
         QML_FILES vcuView.qml
         QML_FILES errorView.qml
+        QML_FILES inverterView.qml
+        QML_FILES wheelDebugView.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

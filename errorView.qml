@@ -6,7 +6,6 @@ ColumnLayout {
     anchors.fill: parent
     spacing: 10
 
-
     Rectangle {
         Layout.fillWidth: true
         Layout.fillHeight: true
