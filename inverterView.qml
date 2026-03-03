@@ -1,345 +1,306 @@
 import QtQuick
 import QtQuick.Layouts
 
-ColumnLayout{
+GridLayout{
     anchors.fill: parent
-    spacing: 10
+    columnSpacing: 10
+    rowSpacing: 10
 
-    RowLayout{
+    flow:  GridLayout.TopToBottom
+
+    rows: 5
+
+    //Struja invertera
+    Rectangle{
         Layout.fillHeight: true
         Layout.fillWidth: true
-        spacing: 10
+        color: "black"
 
-        //struja invertera
-        Rectangle{
+        Row{
+            anchors.centerIn: parent
+            spacing: 10
+            Text {
+                text: "AC[A]"
+                color: "white"
 
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-
-            Row{
-                anchors.centerIn: parent
-                spacing: 10
-                Text {
-                    text: "AC[A]"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
             }
-        }
+            Text {
+                text: "100"
+                color: "white"
 
-        //temperature motora
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-
-
-        }
-
-        //temperature invertera
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-
-
-        }
-    }
-    RowLayout{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        spacing: 10
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-
-            Row{
-                anchors.centerIn: parent
-                spacing: 10
-                Text {
-                    text: "TM[°C]"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
             }
-        }
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            Text {
+                text: "100"
+                color: "white"
 
-            color: "black"
-        }
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-        }
-    }
-    RowLayout{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        spacing: 10
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-
-            Row{
-                anchors.centerIn: parent
-                spacing: 10
-                Text {
-                    text: "TI[°C]"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-            }
-        }
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-        }
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-        }
-    }
-    RowLayout{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        spacing: 10
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-
-            Row{
-                anchors.centerIn: parent
-                spacing: 10
-                Text {
-                    text: "ERPM"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-            }
-        }
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-
-            Column{
-                anchors.centerIn: parent
-                Text{
-                    text: "DS1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text{
-                    text: "DS2"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-            }
-        }
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-
-            Column{
-                anchors.centerIn: parent
-                Text{
-                    text: "ES1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text{
-                    text: "ES2"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
             }
         }
     }
 
-    //faultovi
-    RowLayout{
+    //Temperature motora
+    Rectangle{
         Layout.fillHeight: true
         Layout.fillWidth: true
-        spacing: 10
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
 
-            color: "black"
-            Column{
-                anchors.centerIn: parent
-                Text{
-                    text: "fault1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text{
-                    text: "fault1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
+        color: "black"
+
+        Row{
+            anchors.centerIn: parent
+            spacing: 10
+            Text {
+                text: "TM[°C]"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
+            }
+            Text {
+                text: "100"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
+            }
+            Text {
+                text: "100"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
             }
         }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-            Column{
-                anchors.centerIn: parent
-                Text{
-                    text: "fault1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text{
-                    text: "fault1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-            Column{
-                anchors.centerIn: parent
-                Text{
-                    text: "fault1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text{
-                    text: "fault1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            color: "black"
-            Column{
-                anchors.centerIn: parent
-                Text{
-                    text: "fault1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-                Text{
-                    text: "fault1"
-                    color: "white"
-                    font.pixelSize: parent.parent.height * 0.4
-                    font.bold: true
-                }
-            }
-        }
-
     }
+
+    //Temperature invertera
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        color: "black"
+
+        Row{
+            anchors.centerIn: parent
+            spacing: 10
+            Text {
+                text: "TI[°C]"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
+            }
+            Text {
+                text: "100"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
+            }
+            Text {
+                text: "100"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
+            }
+        }
+    }
+
+    //ERPMs
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        color: "black"
+
+        Row{
+            anchors.centerIn: parent
+            spacing: 10
+            Text {
+                text: "ERPM"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
+            }
+            Text {
+                text: "100"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
+            }
+            Text {
+                text: "100"
+                color: "white"
+
+                font.pixelSize: parent.parent.height * 0.4
+                font.bold: true
+            }
+        }
+    }
+
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "0 faults"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+
+
+    //Srednji stupac stanja lijevog invertera
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "LES"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "DS1"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "DS1"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "DS1"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "DS1"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+
+
+
+
+    //Desni stupac stanja desnog invertera
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "RES"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "DS1"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "DS1"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "DS1"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+    Rectangle{
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        color: "black"
+
+        Text{
+            text: "DS1"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+    }
+
+
+
+
+
+
+
 }

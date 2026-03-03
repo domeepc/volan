@@ -5,8 +5,6 @@ import volan
 
 Window {
     id: window_ID
-
-
     width: 853
     height: 479
     visible: true
@@ -17,7 +15,7 @@ Window {
         StackView{
             id: stackView
             anchors.fill: parent
-            initialItem: "wheelDebugView.qml"
+            initialItem: "errorView.qml"
         }
     }
 }
