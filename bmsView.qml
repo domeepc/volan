@@ -30,6 +30,8 @@ RowLayout{
 
             }
         }
+
+
         Rectangle{
             Layout.fillHeight: true
             Layout.fillWidth: true
@@ -496,7 +498,7 @@ RowLayout{
                 verticalAlignment: Text.AlignVCenter
             }
         }
-        //Ukuupni struja i napon
+        //Ukupni struja i napon
         Rectangle{
             Layout.fillHeight: true
             Layout.fillWidth: true
@@ -508,7 +510,7 @@ RowLayout{
                 spacing: 5
 
                 Text {
-                    text: "45A"
+                    text: "TC:45A"
                     color: "white"
                     font.pixelSize: parent.height * 0.6
                     font.bold: true
@@ -517,7 +519,7 @@ RowLayout{
                     verticalAlignment: Text.AlignVCenter
                 }
                 Text {
-                    text: "100V"
+                    text: "TV:100V"
                     color: "white"
                     font.pixelSize: parent.height * 0.6
                     font.bold: true

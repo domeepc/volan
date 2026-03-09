@@ -33,13 +33,13 @@ int main(int argc, char *argv[]) {
   processor.setUniqueIDDescription(DBCparser.getIdDescription());
   processor.setMessages(DBCparser.getMessages());
 
-  SignalHandler signalHandler;
-  engine.rootContext()->setContextProperty("signalHandler", &signalHandler);
+  SignalHandler *signalHandler = new SignalHandler(&engine);
+  engine.rootContext()->setContextProperty("signalHandler", signalHandler);
 
 
   QObject::connect(&canInterface, &CanInterface::frameReceived, &processor, &CanMessageProcessor::processFrame);
 
-  QObject::connect(&processor, &CanMessageProcessor::frameDecoded, &signalHandler, &SignalHandler::handleDecodedFrame);
+  QObject::connect(&processor, &CanMessageProcessor::frameDecoded, signalHandler, &SignalHandler::handleDecodedFrame);
   QObject::connect(
       &engine,
       &QQmlApplicationEngine::objectCreationFailed,

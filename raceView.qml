@@ -41,7 +41,7 @@ ColumnLayout {
             spacing: 50
 
             BatteryBar{
-                value: signalHandler.soc
+                value: signalHandler?.soc
                 label: "SOC"
                 Layout.horizontalStretchFactor: 1
 
@@ -54,7 +54,7 @@ ColumnLayout {
 
 
             BatteryBar{
-                value: signalHandler.soc2    // example second battery
+                value: signalHandler?.temporary
                 label: "AUX"
                 Layout.horizontalStretchFactor: 1
             }
@@ -71,12 +71,11 @@ ColumnLayout {
 
         RowLayout {
             anchors.fill: parent
-            //anchors.margins: 20
             anchors.leftMargin: 20
             anchors.rightMargin: 20
 
             Text {
-                text: "MODE"
+                text: signalHandler?.mode
                 color: "white"
                 font.bold: true
                 verticalAlignment: Text.AlignVCenter
@@ -89,7 +88,7 @@ ColumnLayout {
             }
 
             Text {
-                text: "PRESET"
+                text: signalHandler?.preset
                 color: "white"
                 font.bold: true
                 verticalAlignment: Text.AlignVCenter

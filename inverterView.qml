@@ -296,11 +296,4 @@ GridLayout{
             font.bold: true
         }
     }
-
-
-
-
-
-
-
 }
