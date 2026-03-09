@@ -39,6 +39,8 @@ qt_add_qml_module(appvolan
         QML_FILES SpeedGauge.qml
         QML_FILES DataTile.qml
         QML_FILES test.qml
+        QML_FILES ValueRow.qml
+        QML_FILES TitleTile.qml
 
 )
 

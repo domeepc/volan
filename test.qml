@@ -1,105 +1,118 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
-GridLayout {
+RowLayout {
     anchors.fill: parent
-    columnSpacing: 10
-    rowSpacing: 10
+    spacing: 6
 
-    flow: GridLayout.TopToBottom
-    rows: 5
-
-
-    Repeater {
-        model: [
-            {label: "AC[A]", values: ["100","100"]},
-            {label: "TM[°C]", values: ["100","100"]},
-            {label: "TI[°C]", values: ["100","100"]},
-            {label: "ERPM", values: ["100","100"]}
-        ]
-
-        delegate: Rectangle {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            color: "black"
-
-            Row {
-                anchors.centerIn: parent
-                spacing: 15
-
-                Text {
-                    text: modelData.label
-                    color: "white"
-                    font.bold: true
-                    font.pixelSize: parent.parent.height * 0.35
-                }
-
-                Repeater {
-                    model: modelData.values
-
-                    Text {
-                        text: modelData
-                        color: "white"
-                        font.bold: true
-                        font.pixelSize: parent.parent.height * 0.35
-                    }
-                }
-            }
-        }
-    }
-
-    // brojac faultova
-    Rectangle {
-        Layout.fillHeight: true
+    // VOLTAGE COLUMN
+    ColumnLayout {
         Layout.fillWidth: true
-        color: "black"
+        Layout.preferredWidth: 2
+        spacing: 6
 
-        Text {
-            text: "0 faults"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.45
-            font.bold: true
-        }
-    }
-
-    //stanja lijevog stanja
-    Repeater {
-        model: ["LES", "DS1", "DS1", "DS1", "DS1"]
-
-        delegate: Rectangle {
-            Layout.fillHeight: true
+        TitleTile {
+            title: "VOLTAGE[V]"
             Layout.fillWidth: true
-            color: "black"
-            radius: 6
+            Layout.fillHeight: true
+        }
 
-            Text {
-                text: modelData
-                color: "white"
-                anchors.centerIn: parent
-                font.pixelSize: parent.height * 0.45
-                font.bold: true
+        Repeater {
+            model: [
+                    ["45", "45"],
+                    ["41", "43"],
+                    ["50", "47"],
+                    ["30", "33"],
+                    ["60", "62"]
+                ]
+            ValueRow {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                values: modelData
             }
         }
     }
 
-    //stanja desnog invertera
-    Repeater {
-        model: ["RES", "DS1", "DS1", "DS1", "DS1"]
+    // TEMPERATURE COLUMN
+    ColumnLayout {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 3
+        spacing: 6
 
-        delegate: Rectangle {
-            Layout.fillHeight: true
+        TitleTile {
+            title: "TEMPERATURE[°C]"
             Layout.fillWidth: true
-            color: "black"
-            radius: 6
+            Layout.fillHeight: true
+        }
 
-            Text {
-                text: modelData
-                color: "white"
-                anchors.centerIn: parent
-                font.pixelSize: parent.height * 0.45
-                font.bold: true
+        Repeater {
+            model: [
+                    ["45","45","45"],
+                    ["41","42","43"],
+                    ["50","48","47"],
+                    ["30","32","33"],
+                    ["60","61","62"]
+                ]
+            ValueRow {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                values: modelData
             }
+        }
+    }
+
+    // STATUS COLUMN
+    ColumnLayout {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 3
+        spacing: 6
+
+        DataTile{
+            values: ["default"]
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            flowDirection: Qt.horizontal
+        }
+
+
+        ValueRow {
+            values: ["TC:45A","TV:100V"]
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+        ValueRow {
+            values: ["SC:100%","SP:80"]
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+        DataTile{
+            title: "NTC"
+            values: ["100","100"]
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            flowDirection: Qt.Horizontal
+        }
+
+        DataTile {
+            title: "AIR+"
+            values: ["off"]
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+        DataTile {
+            title: "AIR-"
+            values: ["off"]
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+
+        DataTile {
+            title: "PRECHARGE"
+            values: ["off"]
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            flowDirection: Qt.Horizontal
         }
     }
 }

@@ -2,659 +2,117 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-
-RowLayout{
+RowLayout {
     anchors.fill: parent
-    spacing: 5
+    spacing: 6
 
-    //naponi
-    ColumnLayout{
+    // VOLTAGE COLUMN
+    ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredWidth: 2
-        spacing: 5
-        Rectangle{
-            Layout.fillHeight: true
+        spacing: 6
+
+        TitleTile {
+            title: "VOLTAGE[V]"
             Layout.fillWidth: true
-            color: "black"
-
-            Text {
-                anchors.fill: parent
-                text: "VOLTAGE[V]"
-
-                color: "white"
-                font.pixelSize: parent.height * 0.4
-                font.bold: true
-
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-
-            }
+            Layout.fillHeight: true
         }
 
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-
-
-    }
-
-    //temperature
-    ColumnLayout{
-        Layout.fillWidth: true
-        Layout.preferredWidth: 3
-        spacing: 5
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            Text {
-                anchors.fill: parent
-                text: "TEMPERATURE[°C]"
-
-                color: "white"
-                font.pixelSize: parent.height * 0.4
-                font.bold: true
-
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "45"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
+        Repeater {
+            model: [
+                    ["45", "45"],
+                    ["41", "43"],
+                    ["50", "47"],
+                    ["30", "33"],
+                    ["60", "62"]
+                ]
+            ValueRow {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                values: modelData
             }
         }
     }
 
-    //druge vrijednosti
-    ColumnLayout{
+    // TEMPERATURE COLUMN
+    ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredWidth: 3
-        spacing: 5
+        spacing: 6
 
-        //Stanje BMS: puni se, prazni se....
-        Rectangle{
-            Layout.fillHeight: true
+        TitleTile {
+            title: "TEMPERATURE[°C]"
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: "black"
+            Layout.fillHeight: true
+        }
 
-
-            Text {
-                anchors.fill: parent
-                text: "STATE"
-                color: "white"
-                font.pixelSize: parent.height * 0.6
-                font.bold: true
+        Repeater {
+            model: [
+                    ["45","45","45"],
+                    ["41","42","43"],
+                    ["50","48","47"],
+                    ["30","32","33"],
+                    ["60","61","62"]
+                ]
+            ValueRow {
                 Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
+                Layout.fillHeight: true
+                values: modelData
             }
         }
-        //Ukupni struja i napon
-        Rectangle{
-            Layout.fillHeight: true
+    }
+
+    // STATUS COLUMN
+    ColumnLayout {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 3
+        spacing: 6
+
+        DataTile{
+            values: ["default"]
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "TC:45A"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "TV:100V"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
+            Layout.fillHeight: true
+            flowDirection: Qt.horizontal
         }
-        //State of power(SoP) i charge(SoC)
-        Rectangle{
-            Layout.fillHeight: true
+
+
+        ValueRow {
+            values: ["TC:45A","TV:100V"]
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-
-                Text {
-                    text: "SC:100%"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "SP:80"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.6
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
+            Layout.fillHeight: true
         }
-        //Temperature na NTC termistorima
-        Rectangle{
-            Layout.fillHeight: true
+        ValueRow {
+            values: ["SC:100%","SP:80"]
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: "black"
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-                Text {
-                    text: "NTC[°C]:"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.5
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.5
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Text {
-                    text: "100"
-                    color: "white"
-                    font.pixelSize: parent.height * 0.5
-                    font.bold: true
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
+            Layout.fillHeight: true
         }
-        //Releji za air ventilatore i precharge
-        Rectangle{
-            Layout.fillHeight: true
+        DataTile{
+            title: "NTC"
+            values: ["100","100"]
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: "black"
-
-            Text {
-                anchors.fill: parent
-                text: "AIR+"
-                color: "white"
-                font.pixelSize: parent.height * 0.6
-                font.bold: true
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            Layout.fillHeight: true
+            flowDirection: Qt.Horizontal
         }
-        Rectangle{
-            Layout.fillHeight: true
+
+        DataTile {
+            title: "AIR+"
+            values: ["off"]
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: "black"
-
-            Text {
-                anchors.fill: parent
-                text: "AIR-"
-                color: "white"
-                font.pixelSize: parent.height * 0.6
-                font.bold: true
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-
+            Layout.fillHeight: true
         }
-        Rectangle{
-            Layout.fillHeight: true
+        DataTile {
+            title: "AIR-"
+            values: ["off"]
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: "black"
+            Layout.fillHeight: true
+        }
 
-            Text {
-                anchors.fill: parent
-                text: "PRECHARGE"
-                color: "white"
-                font.pixelSize: parent.height * 0.6
-                font.bold: true
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-
+        DataTile {
+            title: "PRECHARGE"
+            values: ["off"]
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            flowDirection: Qt.Horizontal
         }
     }
 }
-

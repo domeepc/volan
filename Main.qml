@@ -15,7 +15,7 @@ Window {
         StackView{
             id: stackView
             anchors.fill: parent
-            initialItem: "test.qml"
+            initialItem: "bmsView.qml"
         }
     }
 }
