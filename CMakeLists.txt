@@ -37,6 +37,8 @@ qt_add_qml_module(appvolan
         QML_FILES errorView.qml
         QML_FILES inverterView.qml
         QML_FILES wheelDebugView.qml
+        QML_FILES BatteryBar.qml
+        QML_FILES SpeedGauge.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
