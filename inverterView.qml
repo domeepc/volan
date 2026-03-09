@@ -1,299 +1,105 @@
 import QtQuick
 import QtQuick.Layouts
 
-GridLayout{
+GridLayout {
     anchors.fill: parent
     columnSpacing: 10
     rowSpacing: 10
 
-    flow:  GridLayout.TopToBottom
-
+    flow: GridLayout.TopToBottom
     rows: 5
 
-    //Struja invertera
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
 
-        Row{
-            anchors.centerIn: parent
-            spacing: 10
-            Text {
-                text: "AC[A]"
-                color: "white"
+    Repeater {
+        model: [
+            {label: "AC[A]", values: ["100","100"]},
+            {label: "TM[°C]", values: ["100","100"]},
+            {label: "TI[°C]", values: ["100","100"]},
+            {label: "ERPM", values: ["100","100"]}
+        ]
 
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-            Text {
-                text: "100"
-                color: "white"
+        delegate: Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            color: "black"
 
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-            Text {
-                text: "100"
-                color: "white"
+            Row {
+                anchors.centerIn: parent
+                spacing: 15
 
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-        }
-    }
+                Text {
+                    text: modelData.label
+                    color: "white"
+                    font.bold: true
+                    font.pixelSize: parent.parent.height * 0.35
+                }
 
-    //Temperature motora
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
+                Repeater {
+                    model: modelData.values
 
-        color: "black"
-
-        Row{
-            anchors.centerIn: parent
-            spacing: 10
-            Text {
-                text: "TM[°C]"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-            Text {
-                text: "100"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-            Text {
-                text: "100"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
+                    Text {
+                        text: modelData
+                        color: "white"
+                        font.bold: true
+                        font.pixelSize: parent.parent.height * 0.35
+                    }
+                }
             }
         }
     }
 
-    //Temperature invertera
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-
-        color: "black"
-
-        Row{
-            anchors.centerIn: parent
-            spacing: 10
-            Text {
-                text: "TI[°C]"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-            Text {
-                text: "100"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-            Text {
-                text: "100"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-        }
-    }
-
-    //ERPMs
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-
-        color: "black"
-
-        Row{
-            anchors.centerIn: parent
-            spacing: 10
-            Text {
-                text: "ERPM"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-            Text {
-                text: "100"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-            Text {
-                text: "100"
-                color: "white"
-
-                font.pixelSize: parent.parent.height * 0.4
-                font.bold: true
-            }
-        }
-    }
-
-    Rectangle{
+    // brojac faultova
+    Rectangle {
         Layout.fillHeight: true
         Layout.fillWidth: true
         color: "black"
 
-        Text{
+        Text {
             text: "0 faults"
             color: "white"
             anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
+            font.pixelSize: parent.height * 0.45
             font.bold: true
         }
     }
 
+    //stanja lijevog stanja
+    Repeater {
+        model: ["LES", "DS1", "DS1", "DS1", "DS1"]
 
-    //Srednji stupac stanja lijevog invertera
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
+        delegate: Rectangle {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            color: "black"
+            radius: 6
 
-        Text{
-            text: "LES"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
-        }
-    }
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "DS1"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
-        }
-    }
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "DS1"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
-        }
-    }
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "DS1"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
-        }
-    }
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "DS1"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
+            Text {
+                text: modelData
+                color: "white"
+                anchors.centerIn: parent
+                font.pixelSize: parent.height * 0.45
+                font.bold: true
+            }
         }
     }
 
+    //stanja desnog invertera
+    Repeater {
+        model: ["RES", "DS1", "DS1", "DS1", "DS1"]
 
+        delegate: Rectangle {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            color: "black"
+            radius: 6
 
-
-    //Desni stupac stanja desnog invertera
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "RES"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
-        }
-    }
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "DS1"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
-        }
-    }
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "DS1"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
-        }
-    }
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "DS1"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
-        }
-    }
-    Rectangle{
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "black"
-
-        Text{
-            text: "DS1"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.5
-            font.bold: true
+            Text {
+                text: modelData
+                color: "white"
+                anchors.centerIn: parent
+                font.pixelSize: parent.height * 0.45
+                font.bold: true
+            }
         }
     }
 }

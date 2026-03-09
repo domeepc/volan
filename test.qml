@@ -1,133 +1,105 @@
 import QtQuick
 import QtQuick.Layouts
 
-ColumnLayout {
+GridLayout {
     anchors.fill: parent
-    spacing: 10
+    columnSpacing: 10
+    rowSpacing: 10
 
-    RowLayout {
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.2
-        spacing: 10
+    flow: GridLayout.TopToBottom
+    rows: 5
 
-        DataTile {
+
+    Repeater {
+        model: [
+            {label: "AC[A]", values: ["100","100"]},
+            {label: "TM[°C]", values: ["100","100"]},
+            {label: "TI[°C]", values: ["100","100"]},
+            {label: "ERPM", values: ["100","100"]}
+        ]
+
+        delegate: Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            title: "SLIP"
-            flowDirection: Qt.Horizontal
-            values: [signalHandler?.slip]
-        }
+            color: "black"
 
-        DataTile {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            title: "SOC"
-            flowDirection: Qt.Horizontal
-            values: [signalHandler?.soc + "%"]
-        }
+            Row {
+                anchors.centerIn: parent
+                spacing: 15
 
-        DataTile {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            title: ""
-            flowDirection: Qt.Horizontal
-            values: [signalHandler?.preset]
-        }
-    }
+                Text {
+                    text: modelData.label
+                    color: "white"
+                    font.bold: true
+                    font.pixelSize: parent.parent.height * 0.35
+                }
 
-    RowLayout {
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.4
-        spacing: 10
+                Repeater {
+                    model: modelData.values
 
-        DataTile {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: 2
-            title: "M-TEMP"
-            flowDirection: Qt.Vertical
-            values: [
-                signalHandler?.motorTemperatureL,
-                signalHandler?.motorTemperatureR
-            ]
-        }
-
-        DataTile {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: 2
-            title: "M-RPM"
-            flowDirection: Qt.Vertical
-            values: [
-                signalHandler?.rpmL,
-                signalHandler?.rpmR
-            ]
-        }
-
-        DataTile {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: 2
-            title: "BRAKE"
-            flowDirection: Qt.Vertical
-            values: [
-                signalHandler?.brakePressureForward,
-                signalHandler?.brakePressureRear
-            ]
-        }
-
-        DataTile {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: 2
-            title: "I-TEMP"
-            flowDirection: Qt.Vertical
-            values: [
-                signalHandler?.inverterTemperatureL,
-                signalHandler?.inverterTemperatureR
-            ]
+                    Text {
+                        text: modelData
+                        color: "white"
+                        font.bold: true
+                        font.pixelSize: parent.parent.height * 0.35
+                    }
+                }
+            }
         }
     }
 
-    RowLayout {
+    // brojac faultova
+    Rectangle {
+        Layout.fillHeight: true
         Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.4
-        spacing: 10
+        color: "black"
 
-        DataTile {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            title: "TORQUE"
-            flowDirection: Qt.Vertical
-            values: [
-                signalHandler?.torqueL,
-                signalHandler?.torqueR
-            ]
+        Text {
+            text: "0 faults"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: parent.height * 0.45
+            font.bold: true
         }
+    }
 
-        DataTile {
-            Layout.fillWidth: true
+    //stanja lijevog stanja
+    Repeater {
+        model: ["LES", "DS1", "DS1", "DS1", "DS1"]
+
+        delegate: Rectangle {
             Layout.fillHeight: true
-            title: "B-TEMP"
-            flowDirection: Qt.Vertical
-            values: [
-                0,
-                0
-            ]
+            Layout.fillWidth: true
+            color: "black"
+            radius: 6
+
+            Text {
+                text: modelData
+                color: "white"
+                anchors.centerIn: parent
+                font.pixelSize: parent.height * 0.45
+                font.bold: true
+            }
         }
+    }
 
-        DataTile {
-            Layout.fillWidth: true
+    //stanja desnog invertera
+    Repeater {
+        model: ["RES", "DS1", "DS1", "DS1", "DS1"]
+
+        delegate: Rectangle {
             Layout.fillHeight: true
-            Layout.preferredWidth: 2
-            title: "C-FACTORS"
-            flowDirection: Qt.Vertical
-            values: [
-                signalHandler?.cFactor1,
-                signalHandler?.cFactor2,
-                signalHandler?.cFactor3,
-                signalHandler?.cFactor4
-            ]
+            Layout.fillWidth: true
+            color: "black"
+            radius: 6
+
+            Text {
+                text: modelData
+                color: "white"
+                anchors.centerIn: parent
+                font.pixelSize: parent.height * 0.45
+                font.bold: true
+            }
         }
     }
 }

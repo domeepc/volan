@@ -38,6 +38,7 @@ qt_add_qml_module(appvolan
         QML_FILES BatteryBar.qml
         QML_FILES SpeedGauge.qml
         QML_FILES DataTile.qml
+        QML_FILES test.qml
 
 )
 
