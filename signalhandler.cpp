@@ -13,7 +13,7 @@ void SignalHandler::handleDecodedFrame(QtCanBus::UniqueId id, const QMap<QString
         m_speed = sigs["SPEED"].toDouble();
         m_soc = sigs["SOC"].toDouble(),
         emit speedChanged();
-        emit socChanged();
+        emit stateOfBatteryValuesChanged();
         break;
     default:
         qDebug() << "Unkown CAN id: " << id ;
