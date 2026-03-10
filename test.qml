@@ -1,118 +1,83 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 RowLayout {
     anchors.fill: parent
-    spacing: 6
+    spacing: 10
 
-    // VOLTAGE COLUMN
+    // LEFT COLUMN (telemetry)
     ColumnLayout {
         Layout.fillWidth: true
-        Layout.preferredWidth: 2
-        spacing: 6
-
-        TitleTile {
-            title: "VOLTAGE[V]"
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
+        Layout.fillHeight: true
+        Layout.preferredWidth: 4
+        spacing: 10
 
         Repeater {
             model: [
-                    ["45", "45"],
-                    ["41", "43"],
-                    ["50", "47"],
-                    ["30", "33"],
-                    ["60", "62"]
-                ]
-            ValueRow {
+                {title: "AC[A]", values: [signalHandler?.AC_L, signalHandler?.AC_R], dir: Qt.Horizontal},
+                {title: "TM[°C]", values: [signalHandler?.motorTemperatureL, signalHandler?.motorTemperatureR], dir: Qt.Horizontal},
+                {title: "TI[°C]", values: [signalHandler?.inverterTemperatureL, signalHandler?.inverterTemperatureR], dir: Qt.Horizontal},
+                {title: "ERPM", values: [signalHandler?.ERPM_L, signalHandler?.ERPM_R], dir: Qt.Vertical},
+                {title: "Faults:", values: [signalHandler?.faultCount], dir: Qt.Horizontal}
+            ]
+
+            DataTile {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                values: modelData
+                flowDirection: modelData.dir
+                title: modelData.title
+                values: modelData.values
             }
         }
     }
 
-    // TEMPERATURE COLUMN
+    // MIDDLE COLUMN (left inverter states)
     ColumnLayout {
         Layout.fillWidth: true
+        Layout.fillHeight: true
         Layout.preferredWidth: 3
-        spacing: 6
-
-        TitleTile {
-            title: "TEMPERATURE[°C]"
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
+        spacing: 10
 
         Repeater {
-            model: [
-                    ["45","45","45"],
-                    ["41","42","43"],
-                    ["50","48","47"],
-                    ["30","32","33"],
-                    ["60","61","62"]
-                ]
-            ValueRow {
+            model:[
+                {title: "LDE", values: [signalHandler?.LDriveEnableState? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "LDO1", values: [signalHandler?.LdigitalOutput1? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "LDO2", values: [signalHandler?.LdigitalOutput2? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "LDO3", values: [signalHandler?.LdigitalOutput3? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "LDO4", values: [signalHandler?.LdigitalOutput4? "ON" : "OFF"], dir: Qt.Horizontal},
+            ]
+            DataTile {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                values: modelData
+                title: modelData.title
+                values: modelData.values
+                flowDirection: modelData.dir
             }
         }
     }
 
-    // STATUS COLUMN
+    // RIGHT COLUMN (right inverter states)
     ColumnLayout {
         Layout.fillWidth: true
+        Layout.fillHeight: true
         Layout.preferredWidth: 3
-        spacing: 6
+        spacing: 10
 
-        DataTile{
-            values: ["default"]
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            flowDirection: Qt.horizontal
-        }
-
-
-        ValueRow {
-            values: ["TC:45A","TV:100V"]
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-        ValueRow {
-            values: ["SC:100%","SP:80"]
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-        DataTile{
-            title: "NTC"
-            values: ["100","100"]
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            flowDirection: Qt.Horizontal
-        }
-
-        DataTile {
-            title: "AIR+"
-            values: ["off"]
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-        DataTile {
-            title: "AIR-"
-            values: ["off"]
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-
-        DataTile {
-            title: "PRECHARGE"
-            values: ["off"]
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            flowDirection: Qt.Horizontal
+        Repeater {
+            model:[
+                {title: "RDE", values: [signalHandler?.RDriveEnableState? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "RDO1", values: [signalHandler?.RdigitalOutput1? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "RDO2", values: [signalHandler?.RdigitalOutput2? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "RDO3", values: [signalHandler?.RdigitalOutput3? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "RDO4", values: [signalHandler?.RdigitalOutput4? "ON" : "OFF"], dir: Qt.Horizontal}
+            ]
+            DataTile {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                title: modelData.title
+                values: modelData.values
+                flowDirection: modelData.dir
+            }
         }
     }
 }

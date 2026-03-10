@@ -44,22 +44,17 @@ ColumnLayout {
                 value: signalHandler?.soc
                 label: "SOC"
                 Layout.horizontalStretchFactor: 1
-
             }
-
 
             SpeedGauge{
                 speed: signalHandler.speed
             }
-
 
             BatteryBar{
                 value: signalHandler?.temporary
                 label: "AUX"
                 Layout.horizontalStretchFactor: 1
             }
-
-
         }
     }
 
@@ -92,7 +87,6 @@ ColumnLayout {
                 color: "white"
                 font.bold: true
                 verticalAlignment: Text.AlignVCenter
-
                 font.pixelSize: bottomBar.height * 0.6
             }
         }

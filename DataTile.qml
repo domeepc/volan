@@ -9,6 +9,7 @@ Rectangle {
     property string title: ""
     property var values: []
     property int flowDirection: Qt.Horizontal
+    //property double titleHeightPercent: value
 
     readonly property bool hasTitle: title !== ""
 

@@ -1,104 +1,82 @@
 import QtQuick
 import QtQuick.Layouts
 
-GridLayout {
+RowLayout {
     anchors.fill: parent
-    columnSpacing: 10
-    rowSpacing: 10
+    spacing: 10
 
-    flow: GridLayout.TopToBottom
-    rows: 5
-
-
-    Repeater {
-        model: [
-            {label: "AC[A]", values: ["100","100"]},
-            {label: "TM[°C]", values: ["100","100"]},
-            {label: "TI[°C]", values: ["100","100"]},
-            {label: "ERPM", values: ["100","100"]}
-        ]
-
-        delegate: Rectangle {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            color: "black"
-
-            Row {
-                anchors.centerIn: parent
-                spacing: 15
-
-                Text {
-                    text: modelData.label
-                    color: "white"
-                    font.bold: true
-                    font.pixelSize: parent.parent.height * 0.35
-                }
-
-                Repeater {
-                    model: modelData.values
-
-                    Text {
-                        text: modelData
-                        color: "white"
-                        font.bold: true
-                        font.pixelSize: parent.parent.height * 0.35
-                    }
-                }
-            }
-        }
-    }
-
-    // brojac faultova
-    Rectangle {
-        Layout.fillHeight: true
+    // LEFT COLUMN (telemetry)
+    ColumnLayout {
         Layout.fillWidth: true
-        color: "black"
+        Layout.fillHeight: true
+        Layout.preferredWidth: 4
+        spacing: 10
 
-        Text {
-            text: "0 faults"
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: parent.height * 0.45
-            font.bold: true
-        }
-    }
+        Repeater {
+            model: [
+                {title: "AC[A]", values: [signalHandler?.AC_L, signalHandler?.AC_R], dir: Qt.Horizontal},
+                {title: "TM[°C]", values: [signalHandler?.motorTemperatureL, signalHandler?.motorTemperatureR], dir: Qt.Horizontal},
+                {title: "TI[°C]", values: [signalHandler?.inverterTemperatureL, signalHandler?.inverterTemperatureR], dir: Qt.Horizontal},
+                {title: "ERPM", values: [signalHandler?.ERPM_L, signalHandler?.ERPM_R], dir: Qt.Vertical},
+                {title: "Faults:", values: [signalHandler?.faultCount], dir: Qt.Horizontal}
+            ]
 
-    //stanja lijevog stanja
-    Repeater {
-        model: ["LES", "DS1", "DS1", "DS1", "DS1"]
-
-        delegate: Rectangle {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-            radius: 6
-
-            Text {
-                text: modelData
-                color: "white"
-                anchors.centerIn: parent
-                font.pixelSize: parent.height * 0.45
-                font.bold: true
+            DataTile {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                flowDirection: modelData.dir
+                title: modelData.title
+                values: modelData.values
             }
         }
     }
 
-    //stanja desnog invertera
-    Repeater {
-        model: ["RES", "DS1", "DS1", "DS1", "DS1"]
+    // MIDDLE COLUMN (left inverter states)
+    ColumnLayout {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredWidth: 3
+        spacing: 10
 
-        delegate: Rectangle {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "black"
-            radius: 6
+        Repeater {
+            model:[
+                {title: "LDE", values: [signalHandler?.LDriveEnableState? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "LDO1", values: [signalHandler?.LdigitalOutput1? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "LDO2", values: [signalHandler?.LdigitalOutput2? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "LDO3", values: [signalHandler?.LdigitalOutput3? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "LDO4", values: [signalHandler?.LdigitalOutput4? "ON" : "OFF"], dir: Qt.Horizontal},
+            ]
+            DataTile {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                title: modelData.title
+                values: modelData.values
+                flowDirection: modelData.dir
+            }
+        }
+    }
 
-            Text {
-                text: modelData
-                color: "white"
-                anchors.centerIn: parent
-                font.pixelSize: parent.height * 0.45
-                font.bold: true
+    // RIGHT COLUMN (right inverter states)
+    ColumnLayout {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredWidth: 3
+        spacing: 10
+
+        Repeater {
+            model:[
+                {title: "RDE", values: [signalHandler?.RDriveEnableState? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "RDO1", values: [signalHandler?.RdigitalOutput1? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "RDO2", values: [signalHandler?.RdigitalOutput2? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "RDO3", values: [signalHandler?.RdigitalOutput3? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "RDO4", values: [signalHandler?.RdigitalOutput4? "ON" : "OFF"], dir: Qt.Horizontal}
+            ]
+            DataTile {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                title: modelData.title
+                values: modelData.values
+                flowDirection: modelData.dir
             }
         }
     }

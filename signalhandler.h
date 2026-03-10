@@ -43,6 +43,28 @@ class SignalHandler : public QObject
     Q_PROPERTY(double cFactor3 READ cFactor3 NOTIFY cFactorsChanged)
     Q_PROPERTY(double cFactor4 READ cFactor4 NOTIFY cFactorsChanged)
 
+    Q_PROPERTY(double ERPM_L READ ERPM_L NOTIFY ERPMsChanged)
+    Q_PROPERTY(double ERPM_R READ ERPM_R NOTIFY ERPMsChanged)
+
+    Q_PROPERTY(double AC_L READ AC_L NOTIFY ACsChanged)
+    Q_PROPERTY(double AC_R READ AC_R NOTIFY ACsChanged)
+
+    Q_PROPERTY(bool LdigitalOutput1 READ LdigitalOutput1 NOTIFY DigitalOutputsChanged)
+    Q_PROPERTY(bool LdigitalOutput2 READ LdigitalOutput2 NOTIFY DigitalOutputsChanged)
+    Q_PROPERTY(bool LdigitalOutput3 READ LdigitalOutput3 NOTIFY DigitalOutputsChanged)
+    Q_PROPERTY(bool LdigitalOutput4 READ LdigitalOutput4 NOTIFY DigitalOutputsChanged)
+
+    Q_PROPERTY(bool RdigitalOutput1 READ RdigitalOutput1 NOTIFY DigitalOutputsChanged)
+    Q_PROPERTY(bool RdigitalOutput2 READ RdigitalOutput2 NOTIFY DigitalOutputsChanged)
+    Q_PROPERTY(bool RdigitalOutput3 READ RdigitalOutput3 NOTIFY DigitalOutputsChanged)
+    Q_PROPERTY(bool RdigitalOutput4 READ RdigitalOutput4 NOTIFY DigitalOutputsChanged)
+
+    Q_PROPERTY(bool LDriveEnableState READ LDriveEnableState NOTIFY DriveEnableStatesChanged)
+    Q_PROPERTY(bool RDriveEnableState READ RDriveEnableState NOTIFY DriveEnableStatesChanged)
+
+    //
+    Q_PROPERTY(double faultCount READ faultCount NOTIFY faultCountChanged)
+
 public:
     explicit SignalHandler(QObject *parent = nullptr);
     double speed() const { return m_speed; }
@@ -71,10 +93,33 @@ public:
     double cFactor3() const {return m_cFactor3;};
     double cFactor4() const {return m_cFactor4;};
 
+    double ERPM_L() const {return m_ERPM_L;};
+    double ERPM_R() const {return m_ERPM_R;};
+
+    double AC_L() const {return m_AC_L;};
+    double AC_R() const {return m_AC_R;};
+
+
+    bool LdigitalOutput1() const {return m_digitalOutputsL[0];};
+    bool LdigitalOutput2() const {return m_digitalOutputsL[1];};
+    bool LdigitalOutput3() const {return m_digitalOutputsL[2];};
+    bool LdigitalOutput4() const {return m_digitalOutputsL[3];};
+
+    bool RdigitalOutput1() const {return m_digitalOutputsR[0];};
+    bool RdigitalOutput2() const {return m_digitalOutputsR[1];};
+    bool RdigitalOutput3() const {return m_digitalOutputsR[2];};
+    bool RdigitalOutput4() const {return m_digitalOutputsR[3];};
+
+    bool LDriveEnableState() const {return m_DriveEnableStateL;};
+    bool RDriveEnableState() const {return m_DriveEnableStateR;};
 
 
     QString mode() const {return m_mode;}
     QString preset() const {return m_preset;}
+
+
+    //
+    int faultCount() const {return m_faultCount;};
 
 public slots:
     void handleDecodedFrame(QtCanBus::UniqueId id, const QMap<QString, QVariant> &sigs);
@@ -93,6 +138,15 @@ signals:
     void inverterTemperatureChanged();
     void torqueChanged();
     void cFactorsChanged();
+
+    void ERPMsChanged();
+    void ACsChanged();
+
+    void DriveEnableStatesChanged();
+    void DigitalOutputsChanged();
+
+    //
+    void faultCountChanged();
 
 private:
     double m_speed = 100.0;
@@ -126,6 +180,24 @@ private:
 
     //treba dodat max i avg temperature za strojarski prikaz
     //treba definirat warning signale
+
+    double m_ERPM_L = -32768;
+    double m_ERPM_R = -32768;
+
+    double m_AC_L = -300.0;
+    double m_AC_R = -300.0;
+
+
+    bool m_DriveEnableStateL = false;
+    bool m_DriveEnableStateR = false;
+    bool m_digitalOutputsL[4] = {false, false, false, false};
+    bool m_digitalOutputsR[4] = {false, false, false, false};
+
+
+
+    //mijenjat ce se ovo je za testiranje prikaza
+    int m_faultCount = 3;
+    
 
 
 
