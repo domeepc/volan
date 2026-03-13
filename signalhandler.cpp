@@ -10,8 +10,7 @@ void SignalHandler::handleDecodedFrame(QtCanBus::UniqueId id, const QMap<QString
     switch(id){
         case QtCanBus::UniqueId(0x7B):
         qDebug() << "asdasdasdasdasd";
-        m_speed = sigs["SPEED"].toDouble();
-        m_soc = sigs["SOC"].toDouble(),
+
         emit speedChanged();
         emit stateOfBatteryValuesChanged();
         break;

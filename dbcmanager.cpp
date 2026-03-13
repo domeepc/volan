@@ -5,8 +5,6 @@ DbcManager::DbcManager() {}
 
 bool DbcManager::load(const QString &path)
 {
-
-
     if (!m_parser.parse(path))
         return false;
 

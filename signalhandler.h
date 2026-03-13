@@ -135,13 +135,6 @@ public:
     bool LDriveEnableState() const {return m_DriveEnableStateL;};
     bool RDriveEnableState() const {return m_DriveEnableStateR;};
 
-    
-
-
-
-
-
-
     //
     int faultCount() const {return m_faultCount;};
 
