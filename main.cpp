@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
   CanInterface canInterface;
   canInterface.start("vcan0");
 
-  QString path ="/home/pmales/Desktop/volan/volantest/dbcfile.dbc";
+  QString path ="/home/pmales/Desktop/Projects/Fesb Racing/can1_vehicle.dbc";
   DbcManager DBCparser;
   if(!DBCparser.load(path)){
       qDebug() << "Could not parse file!";
