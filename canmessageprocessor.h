@@ -22,12 +22,13 @@ public:
 
 
 signals:
-    void frameDecoded(QtCanBus::UniqueId id, const QVariantMap &sigs);
+    void frameDecoded(QtCanBus::UniqueId id, const QVariantMap &sigs, const QString &messageName);
 
 public slots:
     void processFrame(const QCanBusFrame &frame);
 private:
     QCanFrameProcessor m_processor;
+
 };
 
 #endif // CANMESSAGEPROCESSOR_H

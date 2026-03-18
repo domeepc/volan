@@ -5,7 +5,6 @@ RowLayout {
     anchors.fill: parent
     spacing: 10
 
-    // LEFT COLUMN (telemetry)
     ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -31,7 +30,7 @@ RowLayout {
         }
     }
 
-    // MIDDLE COLUMN (left inverter states)
+
     ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -41,10 +40,10 @@ RowLayout {
         Repeater {
             model:[
                 {title: "LDE", values: [signalHandler?.LDriveEnableState? "ON" : "OFF"], dir: Qt.Horizontal},
-                {title: "LDO1", values: [signalHandler?.LdigitalOutput1? "ON" : "OFF"], dir: Qt.Horizontal},
-                {title: "LDO2", values: [signalHandler?.LdigitalOutput2? "ON" : "OFF"], dir: Qt.Horizontal},
-                {title: "LDO3", values: [signalHandler?.LdigitalOutput3? "ON" : "OFF"], dir: Qt.Horizontal},
-                {title: "LDO4", values: [signalHandler?.LdigitalOutput4? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "FAN1", values: [signalHandler?.LdigitalOutput1? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "FAN2", values: [signalHandler?.LdigitalOutput2? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "DO3", values: [signalHandler?.LdigitalOutput3? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "DO4", values: [signalHandler?.LdigitalOutput4? "ON" : "OFF"], dir: Qt.Horizontal},
             ]
             DataTile {
                 Layout.fillWidth: true
@@ -56,7 +55,6 @@ RowLayout {
         }
     }
 
-    // RIGHT COLUMN (right inverter states)
     ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -66,10 +64,10 @@ RowLayout {
         Repeater {
             model:[
                 {title: "RDE", values: [signalHandler?.RDriveEnableState? "ON" : "OFF"], dir: Qt.Horizontal},
-                {title: "RDO1", values: [signalHandler?.RdigitalOutput1? "ON" : "OFF"], dir: Qt.Horizontal},
-                {title: "RDO2", values: [signalHandler?.RdigitalOutput2? "ON" : "OFF"], dir: Qt.Horizontal},
-                {title: "RDO3", values: [signalHandler?.RdigitalOutput3? "ON" : "OFF"], dir: Qt.Horizontal},
-                {title: "RDO4", values: [signalHandler?.RdigitalOutput4? "ON" : "OFF"], dir: Qt.Horizontal}
+                {title: "FAN1", values: [signalHandler?.RdigitalOutput1? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "FAN2", values: [signalHandler?.RdigitalOutput2? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "DO3", values: [signalHandler?.RdigitalOutput3? "ON" : "OFF"], dir: Qt.Horizontal},
+                {title: "DO4", values: [signalHandler?.RdigitalOutput4? "ON" : "OFF"], dir: Qt.Horizontal}
             ]
             DataTile {
                 Layout.fillWidth: true

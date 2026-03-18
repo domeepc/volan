@@ -10,12 +10,24 @@ void CanMessageProcessor::setMessages(const QList<QCanMessageDescription> &messa
 }
 
 void CanMessageProcessor::processFrame(const QCanBusFrame &frame){
-    qDebug() << "AAAAA";
     if(!frame.isValid()){
         qDebug() << "CAN frame not valid!";
     }
 
     QCanFrameProcessor::ParseResult result = m_processor.parseFrame(frame);
+
+
+    //ovaj dio bi se moga optimizirat sa lookup table
+    QString messageName;
+    for(const auto &desc : m_processor.messageDescriptions()){
+        if(desc.uniqueId() == result.uniqueId){
+            messageName = desc.name();
+
+            break;
+        }
+    }
+
+
     if(m_processor.error() != QCanFrameProcessor::Error::None){
         qDebug() << "Frame processing failed: " << m_processor.errorString();
         return;
@@ -27,17 +39,14 @@ void CanMessageProcessor::processFrame(const QCanBusFrame &frame){
     }
 
 
-    qDebug() << "Frame ID: " << result.uniqueId;
+    qDebug() << "Frame ID: " << result.uniqueId << "Message name: " << messageName ;
     QMapIterator<QString, QVariant> i(result.signalValues);
     while (i.hasNext()) {
         i.next();
         qDebug() << "  Signal:" << i.key() << ", Value:" << i.value();
     }
 
-
-
-
-    emit frameDecoded(result.uniqueId, result.signalValues);
+    emit frameDecoded(result.uniqueId, result.signalValues, messageName);
 }
 
 void CanMessageProcessor::setUniqueIDDescription(const QCanUniqueIdDescription &idDescription){
