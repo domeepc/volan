@@ -23,13 +23,13 @@ RowLayout{
                 spacing: 10
 
                 Text {
-                    text: "BC 300.76"
+                    text: "BC " + signalHandler?.bmsTotalCurrent + "A"
                     color: "white"
                     font.pixelSize: root1.height * 0.7
                     font.bold: true
                 }
                 Text {
-                    text: "VC 2A"
+                    text: "VC " + signalHandler?.vcuCurrent + "A"
                     color: "white"
                     font.pixelSize: root1.height * 0.7
                     font.bold: true
@@ -55,13 +55,13 @@ RowLayout{
                     font.bold: true
                 }
                 Text {
-                    text: "100"
+                    text: signalHandler?.brakePressureForward
                     color: "white"
                     font.pixelSize: root1.height * 0.7
                     font.bold: true
                 }
                 Text {
-                    text: "100"
+                    text: signalHandler?.brakePressureRear
                     color: "white"
                     font.pixelSize: root1.height * 0.7
                     font.bold: true
@@ -87,13 +87,13 @@ RowLayout{
                     font.bold: true
                 }
                 Text {
-                    text: "100"
+                    text: signalHandler?.brakePressureForward
                     color: "white"
                     font.pixelSize: root2.height * 0.7
                     font.bold: true
                 }
                 Text {
-                    text: "100"
+                    text: signalHandler?.brakePressureRear
                     color: "white"
                     font.pixelSize: root2.height * 0.7
                     font.bold: true
@@ -144,7 +144,7 @@ RowLayout{
                 spacing: 5
 
                 Text {
-                    text: "ACLx:  -32.768"
+                    text: "ACLx: " + signalHandler?.accelerationX
                     color: "white"
                     font.bold: true
                     Layout.fillWidth: true
@@ -154,7 +154,7 @@ RowLayout{
                 }
 
                 Text {
-                    text: "ACLy:  -32.768"
+                    text: "ACLy: " + signalHandler?.accelerationY
                     color: "white"
                     font.bold: true
                     Layout.fillWidth: true
@@ -164,7 +164,7 @@ RowLayout{
                 }
 
                 Text {
-                    text: "ACLz:  -32.768"
+                    text: "ACLz: " + signalHandler?.accelerationZ
                     color: "white"
                     font.bold: true
                     Layout.fillWidth: true
@@ -174,7 +174,7 @@ RowLayout{
                 }
 
                 Text {
-                    text: "GYROz: -327.76"
+                    text: "GYROz: " + signalHandler?.gyroZ
                     color: "white"
                     font.bold: true
                     Layout.fillWidth: true
@@ -199,7 +199,7 @@ RowLayout{
             color: "black"
 
             Text{
-                text: "ENDURANCE"
+                text: signalHandler?.mode
                 color: "white"
                 anchors.centerIn: parent
                 font.pixelSize: parent.height * 0.7

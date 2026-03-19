@@ -52,7 +52,7 @@ ColumnLayout {
             }
 
             BatteryBar{
-                value: signalHandler?.temporary
+                value: signalHandler?.soc
                 label: "AUX"
                 Layout.horizontalStretchFactor: 1
             }
