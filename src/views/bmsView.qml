@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import volan
 
 RowLayout {
     anchors.fill: parent
@@ -68,13 +69,13 @@ RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            DataTile{
+            DataTile {
                 values: [signalHandler?.bmsState]
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 flowDirection: Qt.Horizontal
             }
-            DataTile{
+            DataTile {
                 title: "IMD"
                 values: [signalHandler?.IMD_ok? "ON" : "OFF"]
                 Layout.fillWidth: true
