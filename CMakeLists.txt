@@ -9,41 +9,39 @@ find_package(Qt6 REQUIRED COMPONENTS Quick SerialBus SerialPort)
 qt_standard_project_setup()
 
 qt_add_executable(appvolan
-    main.cpp
-
+    src/main.cpp
 )
 
-
 qt_policy(SET QTP0001 NEW)
-
-
 
 qt_add_qml_module(appvolan
     URI volan
     VERSION 1.0
     QML_FILES
-        Main.qml
-
-        SOURCES caninterface.h caninterface.cpp
-        SOURCES canmessageprocessor.h canmessageprocessor.cpp
-        SOURCES dbcmanager.h dbcmanager.cpp
-        SOURCES signalhandler.h signalhandler.cpp
-        QML_FILES raceView.qml
-        QML_FILES mechView.qml
-        QML_FILES bmsView.qml
-        QML_FILES vcuView.qml
-        QML_FILES errorView.qml
-        QML_FILES inverterView.qml
-        QML_FILES wheelDebugView.qml
-        QML_FILES BatteryBar.qml
-        QML_FILES SpeedGauge.qml
-        QML_FILES DataTile.qml
-        QML_FILES test.qml
-        QML_FILES ValueRow.qml
-        QML_FILES TitleTile.qml
-
-
+        src/design/Main.qml
+        src/design/test.qml
+        src/views/raceView.qml
+        src/views/mechView.qml
+        src/views/bmsView.qml
+        src/views/vcuView.qml
+        src/views/errorView.qml
+        src/views/inverterView.qml
+        src/views/wheelDebugView.qml
+        src/views/testView.qml
+        src/components/BatteryBar.qml
+        src/components/SpeedGauge.qml
+        src/components/DataTile.qml
+        src/components/ValueRow.qml
+        src/components/TitleTile.qml
+    SOURCES
+        src/includes/caninterface.h       src/caninterface.cpp
+        src/includes/canmessageprocessor.h src/canmessageprocessor.cpp
+        src/includes/dbcmanager.h          src/dbcmanager.cpp
+        src/includes/signalhandler.h       src/signalhandler.cpp
+        src/includes/verticalbar.h         src/verticalbar.cpp
 )
+
+target_include_directories(appvolan PRIVATE src/includes)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
