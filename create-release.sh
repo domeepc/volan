@@ -36,7 +36,8 @@ cp "../../deploy-rpi.sh" ./
 
 # Copy source files for reference
 mkdir -p src
-cp "../../main.cpp" "../../back.cpp" "../../back.h" "../../Main.qml" "../../CMakeLists.txt" src/
+cp -r "../../src/." src/
+cp "../../CMakeLists.txt" src/
 
 # Create installation script
 cat > install.sh << 'EOF'

@@ -78,6 +78,7 @@ set(Qt6_DIR \${CMAKE_SYSROOT}/usr/lib/aarch64-linux-gnu/cmake/Qt6)
 set(Qt6Core_DIR \${CMAKE_SYSROOT}/usr/lib/aarch64-linux-gnu/cmake/Qt6Core)
 set(Qt6Quick_DIR \${CMAKE_SYSROOT}/usr/lib/aarch64-linux-gnu/cmake/Qt6Quick)
 set(Qt6SerialBus_DIR \${CMAKE_SYSROOT}/usr/lib/aarch64-linux-gnu/cmake/Qt6SerialBus)
+set(Qt6SerialPort_DIR \${CMAKE_SYSROOT}/usr/lib/aarch64-linux-gnu/cmake/Qt6SerialPort)
 EOF
 
 # Configure with CMake
