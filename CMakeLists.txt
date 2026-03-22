@@ -13,7 +13,9 @@ qt_add_executable(appvolan
     src/main.cpp
 )
 
-qt_policy(SET QTP0001 NEW)
+if(Qt6_VERSION VERSION_GREATER_EQUAL "6.5")
+    qt_policy(SET QTP0001 NEW)
+endif()
 
 qt_add_qml_module(appvolan
     URI volan
