@@ -7,6 +7,9 @@
 #include "dbcmanager.h"
 #include "canmessageprocessor.h"
 #include "signalhandler.h"
+#include "bmssignalhandler.h"
+#include "vcusignalhandler.h"
+#include "invertersignalhandler.h"
 
 int main(int argc, char *argv[]) {
 
@@ -31,6 +34,8 @@ int main(int argc, char *argv[]) {
     processor.setMessages(DBCparser.getMessages());
 
     SignalHandler *signalHandler = new SignalHandler(&engine);
+
+
     engine.rootContext()->setContextProperty("signalHandler", signalHandler);
 
 

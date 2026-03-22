@@ -20,11 +20,11 @@ RowLayout {
 
         Repeater {
             model: [
-                [signalHandler?.voltageMin[0].toFixed(1), signalHandler?.voltageMax[0].toFixed(1)],
-                [signalHandler?.voltageMin[1].toFixed(1), signalHandler?.voltageMax[1].toFixed(1)],
-                [signalHandler?.voltageMin[2].toFixed(1), signalHandler?.voltageMax[2].toFixed(1)],
-                [signalHandler?.voltageMin[3].toFixed(1), signalHandler?.voltageMax[3].toFixed(1)],
-                [signalHandler?.voltageMin[4].toFixed(1), signalHandler?.voltageMax[4].toFixed(1)]
+                [signalHandler?.bms.voltageMin[0].toFixed(1), signalHandler?.bms.voltageMax[0].toFixed(1)],
+                [signalHandler?.bms.voltageMin[1].toFixed(1), signalHandler?.bms.voltageMax[1].toFixed(1)],
+                [signalHandler?.bms.voltageMin[2].toFixed(1), signalHandler?.bms.voltageMax[2].toFixed(1)],
+                [signalHandler?.bms.voltageMin[3].toFixed(1), signalHandler?.bms.voltageMax[3].toFixed(1)],
+                [signalHandler?.bms.voltageMin[4].toFixed(1), signalHandler?.bms.voltageMax[4].toFixed(1)]
             ]
             ValueRow {
                 Layout.fillWidth: true
@@ -47,11 +47,11 @@ RowLayout {
 
         Repeater {
             model: [
-                [signalHandler?.temperatureMin[0].toFixed(1), signalHandler?.temperatureAvg[0].toFixed(1), signalHandler?.temperatureMax[0].toFixed(1)],
-                [signalHandler?.temperatureMin[1].toFixed(1), signalHandler?.temperatureAvg[1].toFixed(1), signalHandler?.temperatureMax[1].toFixed(1)],
-                [signalHandler?.temperatureMin[2].toFixed(1), signalHandler?.temperatureAvg[2].toFixed(1), signalHandler?.temperatureMax[2].toFixed(1)],
-                [signalHandler?.temperatureMin[3].toFixed(1), signalHandler?.temperatureAvg[3].toFixed(1), signalHandler?.temperatureMax[3].toFixed(1)],
-                [signalHandler?.temperatureMin[4].toFixed(1), signalHandler?.temperatureAvg[4].toFixed(1), signalHandler?.temperatureMax[4].toFixed(1)]
+                [signalHandler?.bms.temperatureMin[0].toFixed(1), signalHandler?.bms.temperatureAvg[0].toFixed(1), signalHandler?.bms.temperatureMax[0].toFixed(1)],
+                [signalHandler?.bms.temperatureMin[1].toFixed(1), signalHandler?.bms.temperatureAvg[1].toFixed(1), signalHandler?.bms.temperatureMax[1].toFixed(1)],
+                [signalHandler?.bms.temperatureMin[2].toFixed(1), signalHandler?.bms.temperatureAvg[2].toFixed(1), signalHandler?.bms.temperatureMax[2].toFixed(1)],
+                [signalHandler?.bms.temperatureMin[3].toFixed(1), signalHandler?.bms.temperatureAvg[3].toFixed(1), signalHandler?.bms.temperatureMax[3].toFixed(1)],
+                [signalHandler?.bms.temperatureMin[4].toFixed(1), signalHandler?.bms.temperatureAvg[4].toFixed(1), signalHandler?.bms.temperatureMax[4].toFixed(1)]
             ]
             ValueRow {
                 Layout.fillWidth: true
@@ -70,14 +70,14 @@ RowLayout {
             Layout.fillHeight: true
 
             DataTile{
-                values: [signalHandler?.bmsState]
+                values: [signalHandler?.bms.state]
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 flowDirection: Qt.Horizontal
             }
             DataTile{
                 title: "IMD"
-                values: [signalHandler?.IMD_ok? "ON" : "OFF"]
+                values: [signalHandler?.bms.IMD_ok? "ON" : "OFF"]
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 flowDirection: Qt.Horizontal
@@ -86,21 +86,21 @@ RowLayout {
 
         DataTile {
             title: "AIR+"
-            values: [signalHandler?.airPlus? "ON" : "OFF"]
+            values: [signalHandler?.bms.airPlus? "ON" : "OFF"]
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
 
         DataTile {
             title: "AIR-"
-            values: [signalHandler?.airMinus? "ON" : "OFF"]
+            values: [signalHandler?.bms.airMinus? "ON" : "OFF"]
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
 
         DataTile {
             title: "PRECHARGE"
-            values: [signalHandler?.precharge? "ON" : "OFF"]
+            values: [signalHandler?.bms.precharge? "ON" : "OFF"]
             Layout.fillWidth: true
             Layout.fillHeight: true
             flowDirection: Qt.Horizontal
@@ -112,14 +112,14 @@ RowLayout {
 
             DataTile{
                 title: "TC"
-                values: [signalHandler?.bmsTotalCurrent + "A"]
+                values: [signalHandler?.bms.totalCurrent + "A"]
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 flowDirection: Qt.Horizontal
             }
             DataTile{
                 title: "TV"
-                values: [signalHandler?.bmsTotalVoltage + "V"]
+                values: [signalHandler?.bms.totalVoltage + "V"]
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 flowDirection: Qt.Horizontal
@@ -132,14 +132,14 @@ RowLayout {
 
             DataTile{
                 title: "SC"
-                values: [signalHandler?.soc + "%"]
+                values: [signalHandler?.bms.soc + "%"]
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 flowDirection: Qt.Horizontal
             }
             DataTile{
                 title: "SP"
-                values: [signalHandler?.sop]
+                values: [signalHandler?.bms.sop]
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 flowDirection: Qt.Horizontal
@@ -148,8 +148,8 @@ RowLayout {
         DataTile{
             title: "NTC[°C]"
             values: [
-                signalHandler?.ntcTemperature[0],
-                signalHandler?.ntcTemperature[1]
+                signalHandler?.bms.ntcTemperature[0],
+                signalHandler?.bms.ntcTemperature[1]
             ]
             Layout.fillWidth: true
             Layout.fillHeight: true

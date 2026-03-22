@@ -23,13 +23,13 @@ RowLayout{
                 spacing: 10
 
                 Text {
-                    text: "BC " + signalHandler?.bmsTotalCurrent + "A"
+                    text: "BC " + signalHandler?.bms.totalCurrent + "A"
                     color: "white"
                     font.pixelSize: root1.height * 0.7
                     font.bold: true
                 }
                 Text {
-                    text: "VC " + signalHandler?.vcuCurrent + "A"
+                    text: "VC " + signalHandler?.vcu.current + "A"
                     color: "white"
                     font.pixelSize: root1.height * 0.7
                     font.bold: true
@@ -55,13 +55,13 @@ RowLayout{
                     font.bold: true
                 }
                 Text {
-                    text: signalHandler?.brakePressureForward
+                    text: signalHandler?.vcu.brakePressureForward
                     color: "white"
                     font.pixelSize: root1.height * 0.7
                     font.bold: true
                 }
                 Text {
-                    text: signalHandler?.brakePressureRear
+                    text: signalHandler?.vcu.brakePressureRear
                     color: "white"
                     font.pixelSize: root1.height * 0.7
                     font.bold: true
@@ -87,13 +87,13 @@ RowLayout{
                     font.bold: true
                 }
                 Text {
-                    text: signalHandler?.brakePressureForward
+                    text: signalHandler?.vcu.brakePressureForward
                     color: "white"
                     font.pixelSize: root2.height * 0.7
                     font.bold: true
                 }
                 Text {
-                    text: signalHandler?.brakePressureRear
+                    text: signalHandler?.vcu.brakePressureRear
                     color: "white"
                     font.pixelSize: root2.height * 0.7
                     font.bold: true
@@ -117,13 +117,13 @@ RowLayout{
                     font.bold: true
                 }
                 Text {
-                    text: "-50.01°"
+                    text: signalHandler?.vcu.swAngle1 + "°"
                     color: "white"
                     font.pixelSize: root3.height * 0.7
                     font.bold: true
                 }
                 Text {
-                    text: "-50.01°"
+                    text: signalHandler?.vcu.swAngle2 + "°"
                     color: "white"
                     font.pixelSize: root3.height * 0.7
                     font.bold: true
@@ -144,7 +144,7 @@ RowLayout{
                 spacing: 5
 
                 Text {
-                    text: "ACLx: " + signalHandler?.accelerationX
+                    text: "ACLx: " + signalHandler?.vcu.accelerationX
                     color: "white"
                     font.bold: true
                     Layout.fillWidth: true
@@ -154,7 +154,7 @@ RowLayout{
                 }
 
                 Text {
-                    text: "ACLy: " + signalHandler?.accelerationY
+                    text: "ACLy: " + signalHandler?.vcu.accelerationY
                     color: "white"
                     font.bold: true
                     Layout.fillWidth: true
@@ -164,7 +164,7 @@ RowLayout{
                 }
 
                 Text {
-                    text: "ACLz: " + signalHandler?.accelerationZ
+                    text: "ACLz: " + signalHandler?.vcu.accelerationZ
                     color: "white"
                     font.bold: true
                     Layout.fillWidth: true
@@ -174,7 +174,7 @@ RowLayout{
                 }
 
                 Text {
-                    text: "GYROz: " + signalHandler?.gyroZ
+                    text: "GYROz: " + signalHandler?.vcu.gyroZ
                     color: "white"
                     font.bold: true
                     Layout.fillWidth: true
@@ -199,7 +199,7 @@ RowLayout{
             color: "black"
 
             Text{
-                text: signalHandler?.mode
+                text: signalHandler?.vcu.mode
                 color: "white"
                 anchors.centerIn: parent
                 font.pixelSize: parent.height * 0.7
