@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: apt-cache
-          key: ${{ runner.os }}-apt-arm64-qt6-v1
+          key: ${{ runner.os }}-apt-arm64-qt6-v2
           restore-keys: |
             ${{ runner.os }}-apt-arm64-qt6-
             ${{ runner.os }}-apt-arm64-
@@ -59,7 +59,7 @@ jobs:
             -v ${{ github.workspace }}/apt-cache:/var/cache/apt/archives \
             -v ${{ github.workspace }}/.cache/ccache:/root/.cache/ccache \
             -w /workspace \
-            arm64v8/debian:bookworm \
+            arm64v8/debian:trixie \
             bash -c "
               set -e
               export DEBIAN_FRONTEND=noninteractive
