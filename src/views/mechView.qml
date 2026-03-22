@@ -16,7 +16,7 @@ ColumnLayout {
             Layout.fillHeight: true
             title: "SLIP"
             flowDirection: Qt.Horizontal
-            values: [signalHandler?.slip]
+            values: [signalHandler?.vcu.slip]
         }
 
         DataTile {
@@ -24,7 +24,7 @@ ColumnLayout {
             Layout.fillHeight: true
             title: "SOC"
             flowDirection: Qt.Horizontal
-            values: [signalHandler?.soc + "%"]
+            values: [signalHandler?.bms.soc + "%"]
         }
 
         DataTile {
@@ -32,7 +32,7 @@ ColumnLayout {
             Layout.fillHeight: true
             title: ""
             flowDirection: Qt.Horizontal
-            values: [signalHandler?.preset]
+            values: [signalHandler?.vcu.preset]
         }
     }
 
@@ -48,8 +48,8 @@ ColumnLayout {
             title: "M-TEMP"
             flowDirection: Qt.Vertical
             values: [
-                signalHandler?.motorTemperatureL,
-                signalHandler?.motorTemperatureR
+                signalHandler?.inverter.motorTemperatureL,
+                signalHandler?.inverter.motorTemperatureR
             ]
         }
 
@@ -60,8 +60,8 @@ ColumnLayout {
             title: "M-RPM"
             flowDirection: Qt.Vertical
             values: [
-                signalHandler?.rpmL,
-                signalHandler?.rpmR
+                signalHandler?.vcu.rpmL,
+                signalHandler?.vcu.rpmR
             ]
         }
 
@@ -72,8 +72,8 @@ ColumnLayout {
             title: "BRAKE"
             flowDirection: Qt.Vertical
             values: [
-                signalHandler?.brakePressureForward,
-                signalHandler?.brakePressureRear
+                signalHandler?.vcu.brakePressureForward,
+                signalHandler?.vcu.brakePressureRear
             ]
         }
 
@@ -84,8 +84,8 @@ ColumnLayout {
             title: "I-TEMP"
             flowDirection: Qt.Vertical
             values: [
-                signalHandler?.inverterTemperatureL,
-                signalHandler?.inverterTemperatureR
+                signalHandler?.inverter.temperatureL,
+                signalHandler?.inverter.temperatureR
             ]
         }
     }
@@ -101,8 +101,8 @@ ColumnLayout {
             title: "TORQUE"
             flowDirection: Qt.Vertical
             values: [
-                signalHandler?.torqueL,
-                signalHandler?.torqueR
+                signalHandler?.vcu.torqueL,
+                signalHandler?.vcu.torqueR
             ]
         }
 
@@ -124,10 +124,10 @@ ColumnLayout {
             title: "C-FACTORS"
             flowDirection: Qt.Vertical
             values: [
-                signalHandler?.cFactor1,
-                signalHandler?.cFactor2,
-                signalHandler?.cFactor3,
-                signalHandler?.cFactor4
+                signalHandler?.vcu.cFactor1,
+                signalHandler?.vcu.cFactor2,
+                signalHandler?.vcu.cFactor3,
+                signalHandler?.vcu.cFactor4
             ]
         }
     }

@@ -38,7 +38,10 @@ qt_add_qml_module(appvolan
         src/includes/canmessageprocessor.h src/canmessageprocessor.cpp
         src/includes/dbcmanager.h          src/dbcmanager.cpp
         src/includes/signalhandler.h       src/signalhandler.cpp
-        src/includes/verticalbar.h         src/verticalbar.cpp
+        src/includes/bmssignalhandler.h    src/bmssignalhandler.cpp
+        src/includes/vcusignalhandler.h    src/vcusignalhandler.cpp
+        src/includes/invertersignalhandler.h src/invertersignalhandler.cpp
+
 )
 
 target_include_directories(appvolan PRIVATE src/includes)

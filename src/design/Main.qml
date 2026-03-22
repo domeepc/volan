@@ -15,7 +15,7 @@ Window {
         StackView{
             id: stackView
             anchors.fill: parent
-            initialItem: "../views/vcuView.qml"
+            initialItem: "../views/raceView.qml"
         }
     }
 }

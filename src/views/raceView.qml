@@ -42,13 +42,13 @@ ColumnLayout {
             spacing: 50
 
             BatteryBar{
-                value: signalHandler?.soc
+                value: signalHandler?.bms.soc
                 label: "SOC"
                 Layout.horizontalStretchFactor: 1
             }
 
             SpeedGauge{
-                speed: signalHandler.speed
+                speed: signalHandler.vcu.speed
             }
 
             BatteryBar{
@@ -71,7 +71,7 @@ ColumnLayout {
             anchors.rightMargin: 20
 
             Text {
-                text: signalHandler?.mode
+                text: signalHandler?.vcu.mode
                 color: "white"
                 font.bold: true
                 verticalAlignment: Text.AlignVCenter
@@ -84,7 +84,7 @@ ColumnLayout {
             }
 
             Text {
-                text: signalHandler?.preset
+                text: signalHandler?.vcu.preset
                 color: "white"
                 font.bold: true
                 verticalAlignment: Text.AlignVCenter
