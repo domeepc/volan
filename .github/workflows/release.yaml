@@ -104,6 +104,25 @@ jobs:
               ls -lh appvolan
               file appvolan
               strip appvolan
+
+              echo 'Copying Qt runtime libraries for bundling...'
+              mkdir -p /workspace/qt-libs/plugins /workspace/qt-libs/qml
+              cp /usr/lib/aarch64-linux-gnu/libQt6Core.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Gui.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Network.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Qml.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Quick.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6SerialBus.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6SerialPort.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6OpenGL.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6DBus.so.6* /workspace/qt-libs/ 2>/dev/null || true
+              cp /usr/lib/aarch64-linux-gnu/libQt6XcbQpa.so.6* /workspace/qt-libs/ 2>/dev/null || true
+              cp /usr/lib/aarch64-linux-gnu/libQt6EglFsKmsSupport.so.6* /workspace/qt-libs/ 2>/dev/null || true
+              cp /usr/lib/aarch64-linux-gnu/libQt6WaylandClient.so.6* /workspace/qt-libs/ 2>/dev/null || true
+              cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms /workspace/qt-libs/plugins/ 2>/dev/null || true
+              cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/xcbglintegrations /workspace/qt-libs/plugins/ 2>/dev/null || true
+              cp -r /usr/lib/qt6/qml/QtQuick /workspace/qt-libs/qml/ 2>/dev/null || true
+              cp -r /usr/lib/qt6/qml/QtQml /workspace/qt-libs/qml/ 2>/dev/null || true
             "
 
       - name: Clean up cache directories
@@ -119,12 +138,17 @@ jobs:
 
       - name: Package release
         run: |
-          mkdir -p release
+          mkdir -p release/lib release/plugins release/qml
           cp build-rpi/appvolan release/
           cp README.md release/ 2>/dev/null || true
           cp LICENSE release/ 2>/dev/null || true
 
-          # Create a simple installation script
+          # Bundle Qt runtime libraries from the build container
+          cp qt-libs/*.so.6* release/lib/ 2>/dev/null || true
+          cp -r qt-libs/plugins/* release/plugins/ 2>/dev/null || true
+          cp -r qt-libs/qml/* release/qml/ 2>/dev/null || true
+
+          # Create installation script
           cat > release/install.sh << 'EOF'
           #!/bin/bash
           # Volan installation script for Raspberry Pi
@@ -134,42 +158,44 @@ jobs:
           echo "==================================="
           echo ""
 
-          # Check for required Qt6 libraries
-          echo "Checking for required Qt6 libraries..."
-          if ! dpkg -l | grep -q libqt6serialbus6; then
-            echo "Qt6 libraries not found. Installing dependencies..."
-            sudo apt-get update
-            sudo apt-get install -y \
-              libqt6core6 \
-              libqt6gui6 \
-              libqt6qml6 \
-              libqt6quick6 \
-              libqt6serialbus6 \
-              libqt6serialport6 \
-              libqt6opengl6 \
-              qt6-qpa-plugins \
-              qml6-module-qtquick \
-              qml6-module-qtquick-controls \
-              qml6-module-qtquick-layouts \
-              qml6-module-qtquick-window \
-              qml6-module-qtqml-workerscript \
-              libgl1 \
-              libegl1 \
-              libgles2
-            echo "Dependencies installed successfully!"
-          else
-            echo "Qt6 libraries already installed. Checking for platform plugins..."
-            if ! dpkg -l | grep -q qt6-qpa-plugins; then
-              echo "Installing Qt6 platform plugins..."
-              sudo apt-get update
-              sudo apt-get install -y qt6-qpa-plugins libgl1 libegl1 libgles2
-            fi
-          fi
+          SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+          # Install minimal system GL/EGL deps (these are OS-level, not Qt)
+          echo "Installing system GL dependencies..."
+          sudo apt-get update -qq
+          sudo apt-get install -y libgl1 libegl1 libgles2 libfontconfig1 libdbus-1-3 2>/dev/null || true
+
+          # Install bundled Qt libraries
+          echo "Installing bundled Qt libraries..."
+          sudo cp "$SCRIPT_DIR"/lib/libQt6*.so.6* /usr/local/lib/
+          sudo ldconfig
+
+          # Install Qt platform plugins
+          echo "Installing Qt plugins..."
+          sudo mkdir -p /usr/local/lib/qt6/plugins
+          sudo cp -r "$SCRIPT_DIR"/plugins/* /usr/local/lib/qt6/plugins/ 2>/dev/null || true
+
+          # Install QML modules
+          echo "Installing QML modules..."
+          sudo mkdir -p /usr/local/lib/qt6/qml
+          sudo cp -r "$SCRIPT_DIR"/qml/* /usr/local/lib/qt6/qml/ 2>/dev/null || true
+
+          # Install binary
+          echo "Installing Volan application..."
+          sudo cp "$SCRIPT_DIR"/appvolan /usr/local/bin/
+          sudo chmod +x /usr/local/bin/appvolan
+
+          # Create wrapper that sets Qt paths to bundled libs
+          sudo tee /usr/local/bin/volan > /dev/null << 'WRAPPER'
+          #!/bin/bash
+          export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+          export QT_PLUGIN_PATH=/usr/local/lib/qt6/plugins
+          export QML2_IMPORT_PATH=/usr/local/lib/qt6/qml
+          exec /usr/local/bin/appvolan "$@"
+          WRAPPER
+          sudo chmod +x /usr/local/bin/volan
 
           echo ""
-          echo "Installing Volan application..."
-          sudo cp appvolan /usr/local/bin/
-          sudo chmod +x /usr/local/bin/appvolan
           echo "Installation complete!"
           echo ""
           echo "==================================="
@@ -186,7 +212,7 @@ jobs:
           echo "     up /sbin/ip link set can0 up"
           echo ""
           echo "3. Run the application:"
-          echo "   appvolan"
+          echo "   volan"
           echo ""
           EOF
           chmod +x release/install.sh
