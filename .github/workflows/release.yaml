@@ -36,22 +36,17 @@ jobs:
             ${{ runner.os }}-apt-arm64-qt6-
             ${{ runner.os }}-apt-arm64-
 
-      - name: Cache CMake build
+      - name: Cache ccache
         uses: actions/cache@v4
         with:
-          path: |
-            build-rpi
-            .cache/ccache
-          key: ${{ runner.os }}-cmake-arm64-${{ hashFiles('CMakeLists.txt', 'src/**/*.cpp', 'src/**/*.h', 'src/**/*.qml') }}-v2
+          path: .cache/ccache
+          key: ${{ runner.os }}-ccache-arm64-${{ hashFiles('CMakeLists.txt', 'src/**/*.cpp', 'src/**/*.h', 'src/**/*.qml') }}
           restore-keys: |
-            ${{ runner.os }}-cmake-arm64-
+            ${{ runner.os }}-ccache-arm64-
 
       - name: Build for Raspberry Pi using ARM64 container
         run: |
-          # Create cache directories
           mkdir -p apt-cache .cache/ccache
-
-          # Fix permissions for apt-cache to avoid tar errors
           chmod -R 755 apt-cache 2>/dev/null || true
 
           docker run --rm --platform linux/arm64 \
@@ -64,7 +59,7 @@ jobs:
               set -e
               export DEBIAN_FRONTEND=noninteractive
               export CCACHE_DIR=/root/.cache/ccache
-              
+
               echo 'Installing dependencies...'
               apt-get update
               apt-get install -y \
@@ -77,57 +72,45 @@ jobs:
                 qt6-serialport-dev \
                 libgl1-mesa-dev \
                 file
-              
-              # Configure ccache
+
               export PATH=/usr/lib/ccache:\$PATH
               ccache --max-size=500M
-              ccache --show-stats
-              
-              echo 'Creating build directory...'
-              mkdir -p build-rpi
-              cd build-rpi
-              
-              echo 'Configuring with CMake...'
+
+              echo 'Building...'
+              mkdir -p build-rpi && cd build-rpi
               cmake .. \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DCMAKE_INSTALL_PREFIX=/usr/local \
                 -DCMAKE_CXX_STANDARD=17 \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-              
-              echo 'Building application...'
               make -j\$(nproc)
-              
-              echo 'CCache statistics:'
-              ccache --show-stats
-              
-              echo 'Build complete!'
-              ls -lh appvolan
-              file appvolan
               strip appvolan
+
+              echo 'ccache stats:' && ccache --show-stats
+              echo 'Build complete!' && file appvolan
 
               echo 'Copying Qt runtime libraries for bundling...'
               mkdir -p /workspace/qt-libs/plugins /workspace/qt-libs/qml
-              cp /usr/lib/aarch64-linux-gnu/libQt6Core.so.6* /workspace/qt-libs/
-              cp /usr/lib/aarch64-linux-gnu/libQt6Gui.so.6* /workspace/qt-libs/
-              cp /usr/lib/aarch64-linux-gnu/libQt6Network.so.6* /workspace/qt-libs/
-              cp /usr/lib/aarch64-linux-gnu/libQt6Qml.so.6* /workspace/qt-libs/
-              cp /usr/lib/aarch64-linux-gnu/libQt6Quick.so.6* /workspace/qt-libs/
-              cp /usr/lib/aarch64-linux-gnu/libQt6SerialBus.so.6* /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Core.so.6*       /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Gui.so.6*        /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Network.so.6*    /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Qml.so.6*        /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6Quick.so.6*      /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6SerialBus.so.6*  /workspace/qt-libs/
               cp /usr/lib/aarch64-linux-gnu/libQt6SerialPort.so.6* /workspace/qt-libs/
-              cp /usr/lib/aarch64-linux-gnu/libQt6OpenGL.so.6* /workspace/qt-libs/
-              cp /usr/lib/aarch64-linux-gnu/libQt6DBus.so.6* /workspace/qt-libs/ 2>/dev/null || true
-              cp /usr/lib/aarch64-linux-gnu/libQt6XcbQpa.so.6* /workspace/qt-libs/ 2>/dev/null || true
+              cp /usr/lib/aarch64-linux-gnu/libQt6OpenGL.so.6*     /workspace/qt-libs/
+              cp /usr/lib/aarch64-linux-gnu/libQt6DBus.so.6*           /workspace/qt-libs/ 2>/dev/null || true
+              cp /usr/lib/aarch64-linux-gnu/libQt6XcbQpa.so.6*         /workspace/qt-libs/ 2>/dev/null || true
               cp /usr/lib/aarch64-linux-gnu/libQt6EglFsKmsSupport.so.6* /workspace/qt-libs/ 2>/dev/null || true
-              cp /usr/lib/aarch64-linux-gnu/libQt6WaylandClient.so.6* /workspace/qt-libs/ 2>/dev/null || true
-              cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms /workspace/qt-libs/plugins/ 2>/dev/null || true
+              cp /usr/lib/aarch64-linux-gnu/libQt6WaylandClient.so.6*  /workspace/qt-libs/ 2>/dev/null || true
+              cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms      /workspace/qt-libs/plugins/ 2>/dev/null || true
               cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/xcbglintegrations /workspace/qt-libs/plugins/ 2>/dev/null || true
               cp -r /usr/lib/qt6/qml/QtQuick /workspace/qt-libs/qml/ 2>/dev/null || true
-              cp -r /usr/lib/qt6/qml/QtQml /workspace/qt-libs/qml/ 2>/dev/null || true
+              cp -r /usr/lib/qt6/qml/QtQml   /workspace/qt-libs/qml/ 2>/dev/null || true
             "
 
-      - name: Clean up cache directories
+      - name: Clean up APT cache
         run: |
-          # Remove lock files and other non-cacheable items from apt-cache
           rm -f apt-cache/lock apt-cache/partial/* 2>/dev/null || true
           chmod -R 755 apt-cache 2>/dev/null || true
 
@@ -136,17 +119,41 @@ jobs:
           ls -lh build-rpi/appvolan
           file build-rpi/appvolan
 
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: volan-rpi4
+          path: |
+            build-rpi/appvolan
+            qt-libs/
+          retention-days: 7
+
+  release:
+    needs: build-rpi
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: volan-rpi4
+          path: artifact
+
       - name: Package release
         run: |
           mkdir -p release/lib release/plugins release/qml
-          cp build-rpi/appvolan release/
+          cp artifact/build-rpi/appvolan release/
           cp README.md release/ 2>/dev/null || true
           cp LICENSE release/ 2>/dev/null || true
 
-          # Bundle Qt runtime libraries from the build container
-          cp qt-libs/*.so.6* release/lib/ 2>/dev/null || true
-          cp -r qt-libs/plugins/* release/plugins/ 2>/dev/null || true
-          cp -r qt-libs/qml/* release/qml/ 2>/dev/null || true
+          # Bundle Qt runtime libraries
+          cp artifact/qt-libs/*.so.6*          release/lib/ 2>/dev/null || true
+          cp -r artifact/qt-libs/plugins/*     release/plugins/ 2>/dev/null || true
+          cp -r artifact/qt-libs/qml/*         release/qml/ 2>/dev/null || true
 
           # Create installation script
           cat > release/install.sh << 'EOF'
@@ -160,12 +167,12 @@ jobs:
 
           SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-          # Install minimal system GL/EGL deps (these are OS-level, not Qt)
+          # Install system-level GL/EGL deps from OS repos
           echo "Installing system GL dependencies..."
           sudo apt-get update -qq
           sudo apt-get install -y libgl1 libegl1 libgles2 libfontconfig1 libdbus-1-3 2>/dev/null || true
 
-          # Install bundled Qt libraries
+          # Install bundled Qt libraries (exact version binary was linked against)
           echo "Installing bundled Qt libraries..."
           sudo cp "$SCRIPT_DIR"/lib/libQt6*.so.6* /usr/local/lib/
           sudo ldconfig
@@ -185,7 +192,7 @@ jobs:
           sudo cp "$SCRIPT_DIR"/appvolan /usr/local/bin/
           sudo chmod +x /usr/local/bin/appvolan
 
-          # Create wrapper that sets Qt paths to bundled libs
+          # Create wrapper that sets Qt paths to the bundled libs
           sudo tee /usr/local/bin/volan > /dev/null << 'WRAPPER'
           #!/bin/bash
           export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -217,18 +224,14 @@ jobs:
           EOF
           chmod +x release/install.sh
 
-          # Create archive
-          cd release
-          tar czf ../volan-rpi4-${GITHUB_REF_NAME}.tar.gz *
-          cd ..
+          tar czf volan-rpi4-${{ github.ref_name }}.tar.gz -C release .
 
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             volan-rpi4-${{ github.ref_name }}.tar.gz
-            build-rpi/appvolan
+            artifact/build-rpi/appvolan
           body: |
             ## Volan Release ${{ github.ref_name }}
 
@@ -247,50 +250,30 @@ jobs:
                tar xzf volan-rpi4-${{ github.ref_name }}.tar.gz
                ```
 
-            2. Run the installation script (this will install Qt6 dependencies):
+            2. Run the installation script:
                ```bash
                chmod +x install.sh
                ./install.sh
                ```
 
-            **Manual installation** (if you prefer):
-            ```bash
-            # Install Qt6 dependencies and platform plugins
-            sudo apt-get update
-            sudo apt-get install -y \
-              libqt6core6 libqt6gui6 libqt6qml6 libqt6quick6 \
-              libqt6serialbus6 libqt6serialport6 libqt6opengl6 qt6-qpa-plugins \
-              qml6-module-qtquick qml6-module-qtquick-controls \
-              libgl1 libegl1 libgles2
-
-            # Copy binary
-            sudo cp appvolan /usr/local/bin/
-            sudo chmod +x /usr/local/bin/appvolan
-            ```
-
             **Troubleshooting:**
-            - If you get "no Qt platform plugin could be initialized", ensure `qt6-qpa-plugins` is installed
             - For headless/embedded display, set: `export QT_QPA_PLATFORM=eglfs`
-            - For X11/desktop, Qt should auto-detect, or set: `export QT_QPA_PLATFORM=xcb`
+            - For X11/desktop: `export QT_QPA_PLATFORM=xcb`
 
             ### Requirements
             - Raspberry Pi 4 Compute Module (or Raspberry Pi 4 Model B)
             - Raspberry Pi OS (64-bit) - Bookworm or later
-            - Qt 6 runtime libraries (installed automatically by script)
             - CAN interface hardware (e.g., MCP2515, Waveshare CAN HAT)
 
             ### Setup CAN Interface
             ```bash
-            # Enable CAN interface
             sudo ip link set can0 up type can bitrate 500000
-
-            # Verify interface is up
             ip link show can0
             ```
 
             ### Running
             ```bash
-            appvolan
+            volan
             ```
 
             Built on: ${{ github.event.head_commit.timestamp }}
