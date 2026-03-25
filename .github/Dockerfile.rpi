@@ -1,8 +1,107 @@
-FROM arm64v8/debian:trixie
+FROM arm64v8/debian:bookworm AS qt-builder
+
 ENV DEBIAN_FRONTEND=noninteractive
+ENV QT_VERSION=6.8.3
+
 RUN apt-get update && apt-get install -y \
-    build-essential cmake ccache \
-    qt6-base-dev qt6-declarative-dev \
-    qt6-serialbus-dev qt6-serialport-dev \
-    libgl1-mesa-dev file \
+    build-essential cmake ninja-build perl python3 pkg-config \
+    libgl1-mesa-dev libegl1-mesa-dev libgles-dev \
+    libfontconfig1-dev libfreetype-dev libinput-dev \
+    libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev \
+    libxi-dev libxrender-dev libxcb1-dev \
+    libxcb-cursor-dev libxcb-glx0-dev libxcb-keysyms1-dev \
+    libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev \
+    libxcb-sync-dev libxcb-xfixes0-dev libxcb-shape0-dev \
+    libxcb-randr0-dev libxcb-render-util0-dev \
+    libxcb-xinerama0-dev libxcb-xkb-dev \
+    libxkbcommon-dev libxkbcommon-x11-dev \
+    libssl-dev libdbus-1-dev libicu-dev \
+    libdrm-dev libgbm-dev libmtdev-dev libudev-dev \
+    libts-dev libwayland-dev \
+    wget file \
   && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+# --- qtbase ---
+RUN wget -q https://download.qt.io/archive/qt/6.8/${QT_VERSION}/submodules/qtbase-everywhere-src-${QT_VERSION}.tar.xz \
+  && tar xf qtbase-everywhere-src-${QT_VERSION}.tar.xz \
+  && cmake -S qtbase-everywhere-src-${QT_VERSION} -B qtbase-build -G Ninja \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_INSTALL_PREFIX=/opt/qt6 \
+       -DBUILD_SHARED_LIBS=ON \
+       -DQT_BUILD_EXAMPLES=OFF \
+       -DQT_BUILD_TESTS=OFF \
+  && cmake --build qtbase-build --parallel \
+  && cmake --install qtbase-build \
+  && rm -rf qtbase-everywhere-src-${QT_VERSION}* qtbase-build
+
+# --- qtshadertools (required by qtdeclarative) ---
+RUN wget -q https://download.qt.io/archive/qt/6.8/${QT_VERSION}/submodules/qtshadertools-everywhere-src-${QT_VERSION}.tar.xz \
+  && tar xf qtshadertools-everywhere-src-${QT_VERSION}.tar.xz \
+  && cmake -S qtshadertools-everywhere-src-${QT_VERSION} -B qtshadertools-build -G Ninja \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_PREFIX_PATH=/opt/qt6 \
+       -DCMAKE_INSTALL_PREFIX=/opt/qt6 \
+       -DQT_BUILD_EXAMPLES=OFF \
+       -DQT_BUILD_TESTS=OFF \
+  && cmake --build qtshadertools-build --parallel \
+  && cmake --install qtshadertools-build \
+  && rm -rf qtshadertools-everywhere-src-${QT_VERSION}* qtshadertools-build
+
+# --- qtdeclarative (QtQuick / QtQml) ---
+RUN wget -q https://download.qt.io/archive/qt/6.8/${QT_VERSION}/submodules/qtdeclarative-everywhere-src-${QT_VERSION}.tar.xz \
+  && tar xf qtdeclarative-everywhere-src-${QT_VERSION}.tar.xz \
+  && cmake -S qtdeclarative-everywhere-src-${QT_VERSION} -B qtdeclarative-build -G Ninja \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_PREFIX_PATH=/opt/qt6 \
+       -DCMAKE_INSTALL_PREFIX=/opt/qt6 \
+       -DQT_BUILD_EXAMPLES=OFF \
+       -DQT_BUILD_TESTS=OFF \
+  && cmake --build qtdeclarative-build --parallel \
+  && cmake --install qtdeclarative-build \
+  && rm -rf qtdeclarative-everywhere-src-${QT_VERSION}* qtdeclarative-build
+
+# --- qtserialport ---
+RUN wget -q https://download.qt.io/archive/qt/6.8/${QT_VERSION}/submodules/qtserialport-everywhere-src-${QT_VERSION}.tar.xz \
+  && tar xf qtserialport-everywhere-src-${QT_VERSION}.tar.xz \
+  && cmake -S qtserialport-everywhere-src-${QT_VERSION} -B qtserialport-build -G Ninja \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_PREFIX_PATH=/opt/qt6 \
+       -DCMAKE_INSTALL_PREFIX=/opt/qt6 \
+       -DQT_BUILD_EXAMPLES=OFF \
+       -DQT_BUILD_TESTS=OFF \
+  && cmake --build qtserialport-build --parallel \
+  && cmake --install qtserialport-build \
+  && rm -rf qtserialport-everywhere-src-${QT_VERSION}* qtserialport-build
+
+# --- qtserialbus ---
+RUN wget -q https://download.qt.io/archive/qt/6.8/${QT_VERSION}/submodules/qtserialbus-everywhere-src-${QT_VERSION}.tar.xz \
+  && tar xf qtserialbus-everywhere-src-${QT_VERSION}.tar.xz \
+  && cmake -S qtserialbus-everywhere-src-${QT_VERSION} -B qtserialbus-build -G Ninja \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_PREFIX_PATH=/opt/qt6 \
+       -DCMAKE_INSTALL_PREFIX=/opt/qt6 \
+       -DQT_BUILD_EXAMPLES=OFF \
+       -DQT_BUILD_TESTS=OFF \
+  && cmake --build qtserialbus-build --parallel \
+  && cmake --install qtserialbus-build \
+  && rm -rf qtserialbus-everywhere-src-${QT_VERSION}* qtserialbus-build
+
+# ---- Final image: Qt + app build tools ----
+FROM arm64v8/debian:bookworm
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+COPY --from=qt-builder /opt/qt6 /opt/qt6
+
+RUN apt-get update && apt-get install -y \
+    build-essential cmake ccache file \
+    libgl1-mesa-dev libegl1-mesa-dev libgles-dev \
+    libfontconfig1-dev libdbus-1-dev libicu-dev \
+    libinput-dev libdrm-dev libgbm-dev \
+    libxkbcommon-dev libwayland-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/opt/qt6/bin:${PATH}"
+ENV CMAKE_PREFIX_PATH="/opt/qt6"
