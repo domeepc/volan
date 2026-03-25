@@ -62,7 +62,6 @@ jobs:
               mkdir -p build-rpi && cd build-rpi
               cmake .. \
                 -DCMAKE_BUILD_TYPE=Release \
-                -DCMAKE_PREFIX_PATH=/opt/qt6 \
                 -DCMAKE_INSTALL_PREFIX=/usr/local \
                 -DCMAKE_CXX_STANDARD=17 \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
@@ -76,27 +75,28 @@ jobs:
 
               echo 'Copying Qt runtime libraries for bundling...'
               mkdir -p /workspace/qt-libs/plugins /workspace/qt-libs/qml
-              cp -a /opt/qt6/lib/libQt6Core.so*          /workspace/qt-libs/
-              cp -a /opt/qt6/lib/libQt6Gui.so*           /workspace/qt-libs/
-              cp -a /opt/qt6/lib/libQt6Network.so*       /workspace/qt-libs/
-              cp -a /opt/qt6/lib/libQt6Qml.so*           /workspace/qt-libs/
-              cp -a /opt/qt6/lib/libQt6QmlModels.so*     /workspace/qt-libs/ 2>/dev/null || true
-              cp -a /opt/qt6/lib/libQt6QmlWorkerScript.so* /workspace/qt-libs/ 2>/dev/null || true
-              cp -a /opt/qt6/lib/libQt6Quick.so*         /workspace/qt-libs/
-              cp -a /opt/qt6/lib/libQt6SerialBus.so*     /workspace/qt-libs/
-              cp -a /opt/qt6/lib/libQt6SerialPort.so*    /workspace/qt-libs/
-              cp -a /opt/qt6/lib/libQt6OpenGL.so*        /workspace/qt-libs/
-              cp -a /opt/qt6/lib/libQt6DBus.so*          /workspace/qt-libs/ 2>/dev/null || true
-              cp -a /opt/qt6/lib/libQt6XcbQpa.so*        /workspace/qt-libs/ 2>/dev/null || true
-              cp -a /opt/qt6/lib/libQt6EglFSDeviceIntegration.so* /workspace/qt-libs/ 2>/dev/null || true
-              cp -a /opt/qt6/lib/libQt6EglFsKmsSupport.so* /workspace/qt-libs/ 2>/dev/null || true
-              cp -a /opt/qt6/lib/libQt6WaylandClient.so* /workspace/qt-libs/ 2>/dev/null || true
-              cp -a /opt/qt6/lib/libQt6ShaderTools.so*   /workspace/qt-libs/ 2>/dev/null || true
-              cp -r /opt/qt6/plugins/platforms           /workspace/qt-libs/plugins/ 2>/dev/null || true
-              cp -r /opt/qt6/plugins/xcbglintegrations   /workspace/qt-libs/plugins/ 2>/dev/null || true
-              cp -r /opt/qt6/plugins/egldeviceintegrations /workspace/qt-libs/plugins/ 2>/dev/null || true
-              cp -r /opt/qt6/qml/QtQuick                 /workspace/qt-libs/qml/ 2>/dev/null || true
-              cp -r /opt/qt6/qml/QtQml                   /workspace/qt-libs/qml/ 2>/dev/null || true
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6Core.so.6*        /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6Gui.so.6*         /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6Network.so.6*     /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6Qml.so.6*         /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6QmlModels.so.6*   /workspace/qt-libs/ 2>/dev/null || true
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6Quick.so.6*       /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6SerialBus.so.6*   /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6SerialPort.so.6*  /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6OpenGL.so.6*      /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6DBus.so.6*        /workspace/qt-libs/ 2>/dev/null || true
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6XcbQpa.so.6*      /workspace/qt-libs/ 2>/dev/null || true
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6EglFsKmsSupport.so.6* /workspace/qt-libs/ 2>/dev/null || true
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6WaylandClient.so.6*   /workspace/qt-libs/ 2>/dev/null || true
+              cp -a /usr/lib/aarch64-linux-gnu/libQt6ShaderTools.so.6* /workspace/qt-libs/ 2>/dev/null || true
+              cp -a /usr/lib/aarch64-linux-gnu/libicuuc.so*             /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libicui18n.so*           /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libicudata.so*           /workspace/qt-libs/
+              cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms        /workspace/qt-libs/plugins/ 2>/dev/null || true
+              cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/xcbglintegrations /workspace/qt-libs/plugins/ 2>/dev/null || true
+              cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/egldeviceintegrations /workspace/qt-libs/plugins/ 2>/dev/null || true
+              cp -r /usr/lib/qt6/qml/QtQuick /workspace/qt-libs/qml/ 2>/dev/null || true
+              cp -r /usr/lib/qt6/qml/QtQml   /workspace/qt-libs/qml/ 2>/dev/null || true
             "
 
       - name: Verify build
@@ -151,10 +151,27 @@ jobs:
 
           SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-          # Install system-level GL/EGL deps from OS repos
-          echo "Installing system GL dependencies..."
+          # Install system runtime dependencies
+          echo "Installing system dependencies..."
           sudo apt-get update -qq
-          sudo apt-get install -y libgl1 libegl1 libgles2 libfontconfig1 libdbus-1-3 2>/dev/null || true
+          sudo apt-get install -y \
+            libgl1 libopengl0 libegl1 libgles2 libglx0 \
+            libfontconfig1 libfreetype6 libharfbuzz0b \
+            libdbus-1-3 libmd4c0 \
+            libpng16-16 libjpeg62-turbo libpcre2-16-0 \
+            libdouble-conversion3 libglib2.0-0 libzstd1 \
+            libxkbcommon0 libxkbcommon-x11-0 \
+            libinput10 libmtdev1 libts0 \
+            libdrm2 libgbm1 \
+            libwayland-client0 libwayland-cursor0 libwayland-egl1 \
+            libxcb1 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 \
+            libxcb-image0 libxcb-render-util0 libxcb-xinerama0 \
+            libxcb-xkb1 libxcb-randr0 libxcb-shape0 \
+            libxcb-shm0 libxcb-sync1 libxcb-glx0 \
+            libxcb-render0 libxcb-xfixes0 \
+            libx11-6 libx11-xcb1 libxext6 libxrender1 libxi6 libxfixes3 \
+            libssl3 libproxy1v5 \
+            2>/dev/null || true
 
           # Install bundled Qt libraries (built from source against Bookworm's glibc)
           echo "Installing bundled Qt libraries..."
@@ -176,12 +193,18 @@ jobs:
           sudo cp "$SCRIPT_DIR"/appvolan /usr/local/bin/
           sudo chmod +x /usr/local/bin/appvolan
 
-          # Create wrapper that sets Qt paths to the bundled libs
+          # Install qt.conf so Qt finds plugins/qml regardless of how binary is launched
+          sudo tee /usr/local/bin/qt.conf > /dev/null << 'QTCONF'
+          [Paths]
+          Prefix = /usr/local
+          Plugins = lib/qt6/plugins
+          Qml2Imports = lib/qt6/qml
+          QTCONF
+
+          # Create wrapper that also sets LD_LIBRARY_PATH for the bundled Qt libs
           sudo tee /usr/local/bin/volan > /dev/null << 'WRAPPER'
           #!/bin/bash
           export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-          export QT_PLUGIN_PATH=/usr/local/lib/qt6/plugins
-          export QML2_IMPORT_PATH=/usr/local/lib/qt6/qml
           exec /usr/local/bin/appvolan "$@"
           WRAPPER
           sudo chmod +x /usr/local/bin/volan

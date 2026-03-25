@@ -63,7 +63,6 @@ jobs:
               mkdir -p build-rpi && cd build-rpi
               cmake .. \
                 -DCMAKE_BUILD_TYPE=Release \
-                -DCMAKE_PREFIX_PATH=/opt/qt6 \
                 -DCMAKE_INSTALL_PREFIX=/usr/local \
                 -DCMAKE_CXX_STANDARD=17 \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
