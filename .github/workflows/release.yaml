@@ -87,6 +87,10 @@ jobs:
               cp -a /usr/lib/aarch64-linux-gnu/libQt6XcbQpa.so.6*         /workspace/qt-libs/ 2>/dev/null || true
               cp -a /usr/lib/aarch64-linux-gnu/libQt6EglFsKmsSupport.so.6* /workspace/qt-libs/ 2>/dev/null || true
               cp -a /usr/lib/aarch64-linux-gnu/libQt6WaylandClient.so.6*  /workspace/qt-libs/ 2>/dev/null || true
+              # ICU libraries (Qt6Core dependency, Trixie ships v76)
+              cp -a /usr/lib/aarch64-linux-gnu/libicuuc.so*              /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libicui18n.so*            /workspace/qt-libs/
+              cp -a /usr/lib/aarch64-linux-gnu/libicudata.so*            /workspace/qt-libs/
               cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms      /workspace/qt-libs/plugins/ 2>/dev/null || true
               cp -r /usr/lib/aarch64-linux-gnu/qt6/plugins/xcbglintegrations /workspace/qt-libs/plugins/ 2>/dev/null || true
               cp -r /usr/lib/qt6/qml/QtQuick /workspace/qt-libs/qml/ 2>/dev/null || true
@@ -128,8 +132,8 @@ jobs:
           cp README.md release/ 2>/dev/null || true
           cp LICENSE release/ 2>/dev/null || true
 
-          # Bundle Qt runtime libraries
-          cp artifact/qt-libs/*.so.6*          release/lib/ 2>/dev/null || true
+          # Bundle Qt runtime libraries and ICU
+          cp -a artifact/qt-libs/*.so*          release/lib/ 2>/dev/null || true
           cp -r artifact/qt-libs/plugins/*     release/plugins/ 2>/dev/null || true
           cp -r artifact/qt-libs/qml/*         release/qml/ 2>/dev/null || true
 
@@ -150,9 +154,10 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y libgl1 libegl1 libgles2 libfontconfig1 libdbus-1-3 2>/dev/null || true
 
-          # Install bundled Qt libraries (exact version binary was linked against)
-          echo "Installing bundled Qt libraries..."
+          # Install bundled Qt libraries and ICU (exact versions binary was linked against)
+          echo "Installing bundled Qt and ICU libraries..."
           sudo cp -a "$SCRIPT_DIR"/lib/libQt6*.so.6* /usr/local/lib/
+          sudo cp -a "$SCRIPT_DIR"/lib/libicu*.so*    /usr/local/lib/
           sudo ldconfig
 
           # Install Qt platform plugins
